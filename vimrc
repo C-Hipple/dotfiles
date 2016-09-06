@@ -35,3 +35,12 @@ nnoremap <Leader>w :call StripTabsAndTrailingWhitespaces()<CR>:w<CR>
 "Incremental Search and Highlighting Results"
 set incsearch
 set hlsearch
+
+"Plugins"
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'scrooloose/syntastic'                 "Syntax Checking
+Plug 'tpope/vim-fugitive'                   "git rapper
+Plug 'tpope/vim-sensible'                   "sensible defaults
+call plug#end()
