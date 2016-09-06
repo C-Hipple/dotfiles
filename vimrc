@@ -1,9 +1,12 @@
 inoremap jj <Esc><Right>
 inoremap jk <Esc><Right>
 
+" Dealing with brokenish keyboard!
 inoremap pp (
 inoremap cc )
 inoremap uu _
+inoremap dd -
+
 
 " Fix background color
 set t_ut=

@@ -1,6 +1,5 @@
 [credential]
-	helper = cache --timeout=360000
+    helper = cache --timeout=360000
 [user]
-	name = C-Hipple
-	email = Hipplec@ischool.berkeley.edu
-
+    name = C-Hipple
+    email = Chris.Hipple@gmail.com
