@@ -31,3 +31,7 @@ function! StripTabsAndTrailingWhitespaces()
 endfunction
 
 nnoremap <Leader>w :call StripTabsAndTrailingWhitespaces()<CR>:w<CR>
+
+"Incremental Search and Highlighting Results"
+set incsearch
+set hlsearch
