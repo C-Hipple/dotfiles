@@ -4,8 +4,13 @@ inoremap jk <Esc><Right>
 " Dealing with brokenish keyboard!
 inoremap pp (
 inoremap cc )
+inoremap cp () <Left>
 inoremap uu _
 inoremap dd -
+inoremap ff 5
+inoremap ss 7
+inoremap ni 9
+inoremap ob [
 
 
 " Fix background color
