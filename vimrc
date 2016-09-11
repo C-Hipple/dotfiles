@@ -1,10 +1,11 @@
 inoremap jj <Esc><Right>
 inoremap jk <Esc><Right>
 
+
 " Dealing with brokenish keyboard!
 inoremap pp (
 inoremap cc )
-inoremap cp () <Left>
+inoremap cp  ()<Esc>i
 inoremap uu _
 inoremap dd -
 inoremap ff 5
@@ -48,7 +49,10 @@ set hlsearch
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'scrooloose/syntastic'                 "Syntax Checking
-Plug 'tpope/vim-fugitive'                   "git rapper
-Plug 'tpope/vim-sensible'                   "sensible defaults
+Plug 'scrooloose/syntastic'                                "Syntax Checking
+Plug 'tpope/vim-fugitive'                                  "git rapper
+Plug 'tpope/vim-sensible'                                  "sensible defaults
+Plug 'jalvesaq/Nvim-R',    { 'for': 'R'}                   "R plugin
+Plug 'ivanov/vim-ipython', { 'for': 'python' }             " Vim + IPython Notebook integration
+
 call plug#end()
