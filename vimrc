@@ -49,10 +49,10 @@ set hlsearch
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'scrooloose/syntastic'                                "Syntax Checking
-Plug 'tpope/vim-fugitive'                                  "git rapper
-Plug 'tpope/vim-sensible'                                  "sensible defaults
-Plug 'jalvesaq/Nvim-R',    { 'for': 'R'}                   "R plugin
-Plug 'ivanov/vim-ipython', { 'for': 'python' }             " Vim + IPython Notebook integration
+Plug 'scrooloose/syntastic'                                " Syntax Checking
+Plug 'tpope/vim-fugitive'                                  " git rapper
+Plug 'tpope/vim-sensible'                                  " sensible defaults
+Plug 'jalvesaq/Nvim-R',                                    " R Plugin
+Plug 'ivanov/vim-ipython',                                 " Vim + IPython Notebook integration
 
 call plug#end()
