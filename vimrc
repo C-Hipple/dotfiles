@@ -12,7 +12,7 @@ inoremap ff 5
 inoremap ss 7
 inoremap ni 9
 inoremap ob [
-
+inoremap oc {
 
 " Fix background color
 set t_ut=
