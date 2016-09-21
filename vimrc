@@ -1,17 +1,21 @@
 inoremap jj <Esc><Right>
 inoremap jk <Esc><Right>
 
+nmap <CR> o<Esc>
+nmap <S-Enter> 0<Esc>
+
 
 " Dealing with brokenish keyboard!
-inoremap pp (
-inoremap cc )
-inoremap cp  ()<Esc>i
-inoremap uu _
-inoremap dd -
-inoremap ff 5
-inoremap ss 7
-inoremap ni 9
-inoremap ob [
+" Commented out while laptop is broken.
+#inoremap pp (
+#inoremap cc )
+#inoremap cp  ()<Esc>i
+#inoremap uu _
+#inoremap dd -
+#inoremap ff 5
+#inoremap ss 7
+#inoremap ni 9
+#inoremap ob [
 
 
 " Fix background color
