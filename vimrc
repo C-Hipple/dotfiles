@@ -6,6 +6,7 @@ nmap <S-Enter> 0<Esc>
 
 
 " Dealing with brokenish keyboard!
+<<<<<<< HEAD
 " Commented out while laptop is broken.
 #inoremap pp (
 #inoremap cc )
@@ -17,6 +18,18 @@ nmap <S-Enter> 0<Esc>
 #inoremap ni 9
 #inoremap ob [
 
+=======
+inoremap pp (
+inoremap cc )
+inoremap cp  ()<Esc>i
+inoremap uu _
+inoremap dd -
+inoremap ff 5
+inoremap ss 7
+inoremap ni 9
+inoremap ob [
+inoremap oc {
+>>>>>>> ef2d75769e6526fee2d6510b0f485e48a7cb9656
 
 " Fix background color
 set t_ut=
