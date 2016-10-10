@@ -1,5 +1,6 @@
 inoremap jj <Esc><Right>
 inoremap jk <Esc><Right>
+inoremap jJ <Esc><Right>
 
 nmap <CR> o<Esc>
 nmap <S-Enter> 0<Esc>
@@ -48,6 +49,10 @@ nnoremap <Leader>w :call StripTabsAndTrailingWhitespaces()<CR>:w<CR>
 "Incremental Search and Highlighting Results"
 set incsearch
 set hlsearch
+
+"Highlight Chracters that are beyond the 80th column
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
 
 "Plugins"
 
