@@ -7,7 +7,7 @@ nmap <S-Enter> 0<Esc>
 
 
 " Dealing with brokenish keyboard!
-<<<<<<< HEAD
+"<<<<<<< HEAD
 " Commented out while laptop is broken.
 "inoremap pp (
 "inoremap cc )
@@ -54,6 +54,7 @@ set hlsearch
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
 
+
 "Plugins"
 
 call plug#begin('~/.vim/plugged')
@@ -63,5 +64,8 @@ Plug 'tpope/vim-fugitive'                                  " git rapper
 Plug 'tpope/vim-sensible'                                  " sensible defaults
 Plug 'jalvesaq/Nvim-R',                                    " R Plugin
 Plug 'ivanov/vim-ipython',                                 " Vim + IPython Notebook integration
+Plug 'tpope/vim-pathogen'                                  " install halp
+Plug 'nvie/vim-flake8'                                     " python pep8 checker
+
 
 call plug#end()
