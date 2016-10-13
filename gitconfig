@@ -10,4 +10,4 @@
     st = status
     pu = push
     p = pull
-    cm = commit -m
+    cm = commit -a -m
