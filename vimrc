@@ -54,6 +54,7 @@ set hlsearch
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
 
+let vim_markdown_preview_github=1
 
 "Plugins"
 
@@ -66,6 +67,6 @@ Plug 'jalvesaq/Nvim-R',                                    " R Plugin
 Plug 'ivanov/vim-ipython',                                 " Vim + IPython Notebook integration
 Plug 'tpope/vim-pathogen'                                  " install halp
 Plug 'nvie/vim-flake8'                                     " python pep8 checker
-
+Plug 'JamshedVesuna/vim-markdown-preview'                  " markdown preview
 
 call plug#end()

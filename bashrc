@@ -10,3 +10,4 @@ export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr
 alias jup='konsole --new-tab -e jupyter notebook'
 
 alias ls='ls -h --color'
+alias tree='tree -C'
