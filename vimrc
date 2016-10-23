@@ -1,23 +1,16 @@
 inoremap jj <Esc><Right>
 inoremap jk <Esc><Right>
 inoremap jJ <Esc><Right>
+inoremap kk <Esc><Right>
 
 nmap <CR> o<Esc>
 nmap <S-Enter> 0<Esc>
 
+" Use r to comment out a line on the fly
+" use t to delete the first character of a line.
 
-" Dealing with brokenish keyboard!
-"<<<<<<< HEAD
-" Commented out while laptop is broken.
-"inoremap pp (
-"inoremap cc )
-"inoremap cp  ()<Esc>i
-"inoremap uu _
-"inoremap dd -
-"inoremap ff 5
-"inoremap ss 7
-"inoremap ni 9
-"inoremap ob [
+:nmap r I#<Space><Esc>
+:nmap t I<Delete><Delete><Esc>
 
 " Fix background color
 set t_ut=
@@ -45,7 +38,6 @@ function! StripTabsAndTrailingWhitespaces()
 endfunction
 
 nnoremap <Leader>w :call StripTabsAndTrailingWhitespaces()<CR>:w<CR>
-
 "Incremental Search and Highlighting Results"
 set incsearch
 set hlsearch
