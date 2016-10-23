@@ -27,7 +27,7 @@ set number
 set listchars=tab:>-,trail:-
 set list!
 
-color desert
+color srcery
 
 function! StripTabsAndTrailingWhitespaces()
   let _s=@/
