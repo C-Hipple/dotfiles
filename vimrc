@@ -1,14 +1,16 @@
+" More maps for return to normal mode.
 inoremap jj <Esc><Right>
 inoremap jk <Esc><Right>
 inoremap jJ <Esc><Right>
 inoremap kk <Esc><Right>
 
+" Insert blank line from normal mode.
 nmap <CR> o<Esc>
 nmap <S-Enter> 0<Esc>
 
+
 " Use r to comment out a line on the fly
 " use t to delete the first character of a line.
-
 :nmap r I#<Space><Esc>
 :nmap t I<Delete><Delete><Esc>
 
@@ -27,8 +29,11 @@ set number
 set listchars=tab:>-,trail:-
 set list!
 
+" set the colorscheme.  
+" srcery was modded to have an ice blue instead of the red
 color srcery
 
+" Function for stripping whitespice at end of lines and removing tab chars.
 function! StripTabsAndTrailingWhitespaces()
   let _s=@/
   retab
@@ -38,6 +43,7 @@ function! StripTabsAndTrailingWhitespaces()
 endfunction
 
 nnoremap <Leader>w :call StripTabsAndTrailingWhitespaces()<CR>:w<CR>
+
 "Incremental Search and Highlighting Results"
 set incsearch
 set hlsearch
@@ -46,6 +52,7 @@ set hlsearch
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
 
+" Setting for markdown preview
 let vim_markdown_preview_github=1
 
 "Plugins"
