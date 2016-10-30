@@ -14,6 +14,11 @@ nmap <S-Enter> 0<Esc>
 :nmap r I#<Space><Esc>
 :nmap t I<Delete><Delete><Esc>
 
+" Use tab in normal mode to indent a line one tab.
+" Shift tab to unindent a line.
+:nmap <Tab> I<Tab><Esc>
+:nmap <S-Tab> 0i<Delete><delete><Delete><Delete><Esc>
+
 " Fix background color
 set t_ut=
 
