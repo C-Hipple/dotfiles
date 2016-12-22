@@ -1,6 +1,3 @@
-# added by Anaconda2 4.0.0 installer
-export PATH="/home/chris/anaconda2/bin:$PATH"
-
 # added by Anaconda3 4.1.1 installer
 export PATH="/home/chris/anaconda3/bin:$PATH"
 
@@ -10,7 +7,8 @@ export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr
 # Only show the current directory
 PROMPT_DIRTRIM=1
 
-
+# discards stderr messages from gvim.
+alias gvim="gvim 2>/dev/null"
 
 alias jup='konsole --new-tab -e jupyter notebook'
 
