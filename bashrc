@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+# added by Anaconda3 4.1.1 installer
+export PATH="/home/chris/anaconda3/bin:$PATH"
+>>>>>>> 4fcb9b4a0c01f14f3dedfc5f922829eb33f6fec4
 
 # wwas this the colorful thing?
 export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr0)\]\[\033[38;5;6m\][\w]:\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
@@ -5,6 +10,7 @@ export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr
 # Only show the current directory
 PROMPT_DIRTRIM=1
 
+<<<<<<< HEAD
 
 # pymodoro
 
@@ -13,6 +19,10 @@ alias pyms='python3 ~/Documents/pymodoro/pymodoro.py start --description'
 
 # Used to kill chrome notifications (and all other chromes opened)
 alias kn='killall -r [c]hrome'
+=======
+# discards stderr messages from gvim.
+alias gvim="gvim 2>/dev/null"
+>>>>>>> 4fcb9b4a0c01f14f3dedfc5f922829eb33f6fec4
 
 alias jup='konsole --new-tab -e jupyter notebook'
 
