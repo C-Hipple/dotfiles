@@ -8,7 +8,6 @@ inoremap kk <Esc><Right>
 nmap <CR> o<Esc>
 nmap <S-Enter> 0<Esc>
 
-
 " Use r to comment out a line on the fly
 " use t to delete the first character of a line.
 :nmap r I#<Space><Esc>
@@ -29,6 +28,10 @@ set shiftwidth=4
 
 " Show line numbers
 set number
+
+" Turn on wordwarp for markdown
+:set wrap
+:set linebreak
 
 " Show tab and trailing whitespace characters
 set listchars=tab:>-,trail:-
@@ -66,6 +69,14 @@ match OverLength /\%81v.\+/
 " Setting for markdown preview
 let vim_markdown_preview_github=1
 
+" Syntastic settings
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes':   [],'passive_filetypes': [] }
+noremap <C-w>e :SyntasticCheck<CR>
+noremap <C-w>f :SyntasticToggleMode<CR>
+
+" Ctrl-w + e shall enable checking
+" Ctrl-w + f shall disable checking
+"
 "Plugins"
 
 call plug#begin('~/.vim/plugged')
