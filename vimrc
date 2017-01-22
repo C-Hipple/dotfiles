@@ -21,6 +21,12 @@ nmap <S-Enter> 0<Esc>
 " Fix background color
 set t_ut=
 
+" Tabbed file browsing
+map <C-t><up> :tabr<cr>
+map <C-t><down> :tabl<cr>
+map <C-t><left> :tabp<cr>
+map <C-t><right> :tabn<cr>
+
 " Fixing tabs
 set tabstop=4
 set expandtab
