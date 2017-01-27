@@ -30,3 +30,6 @@ alias sim='python3 SimulationClasses.py'
 
 # added by Anaconda3 4.2.0 installer
 export PATH="/home/chris/anaconda3/bin:$PATH"
+
+# start emacs from terminal
+alias emacs='emacs &'

@@ -95,5 +95,6 @@ Plug 'ivanov/vim-ipython',                                 " Vim + IPython Noteb
 Plug 'tpope/vim-pathogen'                                  " install halp
 Plug 'nvie/vim-flake8'                                     " python pep8 checker
 Plug 'JamshedVesuna/vim-markdown-preview'                  " markdown preview
+Plug 'davidhalter/jedi-vim'                                " Python auto completion
 
 call plug#end()
