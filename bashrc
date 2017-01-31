@@ -33,3 +33,8 @@ export PATH="/home/chris/anaconda3/bin:$PATH"
 
 # start emacs from terminal
 alias emacs='emacs &'
+
+# nix path
+if [ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+    source $HOME/.nix-profile/etc/profile.d/nix.sh
+fi
