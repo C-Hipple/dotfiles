@@ -34,6 +34,9 @@ export PATH="/home/chris/anaconda3/bin:$PATH"
 # start emacs from terminal
 alias emacs='emacs &'
 
+# Remove spaces from filenames in directory
+alias rmspaces='for f in *\ *; do mv "$f" "${f// /_}"; done'
+
 # nix path
 if [ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
     source $HOME/.nix-profile/etc/profile.d/nix.sh
