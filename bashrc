@@ -41,3 +41,5 @@ alias rmspaces='for f in *\ *; do mv "$f" "${f// /_}"; done'
 if [ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
     source $HOME/.nix-profile/etc/profile.d/nix.sh
 fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
