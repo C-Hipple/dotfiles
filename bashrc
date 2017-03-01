@@ -28,6 +28,9 @@ alias shutdown='sudo shutdown -P now'
 
 alias sim='python3 SimulationClasses.py'
 
+# make it simple to open files
+alias open="xdg-open"
+
 # added by Anaconda3 4.2.0 installer
 export PATH="/home/chris/anaconda3/bin:$PATH"
 
