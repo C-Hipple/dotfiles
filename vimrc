@@ -43,11 +43,15 @@ set number
 set listchars=tab:>-,trail:-
 set list!
 
+" write the file when you accidentally opened it without the right (root)
+cmap w!! w !sudo tee % > /dev/null
 
 " Syntastic
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_python_checkers = ["pyflakes"]
 
+" dissaproval
+let g:LookOfDissaprovalTabTreshold=2
 
 " set the colorscheme.  
 " srcery was modded to have an ice blue instead of the red
