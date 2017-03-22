@@ -26,6 +26,8 @@ alias tree='tree -C'
 alias cdm='cd ~/Documents/assignment-upstream-fall-2016'
 alias shutdown='sudo shutdown -P now'
 
+# alias histg='history | grep'
+
 alias sim='python3 SimulationClasses.py'
 
 # make it simple to open files
@@ -34,8 +36,12 @@ alias open="xdg-open"
 # added by Anaconda3 4.2.0 installer
 export PATH="/home/chris/anaconda3/bin:$PATH"
 
-# start emacs from terminal
-alias emacs='emacs &'
+# shortcut to open emacsclient
+alias emacs='emacs --insecure &'
+
+ec () {
+    emacsclient $1 &
+    }
 
 # Remove spaces from filenames in directory
 alias rmspaces='for f in *\ *; do mv "$f" "${f// /_}"; done'
