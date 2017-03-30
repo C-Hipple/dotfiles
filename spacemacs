@@ -40,12 +40,15 @@ values."
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
-     ;; auto-completion
+     ipython-notebook
+     auto-completion
      ;; better-defaults
      emacs-lisp
      git
      markdown
      org
+     polymode
+     funk
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -295,6 +298,16 @@ before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   )
 
+(defun rmd-mode ()
+  "ESS Markdown mode for rmd files"
+  (interactive)
+  (setq load-path 
+        (append (list "~/.emacs.d/private/polymode/" "~/.emacs.d/layers/+lang/")
+                load-path))
+  (require 'poly-R)
+  (require 'poly-markdown)     
+  (poly-markdown+r-mode))
+
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -303,6 +316,7 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq-default evil-escape-key-sequence "jj")
+  (add-to-list 'load-path "~/.emacs.d/lisp")
   )
 
 ;; Do not write anything past this comment. This is where Emacs will

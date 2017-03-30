@@ -10,7 +10,6 @@
     ~/.vim: vim
     ~/.bashrc: bashrc
     ~/.gitconfig: gitconfig
-    ~/.emacs: emacs
     ~/.spacemacs: spacemacs
 
 - shell:
