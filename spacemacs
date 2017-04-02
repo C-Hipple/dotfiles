@@ -48,13 +48,12 @@ values."
      markdown
      org
      polymode
-     funk
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      spell-checking
      syntax-checking
-     ;; version-control
+     version-control
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -316,8 +315,30 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq-default evil-escape-key-sequence "jj")
+  (define-key evil-normal-state-map (kbd "RET") 'spacemacs/insert-line-below-no-indent)
+  (define-key evil-normal-state-map (kbd "C-RET") 'spacemacs/insert-line-above-no-indent)
+  (define-key evil-normal-state-map (kbd "S-RET") 'spacemacs/insert-line-above-no-indent)
+
+
   (add-to-list 'load-path "~/.emacs.d/lisp")
+  (define-key evil-norm-state-map (kbd "R") (kbd "I#"))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ace-jump-helm-line-autoshow-mode t)
+ '(custom-safe-themes
+   (quote
+    ("e1994cf306356e4358af96735930e73eadbaf95349db14db6d9539923b225565" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "f78de13274781fbb6b01afd43327a4535438ebaeec91d93ebdbba1e3fba34d3c" "62408b3adcd05f887b6357e5bd9221652984a389e9b015f87bbc596aba62ba48" default)))
+ '(evil-want-Y-yank-to-eol nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

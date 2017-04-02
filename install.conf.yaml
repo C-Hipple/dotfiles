@@ -11,7 +11,7 @@
     ~/.bashrc: bashrc
     ~/.gitconfig: gitconfig
     ~/.spacemacs: spacemacs
-    ~/.emacs.d/private/polymode/packages.el
+    ~/.emacs.d/private/polymode/packages.el: packages.el
 
 - shell:
   - [git submodule update --init --recursive, Updating submodules]
