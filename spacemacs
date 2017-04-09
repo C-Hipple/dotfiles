@@ -31,6 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     clojure
+     javascript
      vimscript
      python
      ess
@@ -295,6 +297,10 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  (require 'ein)
+  (require 'ein-loaddefs)
+  (require 'ein-notebook)
+  (require 'ein-subpackages)
   )
 
 (defun rmd-mode ()
@@ -321,6 +327,7 @@ you should place your code here."
 
 
   (add-to-list 'load-path "~/.emacs.d/lisp")
+  (add-to-list 'custom-theme-load-path' "~/dotfiles/emacs_themes/")
   (define-key evil-norm-state-map (kbd "R") (kbd "I#"))
   )
 
@@ -334,7 +341,7 @@ you should place your code here."
  '(ace-jump-helm-line-autoshow-mode t)
  '(custom-safe-themes
    (quote
-    ("e1994cf306356e4358af96735930e73eadbaf95349db14db6d9539923b225565" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "f78de13274781fbb6b01afd43327a4535438ebaeec91d93ebdbba1e3fba34d3c" "62408b3adcd05f887b6357e5bd9221652984a389e9b015f87bbc596aba62ba48" default)))
+    ("1157a4055504672be1df1232bed784ba575c60ab44d8e6c7b3800ae76b42f8bd" "cf08ae4c26cacce2eebff39d129ea0a21c9d7bf70ea9b945588c1c66392578d1" "a4e6940f5c63f3c6759d35e6534eaa26ff14512aa61616a0584bda9f858c60b9" "16229c52cc5d182eea2a1ca424736232d1cbfec479a8045714822208145332f9" "4a5b30efbe455b1840b7d8bb8e8d94ee3abdb1de07654ed4d6f0be1e670962a9" "1e67765ecb4e53df20a96fb708a8601f6d7c8f02edb09d16c838e465ebe7f51b" "f5512c02e0a6887e987a816918b7a684d558716262ac7ee2dd0437ab913eaec6" "2b9d658692fdcd9beda242cef1466db3814a87f1e149428e5b11cee7a6861b30" "e1994cf306356e4358af96735930e73eadbaf95349db14db6d9539923b225565" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "f78de13274781fbb6b01afd43327a4535438ebaeec91d93ebdbba1e3fba34d3c" "62408b3adcd05f887b6357e5bd9221652984a389e9b015f87bbc596aba62ba48" default)))
  '(evil-want-Y-yank-to-eol nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
