@@ -1,6 +1,12 @@
 # added by Anaconda3 4.1.1 installer
 export PATH="/home/chris/anaconda3/bin:$PATH"
 
+# Add my sweet ssmove script
+export PATH="$PATH:/home/bin"
+
+# alias the start for it
+alias ssmove="ssmove.py"
+
 # wwas this the colorful thing?
 export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr0)\]\[\033[38;5;6m\][\w]:\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
 
