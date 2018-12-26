@@ -323,8 +323,29 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq org-todo-keywords
-        '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+
+  ;; Org-mode configurations are from the blog in the link below:
+  ;; https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
+
+  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+
+
+  (setq org-agenda-files '("~/Documents/GTD/inbox.org"
+                           "~/Documents/GTD/gtd.org"
+                           "~/Documents/GTD/tickler.org"))
+
+  (setq org-capture-templates '(("t" "Todo [inbox]" entry
+                                 (file+headline "~/Documents/GTD/inbox.org" "Tasks")
+                                 "* TODO %i%?")
+                                ("T" "Tickler" entry
+                                 (file+headline "~/Documents/GTD/tickler.org" "Tickler")
+                                 "* %i%? \n %U")))
+
+  (setq org-refile-targets '(("~/Documents/GTD/gtd.org" :maxlevel . 3)
+                             ("~/Documents/GTD/someday.org" :level . 1)
+                             ("~/Documents/GTD/tickler.org" :maxlevel . 2)))
+
+
   (setq-default evil-escape-key-sequence "jj")
   (setq ein:notebook-modes '(ein:notebook-multilang-mode ein:notebook-python-mode))
   (define-key evil-normal-state-map (kbd "RET") 'spacemacs/insert-line-below-no-indent)
