@@ -31,10 +31,10 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     html
+     scala
      sql
      csv
-     scala
-     html
      clojure
      javascript
      vimscript
@@ -65,7 +65,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(polymode)
+   dotspacemacs-additional-packages '()
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -144,7 +144,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy
    dotspacemacs-default-font '("AverageMono"
-                               :size 20
+                               :size 18
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -300,17 +300,17 @@ It is called immediately after `dotspacemacs/init', before layer configuration
 executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
-  (push '("melpa-stable" . "stable.melpa.org/packages/") configuration-layer--elpa-archives)
-  (push '(helm . "melpa-stable") package-pinned-packages))
+  (push '('melpa-stable' . 'stable.melpa.org/packages/') configuration-layer--elpa-archives)
+  (push '(helm . 'melpa-stable') package-pinned-packages))
 
 `dotspacemacs/user-config' first."
-  (require 'ein)
-  )
+  ;;(require 'ein)
+ )
 
 (defun rmd-mode ()
   "ESS Markdown mode for rmd files"
   (interactive)
-  (setq load-path 
+  (setq load-path
         (append (list "~/.emacs.d/private/polymode/" "~/.emacs.d/layers/+lang/")
                 load-path))
   (require 'poly-R)
@@ -356,14 +356,10 @@ you should place your code here."
   (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
   (add-to-list 'load-path "~/.emacs.d/lisp")
   (add-to-list 'custom-theme-load-path' "~/dotfiles/emacs_themes/")
-<<<<<<< HEAD
   (define-key evil-normal-state-map (kbd "R") (kbd "I#"))
-=======
-  (define-key evil-norm-state-map (kbd "R") (kbd "I#"))
   (require `helm-bookmark)
   (with-eval-after-load 'helm
     (setq helm-display-function 'helm-default-display-buffer))
->>>>>>> cb0fcf7f2d8cf132f92d6ff093e48489b85b98fd
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -378,11 +374,6 @@ you should place your code here."
    ["#d2ceda" "#f2241f" "#67b11d" "#b1951d" "#3a81c3" "#a31db1" "#21b8c7" "#655370"])
  '(custom-safe-themes
    (quote
-<<<<<<< HEAD
-    ("85968e61ff2c490f687a8159295efb06dd05764ec37a5aef2c59abbd485f0ee4" "c7f10959cb1bc7a36ee355c765a1768d48929ec55dde137da51077ac7f899521" "04589c18c2087cd6f12c01807eed0bdaa63983787025c209b89c779c61c3a4c4" "adf5275cc3264f0a938d97ded007c82913906fc6cd64458eaae6853f6be287ce" "bd82c92996136fdacbb4ae672785506b8d1d1d511df90a502674a51808ecc89f" "5d75f9080a171ccf5508ce033e31dbf5cc8aa19292a7e0ce8071f024c6bcad2a" "36ca8f60565af20ef4f30783aa16a26d96c02df7b4e54e9900a5138fb33808da" "d8dc153c58354d612b2576fea87fe676a3a5d43bcc71170c62ddde4a1ad9e1fb" "e7b49145d311e86da34a32a7e1f73497fa365110a813d2ecd8105eaa551969da" "a77ced882e25028e994d168a612c763a4feb8c4ab67c5ff48688654d0264370c" "2a7beed4f24b15f77160118320123d699282cbf196e0089f113245d4b729ba5d" "3860a842e0bf585df9e5785e06d600a86e8b605e5cc0b74320dfe667bcbe816c" "0bff60fb779498e69ea705825a2ca1a5497a4fccef93bf3275705c2d27528f2f" "10a31b6c251640d04b2fa74bd2c05aaaee915cbca6501bcc82820cdc177f5a93" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "5ee12d8250b0952deefc88814cf0672327d7ee70b16344372db9460e9a0e3ffc" "b9b1a8d2ec1d5c17700e1a09256f33c2520b26f49980ed9e217e444c381279a9" "1157a4055504672be1df1232bed784ba575c60ab44d8e6c7b3800ae76b42f8bd" "cf08ae4c26cacce2eebff39d129ea0a21c9d7bf70ea9b945588c1c66392578d1" "a4e6940f5c63f3c6759d35e6534eaa26ff14512aa61616a0584bda9f858c60b9" "16229c52cc5d182eea2a1ca424736232d1cbfec479a8045714822208145332f9" "4a5b30efbe455b1840b7d8bb8e8d94ee3abdb1de07654ed4d6f0be1e670962a9" "1e67765ecb4e53df20a96fb708a8601f6d7c8f02edb09d16c838e465ebe7f51b" "f5512c02e0a6887e987a816918b7a684d558716262ac7ee2dd0437ab913eaec6" "2b9d658692fdcd9beda242cef1466db3814a87f1e149428e5b11cee7a6861b30" "e1994cf306356e4358af96735930e73eadbaf95349db14db6d9539923b225565" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "f78de13274781fbb6b01afd43327a4535438ebaeec91d93ebdbba1e3fba34d3c" "62408b3adcd05f887b6357e5bd9221652984a389e9b015f87bbc596aba62ba48" default)))
- '(evil-want-Y-yank-to-eol nil)
- '(frame-background-mode (quote dark))
-=======
     ("66f32da4e185defe7127e0dc8b779af99c00b60c751b0662276acaea985e2721" "604648621aebec024d47c352b8e3411e63bdb384367c3dd2e8db39df81b475f5" "9b402e9e8f62024b2e7f516465b63a4927028a7055392290600b776e4a5b9905" "551596f9165514c617c99ad6ce13196d6e7caa7035cea92a0e143dbe7b28be0e" "6de7c03d614033c0403657409313d5f01202361e35490a3404e33e46663c2596" "ed317c0a3387be628a48c4bbdb316b4fa645a414838149069210b66dd521733f" "938d8c186c4cb9ec4a8d8bc159285e0d0f07bad46edf20aa469a89d0d2a586ea" "0ee3fc6d2e0fc8715ff59aed2432510d98f7e76fe81d183a0eb96789f4d897ca" "ab2cbf30ab758c5e936b527377d543ce4927001742f79519b62c45ba9dd9f55e" "fe1682ca8f7a255cf295e76b0361438a21bb657d8846a05d9904872aa2fb86f2" "d3a7eea7ebc9a82b42c47e49517f7a1454116487f6907cf2f5c2df4b09b50fc1" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "5ee12d8250b0952deefc88814cf0672327d7ee70b16344372db9460e9a0e3ffc" "b9b1a8d2ec1d5c17700e1a09256f33c2520b26f49980ed9e217e444c381279a9" "1157a4055504672be1df1232bed784ba575c60ab44d8e6c7b3800ae76b42f8bd" "cf08ae4c26cacce2eebff39d129ea0a21c9d7bf70ea9b945588c1c66392578d1" "a4e6940f5c63f3c6759d35e6534eaa26ff14512aa61616a0584bda9f858c60b9" "16229c52cc5d182eea2a1ca424736232d1cbfec479a8045714822208145332f9" "4a5b30efbe455b1840b7d8bb8e8d94ee3abdb1de07654ed4d6f0be1e670962a9" "1e67765ecb4e53df20a96fb708a8601f6d7c8f02edb09d16c838e465ebe7f51b" "f5512c02e0a6887e987a816918b7a684d558716262ac7ee2dd0437ab913eaec6" "2b9d658692fdcd9beda242cef1466db3814a87f1e149428e5b11cee7a6861b30" "e1994cf306356e4358af96735930e73eadbaf95349db14db6d9539923b225565" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "f78de13274781fbb6b01afd43327a4535438ebaeec91d93ebdbba1e3fba34d3c" "62408b3adcd05f887b6357e5bd9221652984a389e9b015f87bbc596aba62ba48" default)))
  '(evil-want-Y-yank-to-eol nil)
  '(frame-background-mode (quote dark))
@@ -391,7 +382,6 @@ you should place your code here."
     (("unread" :foreground "#aeee00")
      ("flagged" :foreground "#0a9dff")
      ("deleted" :foreground "#ff2c4b" :bold t))))
->>>>>>> cb0fcf7f2d8cf132f92d6ff093e48489b85b98fd
  '(package-selected-packages
    (quote
     (adaptive-wrap noflet ensime sbt-mode scala-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data wgrep smex ivy-hydra counsel-projectile counsel swiper ivy winum powerline org-category-capture gntp json-snatcher json-reformat multiple-cursors hydra parent-mode gitignore-mode fringe-helper git-gutter+ git-gutter fuzzy pos-tip flx let-alist graphql iedit anzu goto-chg ctable skewer-mode request-deferred websocket request deferred simple-httpd dash-functional tern peg eval-sexp-fu highlight queue pkg-info epl bind-map bind-key packed pythonic auto-complete popup sql-indent grandshell-theme badwolf-theme badger-theme abyss-theme gruvbox-theme ample-theme color-theme-sanityinc-tomorrow inkpot-theme creamsody-theme paper-theme jazz-theme dash org diminish paredit cider clojure-mode anaconda-mode ess julia-mode smartparens magit magit-popup evil git-commit with-editor company helm helm-core yasnippet avy markdown-mode async alert log4e projectile f js2-mode s suscolors-theme yapfify ws-butler window-numbering which-key web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package toc-org spacemacs-theme spaceline smeargle restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort popwin polymode pip-requirements persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc info+ indent-guide ido-vertical-mode hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu ess-smart-equals ess-R-object-popup ess-R-data-view elisp-slime-nav ein dumb-jump diff-hl define-word dactyl-mode cython-mode company-tern company-statistics company-anaconda column-enforce-mode coffee-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-window ace-link ace-jump-helm-line)))
