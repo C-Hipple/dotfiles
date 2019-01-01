@@ -341,10 +341,11 @@ you should place your code here."
                                 ("T" "Tickler" entry
                                  (file+headline "~/Documents/GTD/tickler.org" "Tickler")
                                  "* %i%? \n %U")))
+  (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 
-  (setq org-refile-targets '(("~/Documents/GTD/gtd.org" :maxlevel . 3)
-                             ("~/Documents/GTD/someday.org" :level . 1)
-                             ("~/Documents/GTD/tickler.org" :maxlevel . 2)))
+  ;;(setq org-refile-targets '(("~/Documents/GTD/gtd.org" :maxlevel . 3)
+                             ;;("~/Documents/GTD/someday.org" :level . 1)
+                             ;;("~/Documents/GTD/tickler.org" :maxlevel . 2)))
 
 
   (setq-default evil-escape-key-sequence "jj")
