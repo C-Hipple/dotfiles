@@ -35,6 +35,7 @@ values."
      org
      scala
      sql
+     csv
      clojure
      javascript
      vimscript
@@ -64,7 +65,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(polymode)
+   dotspacemacs-additional-packages '()
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -143,7 +144,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy
    dotspacemacs-default-font '("AverageMono"
-                               :size 20
+                               :size 18
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -299,17 +300,17 @@ It is called immediately after `dotspacemacs/init', before layer configuration
 executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
-  (push '("melpa-stable" . "stable.melpa.org/packages/") configuration-layer--elpa-archives)
-  (push '(helm . "melpa-stable") package-pinned-packages))
+  (push '('melpa-stable' . 'stable.melpa.org/packages/') configuration-layer--elpa-archives)
+  (push '(helm . 'melpa-stable') package-pinned-packages))
 
 `dotspacemacs/user-config' first."
-  (require 'ein)
-  )
+  ;;(require 'ein)
+ )
 
 (defun rmd-mode ()
   "ESS Markdown mode for rmd files"
   (interactive)
-  (setq load-path 
+  (setq load-path
         (append (list "~/.emacs.d/private/polymode/" "~/.emacs.d/layers/+lang/")
                 load-path))
   (require 'poly-R)
@@ -340,10 +341,11 @@ you should place your code here."
                                 ("T" "Tickler" entry
                                  (file+headline "~/Documents/GTD/tickler.org" "Tickler")
                                  "* %i%? \n %U")))
+  (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 
-  (setq org-refile-targets '(("~/Documents/GTD/gtd.org" :maxlevel . 3)
-                             ("~/Documents/GTD/someday.org" :level . 1)
-                             ("~/Documents/GTD/tickler.org" :maxlevel . 2)))
+  ;;(setq org-refile-targets '(("~/Documents/GTD/gtd.org" :maxlevel . 3)
+                             ;;("~/Documents/GTD/someday.org" :level . 1)
+                             ;;("~/Documents/GTD/tickler.org" :maxlevel . 2)))
 
 
   (setq-default evil-escape-key-sequence "jj")
@@ -355,7 +357,7 @@ you should place your code here."
   (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
   (add-to-list 'load-path "~/.emacs.d/lisp")
   (add-to-list 'custom-theme-load-path' "~/dotfiles/emacs_themes/")
-  (define-key evil-norm-state-map (kbd "R") (kbd "I#"))
+  (define-key evil-normal-state-map (kbd "R") (kbd "I#"))
   (require `helm-bookmark)
   (with-eval-after-load 'helm
     (setq helm-display-function 'helm-default-display-buffer))

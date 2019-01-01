@@ -53,6 +53,9 @@ ec () {
 # Remove spaces from filenames in directory
 alias rmspaces='for f in *\ *; do mv "$f" "${f// /_}"; done'
 
+# ssh tunnels
+alias statsTunnel='ssh -N -f -L localhost:8888:localhost:8888 root@stats'
+
 # nix path
 if [ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
     source $HOME/.nix-profile/etc/profile.d/nix.sh
