@@ -329,7 +329,7 @@ you should place your code here."
 
   (add-to-list 'load-path "~/.emacs.d/lisp")
   (add-to-list 'custom-theme-load-path' "~/dotfiles/emacs_themes/")
-  (define-key evil-norm-state-map (kbd "R") (kbd "I#"))
+  (define-key evil-normal-state-map (kbd "R") (kbd "I#"))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
