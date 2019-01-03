@@ -13,6 +13,9 @@ export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr
 # Only show the current directory
 PROMPT_DIRTRIM=1
 
+# 1 liner for backing up org files.
+alias org='git add -A;git cm "updates";git push'
+
 #start a pymodoro with a description
 alias pyms='python3 ~/Documents/pymodoro/pymodoro.py start --description'
 
