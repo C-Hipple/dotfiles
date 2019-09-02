@@ -1,7 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_cnt =6
 let g:netrw_dirhist_1='/home/chris/dotfiles/vim'
 let g:netrw_dirhist_2='/home/chris/Documents/MPL_Deployment/Simulation'
 let g:netrw_dirhist_3='/home/chris/dotfiles'
 let g:netrw_dirhist_4='/home/chris/Documents/MIDS-1B-Datastructures-and-Algorithms'
 let g:netrw_dirhist_5='/home/chris/Documents/w205_Project/twitterBot'
+let g:netrw_dirhist_6='/etc/apt/sources.list.d'
