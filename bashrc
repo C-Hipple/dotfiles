@@ -8,6 +8,7 @@ export PATH="$PATH:/home/bin"
 alias ssmove="ssmove.py"
 
 # wwas this the colorful thing?
+export TERM=xterm
 export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr0)\]\[\033[38;5;6m\][\w]:\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
 
 #export PS1=" \[\e[00;34m\]金 :  \[\e[0m\]"
