@@ -1,6 +1,8 @@
 # added by Anaconda3 4.1.1 installer
 export PATH="/home/chris/anaconda2/bin:$PATH"
 
+alias prophetTunnel='ssh -N -f -L localhost:8888:localhost:8888 prophet@prophet'
+
 # Add my sweet ssmove script
 export PATH="$PATH:/home/bin"
 
@@ -64,3 +66,5 @@ if [ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+cd ~/Documents
