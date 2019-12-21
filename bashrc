@@ -2,6 +2,8 @@
 export PATH="/home/chris/anaconda2/bin:$PATH"
 
 alias prophetTunnel='ssh -N -f -L localhost:8888:localhost:8888 prophet@prophet'
+alias grafanaTunnel='ssh -N -f -L localhost:3000:localhost:3000 prophet@prophet'
+alias postgresTunnel='ssh -N -f -L localhost:5432:localhost:5432 prophet@prophet'
 
 # Add my sweet ssmove script
 export PATH="$PATH:/home/bin"
