@@ -49,7 +49,7 @@ values."
      helm
      ;; ivy
      ipython-notebook
-     auto-completion
+     ;;auto-completion
      ;; better-defaults
      emacs-lisp
      git
@@ -60,6 +60,27 @@ values."
      spell-checking
      syntax-checking
      version-control
+     (auto-completion :variables
+                      ; Try to keep the auto-completion snappy!
+                      auto-completion-enable-help-tooltip nil
+                      auto-completion-enable-snippets-in-popup nil
+                      ;;auto-completion-private-snippets-directory "~/dotfiles/spacemacs/bhipple-snippets"
+                      auto-completion-idle-delay 0.03
+                      ; Set out completion backends to a well-scoped set of completers, to optimize performance
+                      spacemacs-default-company-backends
+                        '(
+                          ; Appears to be slow, and likely redundant with lsp?
+                          ; company-semantic
+                          ; These search for strings in the buffer and are quite useful!
+                          company-dabbrev
+                          company-dabbrev-code
+                          ; This one tanks on slow filesystems
+                          ; company-files
+                          ; These don't appear to do much and have upstream performance woes
+                          ; company-etags
+                          ; company-gtags
+                          ; This one is very lightweight, and just adds language keywords
+                          company-keywords))
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -69,7 +90,7 @@ values."
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
-   ["Date"]  dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '()
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and uninstall any
@@ -143,7 +164,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy
-   dotspacemacs-default-font '("AverageMono"
+   dotspacemacs-default-font '("Freemono"
                                :size 20
                                :weight normal
                                :width normal
@@ -231,7 +252,7 @@ values."
    dotspacemacs-loading-progress-bar t
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-at-startup t
    ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
    dotspacemacs-fullscreen-use-non-native nil
