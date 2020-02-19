@@ -1,5 +1,9 @@
 # added by Anaconda3 4.1.1 installer
-export PATH="/home/chris/anaconda3/bin:$PATH"
+export PATH="/home/chris/anaconda2/bin:$PATH"
+
+alias prophetTunnel='ssh -N -f -L localhost:8888:localhost:8888 prophet@prophet'
+alias grafanaTunnel='ssh -N -f -L localhost:3000:localhost:3000 prophet@prophet'
+alias postgresTunnel='ssh -N -f -L localhost:5432:localhost:5432 prophet@prophet'
 
 # Add my sweet ssmove script
 export PATH="$PATH:/home/bin"
@@ -8,7 +12,14 @@ export PATH="$PATH:/home/bin"
 alias ssmove="ssmove.py"
 
 # wwas this the colorful thing?
+export TERM=xterm
 export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr0)\]\[\033[38;5;6m\][\w]:\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
+
+#export PS1=" \[\e[00;34m\]金 :  \[\e[0m\]"
+
+
+
+
 
 # Only show the current directory
 PROMPT_DIRTRIM=1
@@ -36,10 +47,6 @@ alias mm='xdotool mousemove 0 0'
 alias ls='ls -h --color'
 alias tree='tree -C'
 
-# alias histg='history | grep'
-
-alias sim='python3 SimulationClasses.py'
-
 # make it simple to open files
 alias open="xdg-open"
 
@@ -48,10 +55,6 @@ export PATH="/home/chris/anaconda3/bin:$PATH"
 
 # shortcut to open emacsclient
 alias emacs='emacs --insecure &'
-
-ec () {
-    emacsclient $1 &
-    }
 
 # Remove spaces from filenames in directory
 alias rmspaces='for f in *\ *; do mv "$f" "${f// /_}"; done'
@@ -65,3 +68,5 @@ if [ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+cd ~/Documents

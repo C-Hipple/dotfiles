@@ -30,7 +30,8 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(rust
+     csv
      html
      org
      scala
@@ -48,7 +49,7 @@ values."
      helm
      ;; ivy
      ipython-notebook
-     auto-completion
+     ;;auto-completion
      ;; better-defaults
      emacs-lisp
      git
@@ -59,6 +60,27 @@ values."
      spell-checking
      syntax-checking
      version-control
+     (auto-completion :variables
+                      ; Try to keep the auto-completion snappy!
+                      auto-completion-enable-help-tooltip nil
+                      auto-completion-enable-snippets-in-popup nil
+                      ;;auto-completion-private-snippets-directory "~/dotfiles/spacemacs/bhipple-snippets"
+                      auto-completion-idle-delay 0.03
+                      ; Set out completion backends to a well-scoped set of completers, to optimize performance
+                      spacemacs-default-company-backends
+                        '(
+                          ; Appears to be slow, and likely redundant with lsp?
+                          ; company-semantic
+                          ; These search for strings in the buffer and are quite useful!
+                          company-dabbrev
+                          company-dabbrev-code
+                          ; This one tanks on slow filesystems
+                          ; company-files
+                          ; These don't appear to do much and have upstream performance woes
+                          ; company-etags
+                          ; company-gtags
+                          ; This one is very lightweight, and just adds language keywords
+                          company-keywords))
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -231,7 +253,7 @@ values."
    dotspacemacs-loading-progress-bar t
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-at-startup t
    ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
    dotspacemacs-fullscreen-use-non-native nil
@@ -274,7 +296,7 @@ values."
    ;; Select a scope to highlight delimiters. Possible values are `any',
    ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
    ;; emphasis the current one). (default 'all)
-   dotspacemacs-highlight-delimiters 'all
+   dotspacemacs-highlight-delimiters 'nll
    ;; If non nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
    dotspacemacs-persistent-server nil
@@ -291,7 +313,7 @@ values."
    ;; `trailing' to delete only the whitespace at end of lines, `changed'to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
-   dotspacemacs-whitespace-cleanup nil
+   dotspacemacs-whitespace-cleanup `all
    ))
 
 (defun dotspacemacs/user-init ()
@@ -350,6 +372,7 @@ you should place your code here."
 
   (setq-default evil-escape-key-sequence "jj")
   (setq ein:notebook-modes '(ein:notebook-multilang-mode ein:notebook-python-mode))
+  (setq ein:completion-backend 'ein:use-ac-jedi-backend)
   (define-key evil-normal-state-map (kbd "RET") 'spacemacs/insert-line-below-no-indent)
   (define-key evil-normal-state-map (kbd "C-RET") 'spacemacs/insert-line-above-no-indent)
   (define-key evil-normal-state-map (kbd "S-RET") 'spacemacs/insert-line-above-no-indent)
@@ -370,7 +393,7 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ace-jump-helm-line-autoshow-mode t)
+ '(ace-jump-helm-line-autoshow-mode nil)
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
@@ -470,7 +493,7 @@ static char *gnus-pointer[] = {
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
  '(package-selected-packages
    (quote
-    (helm-ag-r iodine-theme flatland-black-theme kaolin-themes planet-theme clues-theme hc-zenburn-theme avk-emacs-themes color-theme-sanityinc-solarized darkburn-theme monokai-theme zenburn-theme flatland-theme firecode-theme poly-R moe-theme espresso-theme lenlen-theme plan9-theme nord-theme dakrone-light-theme dakrone-theme flatui-theme dracula-theme soft-charcoal-theme soft-morning-theme soft-stone-theme professional-theme solarized-theme occidental-theme light-soap-theme hydandata-light-theme github-theme faff-theme autumn-light-theme eziam-theme alect-themes twilight-bright-theme poet-theme csv-mode undo-tree inflections edn seq spinner org-mime flyspell-correct-helm flyspell-correct flycheck-pos-tip flycheck ghub treepy sesman ac-ispell adaptive-wrap noflet ensime sbt-mode scala-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data wgrep smex ivy-hydra counsel-projectile counsel swiper ivy winum powerline org-category-capture gntp json-snatcher json-reformat multiple-cursors hydra parent-mode gitignore-mode fringe-helper git-gutter+ git-gutter fuzzy pos-tip flx let-alist graphql iedit anzu goto-chg ctable skewer-mode request-deferred websocket request deferred simple-httpd dash-functional tern peg eval-sexp-fu highlight queue pkg-info epl bind-map bind-key packed pythonic auto-complete popup sql-indent grandshell-theme badwolf-theme badger-theme abyss-theme gruvbox-theme ample-theme color-theme-sanityinc-tomorrow inkpot-theme creamsody-theme paper-theme jazz-theme dash org diminish paredit cider clojure-mode anaconda-mode ess julia-mode smartparens magit magit-popup evil git-commit with-editor company helm helm-core yasnippet avy markdown-mode async alert log4e projectile f js2-mode s suscolors-theme yapfify ws-butler window-numbering which-key web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package toc-org spacemacs-theme spaceline smeargle restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort popwin polymode pip-requirements persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc info+ indent-guide ido-vertical-mode hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu ess-smart-equals ess-R-object-popup ess-R-data-view elisp-slime-nav ein dumb-jump diff-hl define-word dactyl-mode cython-mode company-tern company-statistics company-anaconda column-enforce-mode coffee-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-window ace-link ace-jump-helm-line)))
+    (dracula-theme soft-charcoal-theme soft-morning-theme soft-stone-theme professional-theme solarized-theme occidental-theme light-soap-theme hydandata-light-theme github-theme faff-theme autumn-light-theme eziam-theme alect-themes twilight-bright-theme poet-theme csv-mode undo-tree inflections edn seq spinner org-mime flyspell-correct-helm flyspell-correct flycheck-pos-tip flycheck ghub treepy sesman ac-ispell adaptive-wrap noflet ensime sbt-mode scala-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data wgrep smex ivy-hydra counsel-projectile counsel swiper ivy winum powerline org-category-capture gntp json-snatcher json-reformat multiple-cursors hydra parent-mode gitignore-mode fringe-helper git-gutter+ git-gutter fuzzy pos-tip flx let-alist graphql iedit anzu goto-chg ctable skewer-mode request-deferred websocket request deferred simple-httpd dash-functional tern peg eval-sexp-fu highlight queue pkg-info epl bind-map bind-key packed pythonic auto-complete popup sql-indent grandshell-theme badwolf-theme badger-theme abyss-theme gruvbox-theme ample-theme color-theme-sanityinc-tomorrow inkpot-theme creamsody-theme paper-theme jazz-theme dash org diminish paredit cider clojure-mode anaconda-mode ess julia-mode smartparens magit magit-popup evil git-commit with-editor company helm helm-core yasnippet avy markdown-mode async alert log4e projectile f js2-mode s suscolors-theme yapfify ws-butler window-numbering which-key web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package toc-org spacemacs-theme spaceline smeargle restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort popwin polymode pip-requirements persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc info+ indent-guide hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu ess-smart-equals ess-R-object-popup ess-R-data-view elisp-slime-nav ein dumb-jump diff-hl define-word dactyl-mode cython-mode company-tern company-statistics company-anaconda column-enforce-mode coffee-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-window ace-link )))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(pos-tip-background-color "#1A3734")
  '(pos-tip-foreground-color "#FFFFC8")
