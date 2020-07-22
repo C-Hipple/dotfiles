@@ -70,3 +70,6 @@ fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 cd ~/Documents
+
+
+alias tree='tree -I '*pyc|postgres-data'
