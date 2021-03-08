@@ -40,6 +40,7 @@ values."
      javascript
      vimscript
      python
+     vue
      ess
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -51,7 +52,6 @@ values."
      ;;auto-completion
      ;; better-defaults
      emacs-lisp
-     ein
      git
      markdown
      ;; (shell :variables
@@ -86,7 +86,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(nord-theme suscolors-theme gruvbox-theme solarized-theme oceanic-theme rebecca-theme)
+   dotspacemacs-additional-packages '(nord-theme suscolors-theme gruvbox-theme solarized-theme oceanic-theme rebecca-theme subatomic-theme)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -170,7 +170,7 @@ values."
                                :size 13
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.0)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
@@ -555,7 +555,10 @@ static char *gnus-pointer[] = {
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 257)) (:family "AverageMono" :foundry "outline" :slant normal :weight normal :height 130 :width normal)) (((class color) (min-colors 89)) (:background "#1c1c1c" :foreground "#eeeeee" :family "AverageMono" :foundry "outline" :slant normal :weight normal :height 130 :width normal)))))
+ ;; '(default ((((class color) (min-colors 257)) (:family "Courier New" :foundry "outline" :slant normal :weight normal :height 130 :width normal)) (((class color) (min-colors 89)) (:background "#1c1c1c" :foreground "#eeeeee" :family "Courier New" :foundry "outline" :slant normal :weight normal :height 130 :width normal)))))
+ '(default ((((class color) (min-colors 257)) (:family "Courier New" :foundry "outline" :slant normal :weight normal :height 130 :width normal))))
+)
+
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
@@ -637,6 +640,7 @@ static char *gnus-pointer[] = {
 \"###..######.######\",
 \"###########.######\" };") t)
  '(helm-completion-style 'emacs)
+ '(helm-descbinds-window-style ''split)
  '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-colors
    (--map
@@ -689,9 +693,10 @@ static char *gnus-pointer[] = {
      ("deleted" :foreground "#ff2c4b" :bold t)))
  '(nrepl-message-colors
    '("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4"))
+ '(org-cycle-level-faces nil)
  '(org-level-color-stars-only t)
  '(package-selected-packages
-   '(birds-of-paradise-plus-theme lavender-theme toxi-theme rebecca-theme immaterial-theme material-theme flatland-theme firecode-theme gruber-darker-theme moe-theme distinguished-theme afternoon-theme cherry-blossom-theme clues-theme heroku-theme cloud-theme zen-and-art-theme purple-haze-theme purp-theme twilight-theme sunburn-theme subatomic-theme spacegray-theme soothe-theme srcery-theme slime-theme smyx-theme reykjavik-theme railscasts-theme pastelmac-theme mandm-theme panda-theme soria-theme nova-theme oceanic-theme obsidian-theme northcode-theme foggy-night-theme warm-night-theme night-owl-theme nimbus-theme naysayer-theme monokai-theme sublime-themes elpy ycmd bubbleberry-theme zenburn-theme laguna-theme eink-theme humanoid-themes minsk-theme csv-mode github-review poly-R autothemer ein suscolors-theme nord-theme toml-mode racer flycheck-rust flx-ido transient anaphora lv parseedn parseclj a cargo rust-mode ace-jump-helm-line dracula-theme soft-charcoal-theme soft-morning-theme soft-stone-theme professional-theme solarized-theme occidental-theme light-soap-theme hydandata-light-theme github-theme faff-theme autumn-light-theme eziam-theme alect-themes twilight-bright-theme poet-theme undo-tree inflections edn seq spinner org-mime flyspell-correct-helm flyspell-correct flycheck-pos-tip ghub treepy sesman ac-ispell adaptive-wrap noflet sbt-mode scala-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data wgrep smex ivy-hydra counsel-projectile counsel swiper ivy winum powerline org-category-capture gntp json-snatcher json-reformat multiple-cursors hydra parent-mode gitignore-mode fringe-helper git-gutter+ git-gutter fuzzy pos-tip flx let-alist graphql iedit anzu goto-chg ctable skewer-mode request-deferred websocket request deferred simple-httpd dash-functional tern peg eval-sexp-fu highlight queue pkg-info epl bind-map bind-key packed pythonic auto-complete popup sql-indent grandshell-theme badwolf-theme badger-theme abyss-theme gruvbox-theme ample-theme color-theme-sanityinc-tomorrow inkpot-theme creamsody-theme paper-theme jazz-theme dash org diminish paredit cider clojure-mode anaconda-mode ess julia-mode smartparens magit magit-popup evil git-commit with-editor company helm helm-core yasnippet avy markdown-mode async alert log4e projectile f js2-mode s suscolors-theme yapfify ws-butler window-numbering which-key web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package toc-org spacemacs-theme spaceline smeargle restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort popwin polymode pip-requirements persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc info+ indent-guide hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu ess-smart-equals ess-R-object-popup ess-R-data-view elisp-slime-nav dumb-jump diff-hl define-word dactyl-mode cython-mode company-tern company-statistics company-anaconda column-enforce-mode coffee-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-window ace-link))
+   '(vue-mode peacock-theme overcast-theme ayu-theme undersea-theme iceberg-theme mlso-theme melancholy-theme dark-krystal-theme darktooth-theme atom-one-dark-theme atom-dark-theme lush-theme monokai-alt-theme monokai-pro-theme waher-theme prassee-theme naquadah-theme birds-of-paradise-plus-theme lavender-theme toxi-theme rebecca-theme immaterial-theme material-theme flatland-theme firecode-theme gruber-darker-theme moe-theme distinguished-theme afternoon-theme cherry-blossom-theme clues-theme heroku-theme cloud-theme zen-and-art-theme purple-haze-theme purp-theme twilight-theme sunburn-theme subatomic-theme spacegray-theme soothe-theme srcery-theme slime-theme smyx-theme reykjavik-theme railscasts-theme pastelmac-theme mandm-theme panda-theme soria-theme nova-theme oceanic-theme obsidian-theme northcode-theme foggy-night-theme warm-night-theme night-owl-theme nimbus-theme naysayer-theme monokai-theme sublime-themes elpy ycmd bubbleberry-theme zenburn-theme laguna-theme eink-theme humanoid-themes minsk-theme csv-mode github-review poly-R autothemer ein suscolors-theme nord-theme toml-mode racer flycheck-rust flx-ido transient anaphora lv parseedn parseclj a cargo rust-mode ace-jump-helm-line dracula-theme soft-charcoal-theme soft-morning-theme soft-stone-theme professional-theme solarized-theme occidental-theme light-soap-theme hydandata-light-theme github-theme faff-theme autumn-light-theme eziam-theme alect-themes twilight-bright-theme poet-theme undo-tree inflections edn seq spinner org-mime flyspell-correct-helm flyspell-correct flycheck-pos-tip ghub treepy sesman ac-ispell adaptive-wrap noflet sbt-mode scala-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data wgrep smex ivy-hydra counsel-projectile counsel swiper ivy winum powerline org-category-capture gntp json-snatcher json-reformat multiple-cursors hydra parent-mode gitignore-mode fringe-helper git-gutter+ git-gutter fuzzy pos-tip flx let-alist graphql iedit anzu goto-chg ctable skewer-mode request-deferred websocket request deferred simple-httpd dash-functional tern peg eval-sexp-fu highlight queue pkg-info epl bind-map bind-key packed pythonic auto-complete popup sql-indent grandshell-theme badwolf-theme badger-theme abyss-theme gruvbox-theme ample-theme color-theme-sanityinc-tomorrow inkpot-theme creamsody-theme paper-theme jazz-theme dash org diminish paredit cider clojure-mode anaconda-mode ess julia-mode smartparens magit magit-popup evil git-commit with-editor company helm helm-core yasnippet avy markdown-mode async alert log4e projectile f js2-mode s suscolors-theme yapfify ws-butler window-numbering which-key web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package toc-org spacemacs-theme spaceline smeargle restart-emacs rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort popwin polymode pip-requirements persp-mode pcre2el paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint json-mode js2-refactor js-doc info+ indent-guide hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu ess-smart-equals ess-R-object-popup ess-R-data-view elisp-slime-nav dumb-jump diff-hl define-word dactyl-mode cython-mode company-tern company-statistics company-anaconda column-enforce-mode coffee-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-window ace-link))
  '(pdf-view-midnight-colors '("#969896" . "#f8eec7"))
  '(pos-tip-background-color "#1A3734")
  '(pos-tip-foreground-color "#FFFFC8")
@@ -738,5 +743,9 @@ static char *gnus-pointer[] = {
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 257)) (:family "AverageMono" :foundry "outline" :slant normal :weight normal :height 130 :width normal)) (((class color) (min-colors 89)) (:background "#1c1c1c" :foreground "#eeeeee" :family "AverageMono" :foundry "outline" :slant normal :weight normal :height 130 :width normal)))))
+ '(default ((((class color) (min-colors 257)) (:family "Courier New" :foundry "outline" :slant normal :weight normal :height 130 :width normal)) (((class color) (min-colors 89)) (:background "#1c1c1c" :foreground "#eeeeee" :family "Courier New" :foundry "outline" :slant normal :weight normal :height 130 :width normal))))
+ '(helm-ff-directory ((t (:extend t :foreground "systemYellowColor"))))
+ '(helm-selection ((t (:extend t :background "Blue" :underline nil))))
+ '(org-level-1 ((t (:extend nil :foreground "#5faf5f"))))
+ '(org-level-2 ((t (:extend nil :foreground "#D8553B")))))
 )
