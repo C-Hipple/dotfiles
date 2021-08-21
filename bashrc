@@ -1,6 +1,8 @@
 # added by Anaconda3 4.1.1 installer
 export PATH="/home/chris/anaconda2/bin:$PATH"
 
+alias dif="pylint `git diff --name-only --diff-filter=d | grep -E '\.py$' | tr '\n' ' '`"
+
 alias prophetTunnel='ssh -N -f -L localhost:8888:localhost:8888 prophet@prophet'
 alias grafanaTunnel='ssh -N -f -L localhost:3000:localhost:3000 prophet@prophet'
 alias postgresTunnel='ssh -N -f -L localhost:5432:localhost:5432 prophet@prophet'
@@ -18,7 +20,12 @@ export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr
 #export PS1=" \[\e[00;34m\]金 :  \[\e[0m\]"
 
 
-
+clear_db() {
+    docker-compose exec db psql -U ohi_dev -c 'DROP DATABASE IF EXISTS test_ohi_dev_gw0;'
+    docker-compose exec db psql -U ohi_dev -c 'DROP DATABASE IF EXISTS test_ohi_dev_gw1;'
+    docker-compose exec db psql -U ohi_dev -c 'DROP DATABASE IF EXISTS test_ohi_dev_gw2;'
+    docker-compose exec db psql -U ohi_dev -c 'DROP DATABASE IF EXISTS test_ohi_dev_gw3;'
+}
 
 
 # Only show the current directory
@@ -73,3 +80,4 @@ cd ~/Documents
 
 
 alias tree='tree -I '*pyc|postgres-data'
+. "$HOME/.cargo/env"
