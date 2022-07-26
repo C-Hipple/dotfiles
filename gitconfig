@@ -1,8 +1,8 @@
 [credential]
     helper = cache --timeout=360000
 [user]
-    name = C-Hipple
-    email = Chris.Hipple@gmail.com
+	name = Chris Hipple
+	email = chrishipple@multimediallc.com
 [alias]
     lg = log --decorate --oneline --graph --branches --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold blue)(%ar) %C(bold yellow)%d%C(reset) %C(green)%s%C(reset) %C(dim green)- %an%C(reset)'
     poosh = push
