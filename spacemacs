@@ -679,8 +679,8 @@ before packages are loaded."
                 ("~//review/month.html")
                 ))
 
-  ;;(with-eval-after-load 'org
-   ;; (add-hook 'org-mode-hook #'visual-line-mode))
+  (with-eval-after-load 'org
+    (add-hook 'org-mode-hook #'visual-line-mode))
 )
 
 (custom-set-variables
