@@ -11,3 +11,5 @@
     pu = push
     p = pull
     cm = commit -a -m
+[github]
+	user = C-Hipple

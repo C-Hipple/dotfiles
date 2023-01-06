@@ -55,7 +55,7 @@ let g:LookOfDissaprovalTabTreshold=2
 
 " set the colorscheme.  
 " srcery was modded to have an ice blue instead of the red
-color srcery
+color desert
 
 " Function for stripping whitespice at end of lines and removing tab chars.
 function! StripTabsAndTrailingWhitespaces()
