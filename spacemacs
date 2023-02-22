@@ -41,7 +41,6 @@ This function should only modify configuration layer settings."
      ;; ----------------------------------------------------------------
      ;; auto-completion
      ;; better-defaults
-     javascript
      typescript
      rust
      go
@@ -752,34 +751,24 @@ before packages are loaded."
 
   ;; Silly theme stuff
   (defun set-gold ()
-    (set-face-attribute 'default :foreground "#d7af5f"))
+    "Set the default face to #d7af5f."
+    (interactive)
+    (set-face-attribute 'default nil :foreground "#d7af5f")
+    )
+
+  (add-to-list 'custom-theme-load-path "~/dotfiles/emacs/themes")
 
   ;; Chat GPT
   (setq python-interpreter "/Users/chrishipple/.pyenv/shims/python")
 
-
   (require 'python)
-  ;; (setq chatgpt-repo-path (expand-file-name "chatgpt/" quelpa-build-dir))
   (setq chatgpt-repo-path (expand-file-name "chatgpt/" quelpa-build-dir))
   (global-set-key (kbd "C-c q") #'chatgpt-query)
 
 
-  (add-to-list 'custom-theme-load-path "~/dotfiles/emacs/themes")
-
   ;; Go
-
   (add-to-list 'exec-path "/Users/chrishipple/go/bin")
   (setq gofmt-command "goimports")
-
-  ;;(require 'lsp-mode)
-  ;; TODO Delete these once I ensure setup.cfg is working
-  ;;  (add-hook 'go-mode-hook #'lsp-deferred)
-  ;;(setq lsp-pylsp-plugins-pycodestyle-enabled t)
-  ;;(add-to-list 'lsp-pyls-plugins-pycodestyle-exclude "E501")
-  ;;(add-to-list 'lsp-pyls-plugins-pycodestyle-exclude "D103")
-
-  ;; lsp-pylsp-plugins-flake8-enabled
-  ;;(add-to-list 'lsp-pyls-plugins-flake8-exclude "D103")
 
 
   ;; Set up before-save hooks to format buffer and add/delete imports.
