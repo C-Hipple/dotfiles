@@ -694,7 +694,9 @@ before packages are loaded."
   (add-to-list 'custom-theme-load-path "~/dotfiles/emacs/themes")
 
   ;; Chat GPT
+  
 
+  ;; Waiting on the new release which uses the APIs instead of webdriver
   ;;(setq python-interpreter "/Users/chrishipple/.pyenv/shims/python")
   ;;(setq python-shell-interpreter "/Users/chrishipple/.pyenv/shims/python")
 
@@ -706,7 +708,6 @@ before packages are loaded."
 
 
   ;; Go
-  ;; (add-to-list 'exec-path "/Users/chrishipple/go/bin")
   (setq gofmt-command "goimports")
 
   ;; Set up before-save hooks to format buffer and add/delete imports.
@@ -741,7 +742,6 @@ before packages are loaded."
   (setq lsp-rust-server 'rust-analyzer)
 
   ;; dash
-  ;; (require 'helm-dash)
 
   (defun go-doc ()
     (interactive)
