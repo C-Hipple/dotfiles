@@ -647,7 +647,7 @@ before packages are loaded."
   (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "PROGRESS(p)" "TENTATIVE(e)" "BLOCKED(b)" "DELEGATED(l)" "|" "DONE(d)" "CANCELLED(c)" )))
 
   (setq org-agenda-files '("~/gtd/inbox.org"
-                           "~/gtd/gtd.org"
+                           "~/gtd/next_actions.org"
                            "~/gtd/tickler.org"))
 
   (setq org-capture-templates '(("t" "Todo [inbox]" entry
@@ -659,9 +659,12 @@ before packages are loaded."
 
   (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
 
-  (setq org-refile-targets '(("~/gtd/gtd.org" :maxlevel . 3)
+  (setq org-refile-targets '(("~/gtd/next_actions.org" :maxlevel . 3)
                              ("~/gtd/someday.org" :level . 1)
                              ("~/gtd/tickler.org" :maxlevel . 2)))
+
+
+  (load-file "~/dotfiles/review.el")
 
 
   (setq org-todo-keyword-faces

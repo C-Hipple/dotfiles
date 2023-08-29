@@ -4,7 +4,7 @@
 ;; time periods
 (setq org-agenda-custom-commands
       '(("c" "Work" tags-todo "work" ;; (1) (2) (3) (4)
-         ((org-agenda-files '("~/gtd/inbox.org" "~/gtd/gtd.org" "~/gtd/notes.org")) ;; (5)
+         ((org-agenda-files '("~/gtd/inbox.org" "~/gtd/gtd.org" "~/gtd/notes.org" "~/gtd/next_actions.org")) ;; (5)
           (org-agenda-sorting-strategy '(priority-up effort-down))) ;; (5) cont.
          ("~/computer.html")) ;; (6)
         ;; ...other commands here
@@ -20,6 +20,7 @@
                             "~/gtd/someday.org"
                             "~/gtd/gtd.org"
                             "~/gtd/inbox.org"
+                            "~/gtd/next_actions.org"
                             ))
         (org-agenda-show-all-dates t)
         (org-agenda-start-with-log-mode t)
