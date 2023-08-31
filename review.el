@@ -73,3 +73,17 @@
                   )
                 ("~//review/month.html")
                 ))
+
+  (add-to-list 'org-agenda-custom-commands
+             `("Rs" "Sprint in review"
+                agenda ""
+                ;; agenda settings
+                ,(append
+                  efs/org-agenda-review-settings
+                  '((org-agenda-span 10)
+                    (org-agenda-start-day "-6d")
+                    (org-agenda-start-on-weekday nil)
+                    (org-agenda-overriding-header "Sprint Review"))
+                  )
+                ("~//review/sprint.html")
+                ))
