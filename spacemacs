@@ -44,7 +44,7 @@ This function should only modify configuration layer settings."
      ;; better-defaults
      typescript
      rust
-     go
+     (go :variables go-tab-width 4)
      html
      sql
      ruby
@@ -638,9 +638,6 @@ before packages are loaded."
   (define-key evil-insert-state-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
 
 
-  ;; attempt at fixing tabs in golang
-  (setq default-tab-width 4)
-  (setq tab-width 4)
 
 
   ;; ORG MODE
@@ -759,13 +756,9 @@ before packages are loaded."
     (add-hook 'before-save-hook 'lsp-organize-imports t t))
   (add-hook 'go-mode-hook 'lsp-go-install-save-hooks)
 
-  ;; I think something is overriting, try a hook
-  (defun go-set-tab-width ()
-    (setq tab-width 4))
-  (add-hook 'go-mode-hook 'go-set-tab-width)
-
 
   ;; PR body mode
+  ;; This was for an example techtalk I gave
   (define-derived-mode pr-body-mode markdown-mode
     "pr-body-mode"
     )
