@@ -756,26 +756,6 @@ before packages are loaded."
     (add-hook 'before-save-hook 'lsp-organize-imports t t))
   (add-hook 'go-mode-hook 'lsp-go-install-save-hooks)
 
-
-  ;; PR body mode
-  ;; This was for an example techtalk I gave
-  (define-derived-mode pr-body-mode markdown-mode
-    "pr-body-mode"
-    )
-
-  (add-to-list 'auto-mode-alist '("\\.prbody\\'" . pr-body-mode))
-
-  (with-eval-after-load 'lsp-mode
-    (add-to-list 'lsp-language-id-configuration
-                 '(pr-body-mode . "lsp-example"))
-
-    (lsp-register-client
-     (make-lsp-client :new-connection (lsp-stdio-connection "lsp-example")
-                      :activation-fn (lsp-activate-on "lsp-example")
-                      :server-id: 'lsp-example)
-      )
-    )
-
   ;; Company mode
   ;; (setq company-idle-delay 0)
   ;; (setq company-minimum-prefix-length 1)
