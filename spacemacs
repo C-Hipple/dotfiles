@@ -711,7 +711,40 @@ before packages are loaded."
   (defun reset-default-face()
     (interactive)
     (set-face-attribute 'default nil :foreground "#ebdbb2")
-   )
+    )
+
+  (defun make-blue ()
+    (interactive)
+    (set-face-attribute 'default nil :background "#2E3440")
+    (set-face-attribute 'fringe nil :background "#2E3440")
+    )
+
+  (defun reset-default-background()
+    (interactive)
+    (set-face-attribute 'default )
+    )
+
+  ;; Reset default face's session customizations
+  ;; it bork
+  (defun reset-default-face-session-customization ()
+    "Reset FACE to its default settings."
+    (interactive)
+    (list (read-face-name "Face to reset: "))
+    (let ((face-spec (get face 'face-defface-spec)))
+      (if face-spec
+          (progn
+            (face-spec-set face face-spec)
+            (message "Face '%s' reset to default." face))
+        (message "No default settings found for face '%s'." face)))
+    )
+
+
+  ;; it bork
+  ;; (defun revert-face-to-default ()
+  ;;   (interactive)
+  ;;   "Revert the given FACE to its default settings."
+  ;;   (let ((default-attributes (face-default-attributes 'default)))
+  ;;     (apply 'set-face-attributes face default-attributes)))
 
   (add-to-list 'custom-theme-load-path "~/dotfiles/emacs/themes")
 
@@ -800,7 +833,21 @@ before packages are loaded."
   (setq shr-use-fonts nil)
   (setq dash-docs-enable-debugging nil)
 
+
   (define-key evil-normal-state-map (kbd ", g d") 'helm-dash-at-point)
+
+  ;; Magit stuffo
+  (defun my-magit-visit-file-other-window ()
+    "Visit the current file's diff in another window."
+    (interactive)
+    (let ((current-file (buffer-file-name)))
+      (if current-file
+          (progn
+            (magit-find-file "master" current-file)
+            )
+        (message "This buffer is not visiting a file!"))))
+
+  (define-key evil-normal-state-map (kbd "SPC g F") 'my-magit-visit-file-other-window)
 )
 
 
