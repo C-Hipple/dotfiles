@@ -108,6 +108,7 @@ This function should only modify configuration layer settings."
   code-review
   chatgpt-shell
   exec-path-from-shell
+  sqlite3
   )
 
    ;; A list of packages that cannot be updated.
