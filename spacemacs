@@ -791,6 +791,7 @@ before packages are loaded."
     (add-hook 'before-save-hook 'lsp-organize-imports t t))
   (add-hook 'go-mode-hook 'lsp-go-install-save-hooks)
 
+  (add-to-list 'lsp-pylsp-plugins-pydocstyle-ignore "D101")
   ;; Company mode
   ;; (setq company-idle-delay 0)
   ;; (setq company-minimum-prefix-length 1)
