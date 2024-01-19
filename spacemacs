@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(lua
+   '(nginx
+     lua
      python
      javascript
      ;; ----------------------------------------------------------------
@@ -105,10 +106,22 @@ This function should only modify configuration layer settings."
   python-black
   helm-dash
   dap-mode
-  code-review
   chatgpt-shell
   exec-path-from-shell
   sqlite3
+  (code-review :location (recipe
+                     :fetcher github
+                     :repo "C-Hipple/code-review"
+                     :files ("*.el")
+                     ;;:branch "feature/delta-highlighting-in-review"
+                     )
+          )
+
+   magit-delta
+   dockerfile-mode
+   docker-compose-mode
+   fireplace
+   ef-themes
   )
 
    ;; A list of packages that cannot be updated.
@@ -643,7 +656,7 @@ before packages are loaded."
 
   ;; ORG MODE
   (setq org-startup-folded t)
-  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "PROGRESS(p)" "TENTATIVE(e)" "BLOCKED(b)" "DELEGATED(l)" "|" "DONE(d)" "CANCELLED(c)" )))
+  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "PROGRESS(p)" "TENTATIVE(e)" "BLOCKED(b)" "DELEGATED(l)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)" )))
 
   (setq org-agenda-files '("~/gtd/inbox.org"
                            "~/gtd/next_actions.org"
@@ -656,11 +669,9 @@ before packages are loaded."
                                  (file+headline "~/gtd/tickler.org" "Tickler")
                                  "* %i%? \n %U")))
 
-  (setq org-refile-targets '((nil :maxlevel . 5) (org-agenda-files :maxlevel . 5)))
-
   (setq org-refile-targets '(("~/gtd/next_actions.org" :maxlevel . 3)
-                             ("~/gtd/someday.org" :level . 1)
-                             ("~/gtd/notes.org" :level . 3)
+                             ("~/gtd/someday.org" :maxlevel . 3)
+                             ("~/gtd/notes.org" :maxlevel . 3)
                              ("~/gtd/tickler.org" :maxlevel . 2)))
 
 
@@ -668,7 +679,7 @@ before packages are loaded."
 
 
   (setq org-todo-keyword-faces
-        '(("TODO" . org-warning) ("STARTED" . "yellow") ("PROGRESS" . "orange") ("WAITING" . "yellow") ("DELEGATED" . "brown")
+        '(("TODO" . org-warning) ("STARTED" . "yellow") ("PROGRESS" . "orange") ("WAITING" . "yellow") ("DELEGATED" . "brown") ("REVIEW" . "yellow")
           ("CANCELED" . (:foreground "blue" :weight bold))))
 
   ;; This makes it so helm is only the width of the buffer, not full emacs
@@ -690,7 +701,8 @@ before packages are loaded."
   (with-eval-after-load 'org
     (add-hook 'org-mode-hook 'visual-line-mode)
     (add-hook 'before-save-hook 'org-auto-check)
-    (add-hook 'before-save-hook 'whitespace-cleanup))
+    (add-hook 'before-save-hook 'whitespace-cleanup)
+  )
 
   (defun org-summary-todo (n-done n-not-done)
     "Switch entry to DONE when all subentries are done, to TODO otherwise."
@@ -762,6 +774,7 @@ before packages are loaded."
   (defun load-chatgpt-config ()
     (setq chatgpt-api-key (getenv "CHATGPT_API_KEY"))
   )
+  (setenv "GTDBOT_GITHUB_TOKEN" (getenv "GTDBOT_GITHUB_TOKEN"))
 
   ;; (add-hook 'markdown-mode-hook
   ;;           (lambda ()
@@ -789,9 +802,11 @@ before packages are loaded."
   (defun lsp-go-install-save-hooks ()
     (add-hook 'before-save-hook 'lsp-format-buffer t t)
     (add-hook 'before-save-hook 'lsp-organize-imports t t))
+
   (add-hook 'go-mode-hook 'lsp-go-install-save-hooks)
 
   (add-to-list 'lsp-pylsp-plugins-pydocstyle-ignore "D101")
+
   ;; Company mode
   ;; (setq company-idle-delay 0)
   ;; (setq company-minimum-prefix-length 1)
@@ -851,9 +866,57 @@ before packages are loaded."
         (message "This buffer is not visiting a file!"))))
 
   (define-key evil-normal-state-map (kbd "SPC g F") 'my-magit-visit-file-other-window)
+
+  ;; Copy org to google docs
+  (defun org-region-to-docx-clipboard ()
+    "Convert selected org-mode region from START to END to docx format and copy to clipboard."
+    (interactive "r")
+    (let* ((org-text (buffer-substring-no-properties region-beginning region-end))
+           (temp-file-org (make-temp-file "org-to-docx-" nil ".org"))
+           (temp-file-docx (make-temp-file "org-to-docx-" nil ".docx")))
+      ;; Write the org text to a temp file
+      (with-temp-file temp-file-org
+        (insert org-text))
+      ;; Use pandoc to convert
+      (call-process "pandoc" nil nil nil
+                    "-s" temp-file-org
+                    "-o" temp-file-docx)
+      ;; Copy to clipboard
+      (with-temp-buffer
+        (insert-file-contents temp-file-docx)
+        (shell-command-on-region (point-min) (point-max) "clip" nil t))
+      ;; Clean up
+      (delete-file temp-file-org)
+      (delete-file temp-file-docx)
+      )
+    )
+  ;; Compilation 
+  (defun my-ansi-color (&optional beg end)
+    "Interpret ANSI color esacape sequence by colorifying cotent.
+Operate on selected region on whole buffer."
+    (interactive
+     (if (use-region-p)
+         (list (region-beginning) (region-end))
+       (list (point-min) (point-max))))
+    (ansi-color-apply-on-region beg end))
+
+  (ignore-errors
+    (require 'ansi-color)
+    (defun my-colorize-compilation-buffer ()
+      (when (eq major-mode 'compilation-mode)
+        (ansi-color-apply-on-region compilation-filter-start (point-max))))
+    (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
+
+  ;; Code Review
+  (defun code-review-start-at-point ()
+    "Copy the current line and pass it to `code-review-start`."
+    (interactive)
+    (let ((current-line (thing-at-point 'line t)))
+      (code-review-start current-line)))
+
+
+
 )
-
-
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
@@ -869,8 +932,8 @@ This function is called at the very end of Spacemacs initialization."
    '("7b8f5bbdc7c316ee62f271acf6bcd0e0b8a272fdffe908f8c920b0ba34871d98" "2681c80b05b9b972e1c5e4d091efb9ba7bb5fa7dad810d9026bc79607a78f1c0" "b1a691bb67bd8bd85b76998caf2386c9a7b2ac98a116534071364ed6489b695d" "d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "ca2e59377dc1ecee2a1069ec7126b453fa1198fed946304abb9a5b8c7ad5404d" default))
  '(desktop-save nil)
  '(package-selected-packages
-   '(vterm dream-theme company-terraform terraform-mode hcl-mode magit-delta sqlite3 lsp-haskell all-the-icons-completion exec-path-from-shell chatgpt-shell xterm-color harpoon tommyh-theme company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode flycheck-haskell haskell-snippets helm-hoogle hindent hlint-refactor haskell-mode dap-mode lsp-docker bui reformatter dash-docs lcr xref company-cabal cmm-mode attrap quelpa-use-package chatgpt tablist aio helm-dash python-black copilot python-isort cov code-review yasnippet-snippets tern lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami helm-lsp helm-c-yasnippet fuzzy web-completion-data auto-yasnippet ac-ispell modus-themes pdf-tools go elpy eredis minsk-theme material-theme jedi lsp-jedi lsp-ui lsp-mode eglot sunny-day-theme vs-light-theme smeargle orgit-forge orgit helm-ls-git helm-git-grep gitignore-templates git-timemachine git-modes git-messenger git-link forge yaml ghub closql emacsql-sqlite emacsql treepy magit-popup treemacs-magit magit magit-section git-commit with-editor yapfify yaml-mode web-mode web-beautify underwater-theme toml-mode tide typescript-mode tagedit suscolors-theme subatomic-theme sql-indent sphinx-doc solarized-theme smyx-theme slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rebecca-theme rbenv rake racer rust-mode pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js poetry transient planet-theme pippel pipenv load-env-vars pyvenv pip-requirements org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-contrib org-cliplink oceanic-theme obsidian-theme npm-mode nose nord-theme nodejs-repl mmm-mode minitest markdown-toc livid-mode skewer-mode live-py-mode json-reformat json-navigator hierarchy json-mode json-snatcher js2-refactor yasnippet multiple-cursors js2-mode js-doc epc ctable concurrent deferred impatient-mode simple-httpd htmlize helm-pydoc helm-org-rifle helm-css-scss haml-mode gruvbox-theme autothemer godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc go-mode gnuplot git-gutter-fringe fringe-helper git-gutter gh-md flyspell-correct-helm flyspell-correct flycheck-rust flycheck-pos-tip pos-tip evil-org emmet-mode cython-mode csv-mode code-cells chruby cargo markdown-mode bundler inf-ruby browse-at-remote blacken auto-dictionary anaconda-mode pythonic ws-butler writeroom-mode visual-fill-column winum volatile-highlights vim-powerline vi-tilde-fringe uuidgen undo-tree queue treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs pfuture posframe toc-org symon symbol-overlay string-inflection spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons memoize spaceline powerline space-doc restart-emacs request rainbow-delimiters quickrun popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless multi-line shut-up macrostep lorem-ipsum link-hint inspector info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck pkg-info epl flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection annalist evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils elisp-slime-nav elisp-def f editorconfig dumb-jump s drag-stuff dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol ht dash auto-compile packed compat all-the-icons aggressive-indent ace-window ace-link ace-jump-helm-line helm avy popup helm-core which-key use-package pcre2el hydra lv hybrid-mode holy-mode font-lock+ evil-evilified-state evil goto-chg dotenv-mode diminish bind-map bind-key async))
- '(warning-suppress-types '(((flycheck syntax-checker)))))
+   '(nginx-mode ef-themes hydandata-light-theme basic-theme fireplace goose-theme docker-compose-mode dockerfile-mode code-review emacsql-sqlite-builtin emacsql-sqlite-module emojify a vterm dream-theme company-terraform terraform-mode hcl-mode magit-delta sqlite3 lsp-haskell all-the-icons-completion exec-path-from-shell chatgpt-shell xterm-color harpoon tommyh-theme company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode flycheck-haskell haskell-snippets helm-hoogle hindent hlint-refactor haskell-mode dap-mode lsp-docker bui reformatter dash-docs lcr xref company-cabal cmm-mode attrap quelpa-use-package chatgpt tablist aio helm-dash python-black copilot python-isort cov yasnippet-snippets tern lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami helm-lsp helm-c-yasnippet fuzzy web-completion-data auto-yasnippet ac-ispell modus-themes pdf-tools go elpy eredis minsk-theme material-theme jedi lsp-jedi lsp-ui lsp-mode eglot sunny-day-theme vs-light-theme smeargle orgit-forge orgit helm-ls-git helm-git-grep gitignore-templates git-timemachine git-modes git-messenger git-link forge yaml ghub emacsql-sqlite emacsql treepy magit-popup treemacs-magit magit magit-section git-commit with-editor yapfify yaml-mode web-mode web-beautify underwater-theme toml-mode tide typescript-mode tagedit suscolors-theme subatomic-theme sql-indent sphinx-doc solarized-theme smyx-theme slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rebecca-theme rbenv rake racer rust-mode pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js poetry transient planet-theme pippel pipenv load-env-vars pyvenv pip-requirements org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-contrib org-cliplink oceanic-theme obsidian-theme npm-mode nose nord-theme nodejs-repl mmm-mode minitest markdown-toc livid-mode skewer-mode live-py-mode json-reformat json-navigator hierarchy json-mode json-snatcher js2-refactor yasnippet multiple-cursors js2-mode js-doc epc ctable concurrent deferred impatient-mode simple-httpd htmlize helm-pydoc helm-org-rifle helm-css-scss haml-mode gruvbox-theme autothemer godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc go-mode gnuplot git-gutter-fringe fringe-helper git-gutter gh-md flyspell-correct-helm flyspell-correct flycheck-rust flycheck-pos-tip pos-tip evil-org emmet-mode cython-mode csv-mode code-cells chruby cargo markdown-mode bundler inf-ruby browse-at-remote blacken auto-dictionary anaconda-mode pythonic ws-butler writeroom-mode visual-fill-column winum volatile-highlights vim-powerline vi-tilde-fringe uuidgen undo-tree queue treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs pfuture posframe toc-org symon symbol-overlay string-inflection spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons memoize spaceline powerline space-doc restart-emacs request rainbow-delimiters quickrun popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless multi-line shut-up macrostep lorem-ipsum link-hint inspector info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck pkg-info epl flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection annalist evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils elisp-slime-nav elisp-def f editorconfig dumb-jump s drag-stuff dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol ht dash auto-compile packed compat all-the-icons aggressive-indent ace-window ace-link ace-jump-helm-line helm avy popup helm-core which-key use-package pcre2el hydra lv hybrid-mode holy-mode font-lock+ evil-evilified-state evil goto-chg dotenv-mode diminish bind-map bind-key async))
+ '(warning-suppress-types '((emacs) ((flycheck syntax-checker)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
