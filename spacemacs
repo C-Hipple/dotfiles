@@ -663,7 +663,7 @@ before packages are loaded."
 
   ;; ORG MODE
   (setq org-startup-folded t)
-  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "PROGRESS(p)" "TENTATIVE(e)" "BLOCKED(b)" "DELEGATED(l)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)" )))
+  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "PROGRESS(p)" "MAYBE(m)" "BLOCKED(b)" "DELEGATED(l)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)" )))
 
   (setq org-agenda-files '("~/gtd/inbox.org"
                            "~/gtd/next_actions.org"
@@ -723,6 +723,12 @@ before packages are loaded."
     (find-file-other-window "~/gtd/inbox.org"))
 
   (define-key evil-normal-state-map (kbd "SPC b i") 'open-inbox-org)
+
+  (defun open-review-org ()
+    (interactive)
+    (find-file-other-window "~/gtd/reviews.org"))
+
+  (define-key evil-normal-state-map (kbd "SPC b r") 'open-review-org)
 
   (defun open-next-actions-org ()
     (interactive)
@@ -810,16 +816,8 @@ before packages are loaded."
   ;;(setq chatgpt-repo-path (expand-file-name "chatgpt/" quelpa-build-dir))
   ;;(global-set-key (kbd "C-c q") 'chatgpt-query)
 
-  ;; Go
+  ;; Go  golang
   (setq gofmt-command "goimports")
-
-  ;; Set up before-save hooks to format buffer and add/delete imports.
-  ;; Make sure you don't have other gofmt/goimports hooks enabled.
-  (defun lsp-go-install-save-hooks ()
-    (add-hook 'before-save-hook 'lsp-format-buffer t t)
-    (add-hook 'before-save-hook 'lsp-organize-imports t t))
-
-  (add-hook 'go-mode-hook 'lsp-go-install-save-hooks)
 
   (use-package lsp-mode
     :config
@@ -853,10 +851,7 @@ before packages are loaded."
 
   ;; Go - lsp-mode
   ;; Set up before-save hooks to format buffer and add/delete imports.
-  (defun lsp-go-install-save-hooks ()
-    (add-hook 'before-save-hook 'lsp-format-buffer t t)
-    (add-hook 'before-save-hook 'lsp-organize-imports t t))
-  (add-hook 'go-mode-hook 'lsp-go-install-save-hooks)
+  (add-to-list 'projectile-project-root-files-functions 'custom/lsp-default-dir)
 
   ;; Start LSP Mode and YASnippet mode
   (add-hook 'go-mode-hook 'lsp-deferred)
@@ -877,6 +872,12 @@ before packages are loaded."
     (setq-local helm-dash-docsets '("Go")))
 
   (add-hook 'go-mode-hook 'go-doc)
+
+  ;; Python
+
+  (define-key evil-normal-state-map (kbd ", f r") 'python-black-region)
+  (define-key evil-visual-state-map (kbd ", f r") 'python-black-region)
+  (define-key evil-normal-state-map (kbd ", f b") 'python-black-buffer)
 
   (defun python-doc ()
     (interactive)
