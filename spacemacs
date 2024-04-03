@@ -1004,6 +1004,9 @@ Operate on selected region on whole buffer."
 
   ;; overwrite default shell-command keybind
   (define-key evil-normal-state-map (kbd "SPC !") 'async-shell-command)
+  (define-key evil-normal-state-map (kbd "SPC b S") 'shell)
+  ;; todo new binding?
+  (define-key evil-normal-state-map (kbd "SPC f c") 'comment-or-uncomment-region)
 
   (exec-path-from-shell-copy-env "GTDBOT_GITHUB_TOKEN")
 
