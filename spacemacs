@@ -668,6 +668,8 @@ before packages are loaded."
 
   (add-hook 'python-ts-mode-hook 'lsp)
   (add-hook 'go-ts-mode-hook 'lsp)
+  (add-hook 'tsx-ts-mode-hook 'lsp)
+
   (setq tab-width 4)
   (setq go-ts-mode-indent-offset tab-width)
 
@@ -990,17 +992,27 @@ Operate on selected region on whole buffer."
         (ansi-color-apply-on-region compilation-filter-start (point-max))))
     (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
 
-  ;; compile tools
-
-  (if (file-exists-p "~/dotfiles/compile_command.el")
-      (load-file "~/dotfiles/compile_command.el"))
 
   ;; Code Review
   (defun code-review-start-at-point ()
     "Copy the current line and pass it to `code-review-start`."
     (interactive)
-    (let ((current-line (thing-at-point 'line t)))
-      (code-review-start current-line)))
+    (let (
+          (current-line (thing-at-point 'line t))
+          (pattern "https://github\\.com/[^/]+/\\([^/]+\\)/pull/[0-9]+")
+          )
+      (when (string-match pattern current-line)
+        (setq project-name (match-string 1 current-line))
+        )
+      (code-review-start current-line)
+      ;; TODO: check if we successfully got the project name
+      (cd (concat "~/" project-name))
+      )
+    )
+
+  (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)
+  (define-key evil-normal-state-map (kbd ", r s") 'code-review-start-at-point)
+
 
   ;; overwrite default shell-command keybind
   (define-key evil-normal-state-map (kbd "SPC !") 'async-shell-command)
@@ -1010,7 +1022,12 @@ Operate on selected region on whole buffer."
 
   (exec-path-from-shell-copy-env "GTDBOT_GITHUB_TOKEN")
 
-  (define-key evil-normal-state-map (kbd "SPC b c") (lambda () (interactive) (switch-to-buffer "*compilation*")))
+  (define-key evil-normal-state-map (kbd "SPC b c") (lambda () (interactive) (switch-to-buffer "*compilation*" nil t)))
+
+  ;; compile tools
+
+  (if (file-exists-p "~/dotfiles/compile_command.el")
+      (load-file "~/dotfiles/compile_command.el"))
 
 )
 (defun dotspacemacs/emacs-custom-settings ()
