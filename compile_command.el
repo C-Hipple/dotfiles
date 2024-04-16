@@ -51,12 +51,11 @@
 (define-key evil-normal-state-map (kbd "SPC c r") 'save-and-recompile)
 (define-key evil-normal-state-map (kbd "SPC c T") 'run-pytest-full-file)
 
-(defun format-by-mode ()
+(defun format-buffer-by-mode ()
   "If we're in python, we use black-format-buffer, otherwise we use lsp-format-buffer"
     (interactive)
     (if (string= major-mode "python-ts-mode")
         (progn
-          (message "Using python formatter")
           (py-isort-buffer)
           (python-black-buffer)
         )
@@ -64,7 +63,7 @@
   )
     )
 
-(define-key evil-normal-state-map (kbd ", f b") 'format-by-mode)
+(define-key evil-normal-state-map (kbd ", f b") 'format-buffer-by-mode)
 
   (defun cb-lint ()
     (interactive)
@@ -78,8 +77,22 @@
     (compile "docker compose run --rm ci linter.pyright.lint-branch")
     )
 
+(defun cb-format()
+    (interactive)
+    (save-some-buffers 1)
+    (compile "docker compose run --rm ci formatpy.format")
+    )
+
   (define-key evil-normal-state-map (kbd "SPC c l") 'cb-lint)
   (define-key evil-normal-state-map (kbd "SPC c p") 'cb-pyright)
+  (define-key evil-normal-state-map (kbd "SPC c f") 'cb-format)
+
+(defun save-all()
+  (interactive)
+  (save-some-buffers 1)
+  )
+
+(define-key evil-normal-state-map (kbd "SPC c s") 'save-all)
 
   ;; frontend compilation
   (defun cb-rebuild-react ()
@@ -87,11 +100,32 @@
     (compile "docker compose run --rm frontend-build yarn workspace @multimediallc/cb-react build")
     )
 
-  (define-key evil-normal-state-map (kbd "SPC c f r b") 'cb-rebuild-react)
+  ;;(define-key evil-normal-state-map (kbd "SPC c f r b") 'cb-rebuild-react)
 
   (defun cb-test-react ()
     (interactive)
     (compile "docker compose run --rm frontend-build yarn workspace @multimediallc/cb-react test")
     )
 
-  (define-key evil-normal-state-map (kbd "SPC c f r t") 'cb-test-react)
+  ;;(define-key evil-normal-state-map (kbd "SPC c f r t") 'cb-test-react)
+
+
+;; Stashing
+(defun magit-stash-read-message ()
+  "OVERLOADED: Always include the branch name in the stash message.
+Read a message from the minibuffer, to be used for a stash.
+
+The message that Git would have picked, is available as the
+default (used when the user enters the empty string) and as
+the next history element (which can be accessed with \
+\\<minibuffer-local-map>\\[next-history-element])."
+  (concat
+   (magit-get-current-branch)
+   ": "
+   (read-string (format "Stash message (default: On%s:%s): "
+                       (magit--ellipsis) (magit--ellipsis))
+               nil nil
+               (format "%s"
+                       (magit-rev-format "%h %s"))))
+
+  )
