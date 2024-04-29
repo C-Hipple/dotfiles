@@ -87,29 +87,30 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    ;; dotspacemacs-additional-packages '(nord-theme suscolors-theme gruvbox-theme solarized-theme oceanic-theme rebecca-theme subatomic-theme obsidian-theme planet-theme smyx-theme underwater-theme magit magit-popup vs-light-theme dockerfile-mode helm-dash python-black )
    dotspacemacs-additional-packages '(
-  (copilot :location (recipe
-                         :fetcher github
-                         :repo "zerolfx/copilot.el"
-                         :files ("*.el" "dist")
-                         )
-           )
+
+
+  ;; (copilot :location (recipe
+  ;;                        :fetcher github
+  ;;                        :repo "zerolfx/copilot.el"
+  ;;                        :files ("*.el" "dist")
+  ;;                        )
+  ;;          )
   ;; (chatgpt :location (recipe
   ;;                     :fetcher github
   ;;                     :repo "joshcho/ChatGPT.el")
   ;;          )
-  (chatgpt :location (recipe
-                      :fetcher github
-                      :repo "MercuricChloride/chatgpt.el"
-                      :files ("*.el" "dist")
-                      )
-           )
+  ;; (chatgpt :location (recipe
+  ;;                     :fetcher github
+  ;;                     :repo "MercuricChloride/chatgpt.el"
+  ;;                     :files ("*.el" "dist")
+  ;;                     )
+  ;;          )
 
   solarized-theme
   vs-light-theme
   python-black
   helm-dash
   dap-mode
-  chatgpt-shell
   exec-path-from-shell
   sqlite3
   (code-review :location (recipe
@@ -118,7 +119,14 @@ This function should only modify configuration layer settings."
                      :files ("*.el")
                      ;;:branch "feature/delta-highlighting-in-review"
                      )
-          )
+               )
+
+  ;; (diff-lsp :location (recipe
+  ;;                    :fetcher github
+  ;;                    :repo "C-Hipple/diff-lsp"
+  ;;                    :files ("*.el")
+  ;;                    )
+  ;;           )
 
    magit-delta
    dockerfile-mode
@@ -649,7 +657,7 @@ before packages are loaded."
     (global-treesit-auto-mode))
 
   ;; not a real hook
-  ;;(setq rust-ts-mode-hook rust-mode-hook)
+  ;;(setq rust-ts-mode-hook rustic-mode-hook)
   (setq python-ts-mode-hook python-mode-hook)
   (setq go-ts-mode-hook go-mode-hook)
   (setq typescript-ts-mode-hook typescript-mode-hook)
@@ -701,14 +709,14 @@ before packages are loaded."
 
   ;; copilot copy/pasted from readme
 
-  (with-eval-after-load 'copilot
-    (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-    (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
+  ;; (with-eval-after-load 'copilot
+  ;;   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+  ;;   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
-  (add-hook 'prog-mode-hook 'copilot-mode)
+  ;; (add-hook 'prog-mode-hook 'copilot-mode)
 
-  (define-key evil-insert-state-map (kbd "C-<tab>") 'copilot-accept-completion-by-word)
-  (define-key evil-insert-state-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
+  ;; (define-key evil-insert-state-map (kbd "C-<tab>") 'copilot-accept-completion-by-word)
+  ;; (define-key evil-insert-state-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
 
   ;; ORG MODE
   (setq org-startup-folded t)
@@ -779,6 +787,12 @@ before packages are loaded."
 
   (define-key evil-normal-state-map (kbd "SPC b r") 'open-review-org)
 
+  (defun open-release-org ()
+    (interactive)
+    (find-file-other-window "~/gtd/release.org"))
+
+  (define-key evil-normal-state-map (kbd "SPC b R") 'open-release-org)
+
   (defun open-next-actions-org ()
     (interactive)
     (find-file-other-window "~/gtd/next_actions.org"))
@@ -836,34 +850,12 @@ before packages are loaded."
 
   (add-to-list 'custom-theme-load-path "~/dotfiles/emacs/themes")
 
-  ;; Chat GPT
-  (load-file "~/Downloads/chatgpt.el")
-  ;; set the api key from env variable
-  (setq chatgpt-api-key (getenv "CHATGPT_API_KEY"))
-
-  (setq chatgpt-model "gpt-3.5")
-
-  (setq chatgpt-shell-openai-key (getenv "CHATGPT_API_KEY"))
-
-  (defun load-chatgpt-config ()
-    (setq chatgpt-api-key (getenv "CHATGPT_API_KEY"))
-  )
-  (setenv "GTDBOT_GITHUB_TOKEN" (getenv "GTDBOT_GITHUB_TOKEN"))
-
-  ;; (add-hook 'markdown-mode-hook
-  ;;           (lambda ()
-  ;;             (define-key evil-normal-state-map (kbd "r") 'chatgpt-reply)))
-
 
   (define-key evil-normal-state-map (kbd ", c") 'comint-clear-buffer)
 
   ;; Waiting on the new release which uses the APIs instead of webdriver
   ;;(setq python-interpreter "/Users/chrishipple/.pyenv/shims/python")
   ;;(setq python-shell-interpreter "/Users/chrishipple/.pyenv/shims/python")
-
-  ;; (require 'python)
-  ;;(setq chatgpt-repo-path (expand-file-name "chatgpt/" quelpa-build-dir))
-  ;;(global-set-key (kbd "C-c q") 'chatgpt-query)
 
   ;; Go  golang
   (setq gofmt-command "goimports")
@@ -1010,8 +1002,15 @@ Operate on selected region on whole buffer."
       )
     )
 
+  (defun run-gtdbot-oneoff ()
+    "Runs gtdbot with the oneoff flag to update reviews.org"
+    (interactive)
+    (shell-command "gtdbot --oneoff")
+    )
+
   (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)
   (define-key evil-normal-state-map (kbd ", r s") 'code-review-start-at-point)
+  (define-key evil-normal-state-map (kbd ", r l") 'run-gtdbot-oneoff) ;; l for list?
 
 
   ;; overwrite default shell-command keybind
@@ -1029,6 +1028,9 @@ Operate on selected region on whole buffer."
   (if (file-exists-p "~/dotfiles/compile_command.el")
       (load-file "~/dotfiles/compile_command.el"))
 
+  ;; trying something here, I htink I need to compile emacs with something else
+  ;; (set-frame-parameter nil 'alpha-background 88)
+
 )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
@@ -1045,7 +1047,7 @@ This function is called at the very end of Spacemacs initialization."
    '("7b8f5bbdc7c316ee62f271acf6bcd0e0b8a272fdffe908f8c920b0ba34871d98" "2681c80b05b9b972e1c5e4d091efb9ba7bb5fa7dad810d9026bc79607a78f1c0" "b1a691bb67bd8bd85b76998caf2386c9a7b2ac98a116534071364ed6489b695d" "d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "ca2e59377dc1ecee2a1069ec7126b453fa1198fed946304abb9a5b8c7ad5404d" default))
  '(desktop-save nil)
  '(package-selected-packages
-   '(github-review minimal-theme solo-jazz-theme jazz-theme kanagawa-theme treesit-auto apheleia nginx-mode ef-themes hydandata-light-theme basic-theme fireplace goose-theme docker-compose-mode dockerfile-mode code-review emacsql-sqlite-builtin emacsql-sqlite-module emojify a vterm dream-theme company-terraform terraform-mode hcl-mode magit-delta sqlite3 lsp-haskell all-the-icons-completion exec-path-from-shell chatgpt-shell xterm-color harpoon tommyh-theme company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode flycheck-haskell haskell-snippets helm-hoogle hindent hlint-refactor haskell-mode dap-mode lsp-docker bui reformatter dash-docs lcr xref company-cabal cmm-mode attrap quelpa-use-package chatgpt tablist aio helm-dash python-black copilot python-isort cov yasnippet-snippets tern lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami helm-lsp helm-c-yasnippet fuzzy web-completion-data auto-yasnippet ac-ispell modus-themes pdf-tools go elpy eredis minsk-theme material-theme jedi lsp-jedi lsp-ui lsp-mode eglot sunny-day-theme vs-light-theme smeargle orgit-forge orgit helm-ls-git helm-git-grep gitignore-templates git-timemachine git-modes git-messenger git-link forge yaml ghub emacsql-sqlite emacsql treepy magit-popup treemacs-magit magit magit-section git-commit with-editor yapfify yaml-mode web-mode web-beautify underwater-theme toml-mode tide typescript-mode tagedit suscolors-theme subatomic-theme sql-indent sphinx-doc solarized-theme smyx-theme slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rebecca-theme rbenv rake racer rust-mode pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js poetry transient planet-theme pippel pipenv load-env-vars pyvenv pip-requirements org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-contrib org-cliplink oceanic-theme obsidian-theme npm-mode nose nord-theme nodejs-repl mmm-mode minitest markdown-toc livid-mode skewer-mode live-py-mode json-reformat json-navigator hierarchy json-mode json-snatcher js2-refactor yasnippet multiple-cursors js2-mode js-doc epc ctable concurrent deferred impatient-mode simple-httpd htmlize helm-pydoc helm-org-rifle helm-css-scss haml-mode gruvbox-theme autothemer godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc go-mode gnuplot git-gutter-fringe fringe-helper git-gutter gh-md flyspell-correct-helm flyspell-correct flycheck-rust flycheck-pos-tip pos-tip evil-org emmet-mode cython-mode csv-mode code-cells chruby cargo markdown-mode bundler inf-ruby browse-at-remote blacken auto-dictionary anaconda-mode pythonic ws-butler writeroom-mode visual-fill-column winum volatile-highlights vim-powerline vi-tilde-fringe uuidgen undo-tree queue treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs pfuture posframe toc-org symon symbol-overlay string-inflection spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons memoize spaceline powerline space-doc restart-emacs request rainbow-delimiters quickrun popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless multi-line shut-up macrostep lorem-ipsum link-hint inspector info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck pkg-info epl flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection annalist evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils elisp-slime-nav elisp-def f editorconfig dumb-jump s drag-stuff dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol ht dash auto-compile packed compat all-the-icons aggressive-indent ace-window ace-link ace-jump-helm-line helm avy popup helm-core which-key use-package pcre2el hydra lv hybrid-mode holy-mode font-lock+ evil-evilified-state evil goto-chg dotenv-mode diminish bind-map bind-key async))
+   '(github-review minimal-theme solo-jazz-theme jazz-theme kanagawa-theme treesit-auto apheleia nginx-mode ef-themes hydandata-light-theme basic-theme fireplace goose-theme docker-compose-mode dockerfile-mode code-review emacsql-sqlite-builtin emacsql-sqlite-module emojify a vterm dream-theme company-terraform terraform-mode hcl-mode magit-delta sqlite3 lsp-haskell all-the-icons-completion exec-path-from-shell xterm-color harpoon tommyh-theme company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode flycheck-haskell haskell-snippets helm-hoogle hindent hlint-refactor haskell-mode dap-mode lsp-docker bui reformatter dash-docs lcr xref company-cabal cmm-mode attrap quelpa-use-package tablist aio helm-dash python-black python-isort cov yasnippet-snippets tern lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami helm-lsp helm-c-yasnippet fuzzy web-completion-data auto-yasnippet ac-ispell modus-themes pdf-tools go elpy eredis minsk-theme material-theme jedi lsp-jedi lsp-ui lsp-mode eglot sunny-day-theme vs-light-theme smeargle orgit-forge orgit helm-ls-git helm-git-grep gitignore-templates git-timemachine git-modes git-messenger git-link forge yaml ghub emacsql-sqlite emacsql treepy magit-popup treemacs-magit magit magit-section git-commit with-editor yapfify yaml-mode web-mode web-beautify underwater-theme toml-mode tide typescript-mode tagedit suscolors-theme subatomic-theme sql-indent sphinx-doc solarized-theme smyx-theme slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rebecca-theme rbenv rake racer rust-mode pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js poetry transient planet-theme pippel pipenv load-env-vars pyvenv pip-requirements org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-contrib org-cliplink oceanic-theme obsidian-theme npm-mode nose nord-theme nodejs-repl mmm-mode minitest markdown-toc livid-mode skewer-mode live-py-mode json-reformat json-navigator hierarchy json-mode json-snatcher js2-refactor yasnippet multiple-cursors js2-mode js-doc epc ctable concurrent deferred impatient-mode simple-httpd htmlize helm-pydoc helm-org-rifle helm-css-scss haml-mode gruvbox-theme autothemer godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc go-mode gnuplot git-gutter-fringe fringe-helper git-gutter gh-md flyspell-correct-helm flyspell-correct flycheck-rust flycheck-pos-tip pos-tip evil-org emmet-mode cython-mode csv-mode code-cells chruby cargo markdown-mode bundler inf-ruby browse-at-remote blacken auto-dictionary anaconda-mode pythonic ws-butler writeroom-mode visual-fill-column winum volatile-highlights vim-powerline vi-tilde-fringe uuidgen undo-tree queue treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs pfuture posframe toc-org symon symbol-overlay string-inflection spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons memoize spaceline powerline space-doc restart-emacs request rainbow-delimiters quickrun popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless multi-line shut-up macrostep lorem-ipsum link-hint inspector info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck pkg-info epl flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection annalist evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils elisp-slime-nav elisp-def f editorconfig dumb-jump s drag-stuff dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol ht dash auto-compile packed compat all-the-icons aggressive-indent ace-window ace-link ace-jump-helm-line helm avy popup helm-core which-key use-package pcre2el hydra lv hybrid-mode holy-mode font-lock+ evil-evilified-state evil goto-chg dotenv-mode diminish bind-map bind-key async))
  '(warning-suppress-types '((emacs) ((flycheck syntax-checker)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
