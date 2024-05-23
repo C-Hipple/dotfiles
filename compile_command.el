@@ -65,10 +65,40 @@
 
 (define-key evil-normal-state-map (kbd ", f b") 'format-buffer-by-mode)
 
-  (defun cb-lint ()
+(defun cb-lint ()
+  (interactive)
+  (save-some-buffers 1)
+  (compile "docker compose run --rm ci linter.lint --fast")
+  )
+
+;; Working on being able to automatically use the re-run
+;; Final vision is to read the compilation buffer and see if
+;; there's a Re-run ... line, and use that command via docker
+;; Currently it expects the Re-Run line to be at the cursor
+
+  (defun cb-re-lint ()
     (interactive)
     (save-some-buffers 1)
-    (compile "docker compose run --rm ci linter.lint --fast")
+    (setq lint-command "docker compose run --rm ci linter.lint --fast")
+    (let (
+          (pattern "Re.+:[\s]*\\(.*\\)")
+          (my_line (thing-at-point 'line))
+          )
+      (message (concat "my line: " my_line))
+      (if (string-match pattern my_line)
+        (progn
+        (message "Found re-lint")
+        (message (match-string 1))
+        (setq lint-command (concat "docker compose run --rm ci "
+                                   (match-string 1)
+                                   )
+              )
+        (message lint-command)
+        )
+        (message "Didn't match re-run")
+        )
+      )
+    (compile lint-command)
     )
 
   (defun cb-pyright()
@@ -127,5 +157,20 @@ the next history element (which can be accessed with \
                nil nil
                (format "%s"
                        (magit-rev-format "%h %s"))))
-
   )
+
+(defun buffer-exists (buffer-name)
+  (not (eq nil (get-buffer buffer-name))
+  )
+  )
+
+(defun check-buffa (buffer-name)
+  (interactive)
+  (when (buffer-exists buffer-name)
+    (with-current-buffer buffer-name
+      buffer-substring
+      )
+    )
+  )
+
+(check-buffa "*scratch*")

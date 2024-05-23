@@ -313,9 +313,9 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-themes '(suscolors
                          gruvbox-dark-medium
                          nord
-                         spacemacs-dark
-                         spacemacs-light
-                         jazz)
+                         jazz
+                         ef-Duo-light
+                         )
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -334,7 +334,7 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Courier New"
-                               :size 16.0
+                               :size 18.0
                                :weight normal
                                :width normal)
 
@@ -641,6 +641,9 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  ;;(add-to-list 'default-frame-alist '(undecorated . t))
+
   ;; General stuff
   (setq-default tab-width 4)
   (define-key evil-normal-state-map (kbd "K") (lambda () (interactive) (previous-line 10)))
@@ -677,6 +680,7 @@ before packages are loaded."
   (add-hook 'python-ts-mode-hook 'lsp)
   (add-hook 'go-ts-mode-hook 'lsp)
   (add-hook 'tsx-ts-mode-hook 'lsp)
+  (add-hook 'typescript-ts-mode-hook 'lsp)
 
   (setq tab-width 4)
   (setq go-ts-mode-indent-offset tab-width)
@@ -801,14 +805,14 @@ before packages are loaded."
 
   ;; delete current theme when loading another
   ;; (defadvice load-theme (before theme-dont-propagate activate)
-    ;;(mapc #'disable-theme custom-enabled-themes))
+  ;;(mapc #'disable-theme custom-enabled-themes))
 
   ;; Silly theme stuff
   (defun set-gold ()
     "set the default face to #d7af5f."
     (interactive)
     (set-face-attribute 'default nil :foreground "#d7af5f")
-   )
+    )
 
   (defun reset-default-face()
     (interactive)
@@ -1012,10 +1016,32 @@ Operate on selected region on whole buffer."
   (define-key evil-normal-state-map (kbd ", r s") 'code-review-start-at-point)
   (define-key evil-normal-state-map (kbd ", r l") 'run-gtdbot-oneoff) ;; l for list?
 
+  ;; (defun get-shell ()
+  ;;   (interactive)
+  ;;   (if (project-name)
+  ;;       (progn
+  ;;         (message "We have a name: %s" (project-name))
+  ;;         'project-shell)
+  ;;     'shell))
 
-  ;; overwrite default shell-command keybind
+  ;; (defun get-shell ()
+  ;;   "Open `shell' if not in a project or `project-shell' if in a project."
+  ;;   (interactive)
+  ;;   (message "here1")
+  ;;   (if (project-current)
+  ;;       (project-shell) ; Or replace with `projectile-run-shell' if using Projectile
+  ;;     (shell)))
+
+  ;; working for project shell?
+  (defun get-shell ()
+    shell
+    )
+
+  (define-key evil-normal-state-map (kbd "SPC b S") 'get-shell)
+
+  ;; overwrite default shell-command keybind to be async
   (define-key evil-normal-state-map (kbd "SPC !") 'async-shell-command)
-  (define-key evil-normal-state-map (kbd "SPC b S") 'shell)
+  ;; testing out using project shell
   ;; todo new binding?
   (define-key evil-normal-state-map (kbd "SPC f c") 'comment-or-uncomment-region)
 
@@ -1024,7 +1050,6 @@ Operate on selected region on whole buffer."
   (define-key evil-normal-state-map (kbd "SPC b c") (lambda () (interactive) (switch-to-buffer "*compilation*" nil t)))
 
   ;; compile tools
-
   (if (file-exists-p "~/dotfiles/compile_command.el")
       (load-file "~/dotfiles/compile_command.el"))
 
