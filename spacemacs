@@ -314,7 +314,7 @@ It should only modify the values of Spacemacs settings."
                          gruvbox-dark-medium
                          nord
                          jazz
-                         ef-Duo-light
+                         ;; ef-duo-light
                          )
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -1052,6 +1052,9 @@ Operate on selected region on whole buffer."
   ;; compile tools
   (if (file-exists-p "~/dotfiles/compile_command.el")
       (load-file "~/dotfiles/compile_command.el"))
+
+  (if (file-exists-p "~/dotfiles/elisp_helpers.el")
+      (load-file "~/dotfiles/elisp_helpers.el"))
 
   ;; trying something here, I htink I need to compile emacs with something else
   ;; (set-frame-parameter nil 'alpha-background 88)
