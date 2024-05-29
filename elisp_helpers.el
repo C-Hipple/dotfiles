@@ -28,7 +28,7 @@
 
 (defun my/org-mode-use-fixed-width-font ()
   "Set Org mode faces to use a fixed-width font."
-  (interactive)
+  (set-face-attribute 'fixed-pitch nil :family "Courier New")
   (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
@@ -48,4 +48,4 @@
   (set-face-attribute 'org-level-5 nil :inherit 'fixed-pitch)
   )
 
-(set-face-attribute 'fixed-pitch nil :family "Courier New")
+(add-hook 'org-mode-hook 'my/org-mode-use-fixed-width-font)
