@@ -670,6 +670,7 @@ before packages are loaded."
         '((yaml-mode . yaml-ts-mode)
           (bash-mode . bash-ts-mode)
           (go-mode . go-ts-mode)
+          (rustic-mode . rust-ts-mode)
           (js2-mode . js-ts-mode)
           (typescript-mode . typescript-ts-mode)
           (tsx-mode . tsx-ts-mode)
@@ -802,6 +803,12 @@ before packages are loaded."
     (find-file-other-window "~/gtd/next_actions.org"))
 
   (define-key evil-normal-state-map (kbd "SPC b a") 'open-next-actions-org)
+
+  (defun open-agendas-org ()
+    (interactive)
+    (find-file-other-window "~/gtd/agendas.org"))
+
+  (define-key evil-normal-state-map (kbd "SPC b A") 'open-agendas-org)
 
   ;; delete current theme when loading another
   ;; (defadvice load-theme (before theme-dont-propagate activate)
@@ -1009,7 +1016,7 @@ Operate on selected region on whole buffer."
   (defun run-gtdbot-oneoff ()
     "Runs gtdbot with the oneoff flag to update reviews.org"
     (interactive)
-    (shell-command "gtdbot --oneoff")
+    (async-shell-command "gtdbot --oneoff")
     )
 
   (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)

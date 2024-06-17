@@ -5,6 +5,7 @@
     (pop-to-buffer (get-buffer-create "*llm*"))
     (insert-buffer-substring (current-buffer))
     (insert (shell-command-to-string command))
+    (markdown-mode)
     )
   )
 
@@ -20,7 +21,6 @@
     (insert-buffer-substring (current-buffer))
     (insert (shell-command-to-string command))
     )
-
   )
 
 (define-key evil-normal-state-map (kbd ", l b") 'send-buffer-to-llm)

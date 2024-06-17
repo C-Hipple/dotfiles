@@ -117,6 +117,13 @@
   (define-key evil-normal-state-map (kbd "SPC c p") 'cb-pyright)
   (define-key evil-normal-state-map (kbd "SPC c f") 'cb-format)
 
+(defun cb-reformat()
+  ;; Reformats files in the region selected by black output
+  ;; would reformat /opt/app/common/util/util.py
+  (interactive)
+  ;; TODO implement
+  )
+
 (defun save-all()
   (interactive)
   (save-some-buffers 1)
@@ -124,20 +131,20 @@
 
 (define-key evil-normal-state-map (kbd "SPC c s") 'save-all)
 
-  ;; frontend compilation
-  (defun cb-rebuild-react ()
-    (interactive)
-    (compile "docker compose run --rm frontend-build yarn workspace @multimediallc/cb-react build")
-    )
+;; frontend compilation
+(defun cb-rebuild-react ()
+  (interactive)
+  (compile "docker compose run --rm frontend-build yarn workspace @multimediallc/cb-react build")
+  )
 
-  ;;(define-key evil-normal-state-map (kbd "SPC c f r b") 'cb-rebuild-react)
+;;(define-key evil-normal-state-map (kbd "SPC c f r b") 'cb-rebuild-react)
 
-  (defun cb-test-react ()
-    (interactive)
-    (compile "docker compose run --rm frontend-build yarn workspace @multimediallc/cb-react test")
-    )
+(defun cb-test-react ()
+  (interactive)
+  (compile "docker compose run --rm frontend-build yarn workspace @multimediallc/cb-react test")
+  )
 
-  ;;(define-key evil-normal-state-map (kbd "SPC c f r t") 'cb-test-react)
+;;(define-key evil-normal-state-map (kbd "SPC c f r t") 'cb-test-react)
 
 
 ;; Stashing
@@ -164,13 +171,13 @@ the next history element (which can be accessed with \
   )
   )
 
-(defun check-buffa (buffer-name)
-  (interactive)
-  (when (buffer-exists buffer-name)
-    (with-current-buffer buffer-name
-      buffer-substring
-      )
-    )
-  )
+;; (defun check-buffa (buffer-name)
+;;   (interactive)
+;;   (when (buffer-exists buffer-name)
+;;     (with-current-buffer buffer-name
+;;       buffer-substring
+;;       )
+;;     )
+;;   )
 
-(check-buffa "*scratch*")
+;; (check-buffa "*scratch*")
