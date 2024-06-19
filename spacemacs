@@ -682,6 +682,7 @@ before packages are loaded."
   (add-hook 'go-ts-mode-hook 'lsp)
   (add-hook 'tsx-ts-mode-hook 'lsp)
   (add-hook 'typescript-ts-mode-hook 'lsp)
+  (add-hook 'rust-ts-mode-hook 'lsp)
 
   (setq tab-width 4)
   (setq go-ts-mode-indent-offset tab-width)
