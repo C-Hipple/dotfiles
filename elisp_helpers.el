@@ -1,3 +1,11 @@
+(defun insert-todo-with-date ()
+  (interactive)
+  ;; TODO: get the right number of ***.  3 is typical for me though
+  (insert "*** TODO ")
+  (org-date-from-calendar)
+  )
+
+(define-key evil-normal-state-map (kbd "SPC C i") 'insert-todo-with-date)
 (defun run-llm (command)
   (interactive "sEnter LLM command: ")
   (setq command (concat "llm \"" command "\""))
