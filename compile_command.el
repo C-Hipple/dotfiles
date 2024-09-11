@@ -43,9 +43,9 @@
 
 ;; Recompile should automatically save
 (defun save-and-recompile ()
-    (interactive)
-    (save-some-buffers 1)
-    (recompile)
+  (interactive)
+  (save-some-buffers 1)
+  (recompile)
   )
 
 (define-key evil-normal-state-map (kbd "SPC c r") 'save-and-recompile)
@@ -53,15 +53,15 @@
 
 (defun format-buffer-by-mode ()
   "If we're in python, we use black-format-buffer, otherwise we use lsp-format-buffer"
-    (interactive)
-    (if (string= major-mode "python-ts-mode")
-        (progn
-          (py-isort-buffer)
-          (python-black-buffer)
+  (interactive)
+  (if (string= major-mode "python-ts-mode")
+      (progn
+        (py-isort-buffer)
+        (python-black-buffer)
         )
-      (lsp-format-buffer)
-  )
+    (lsp-format-buffer)
     )
+  )
 
 (define-key evil-normal-state-map (kbd ", f b") 'format-buffer-by-mode)
 
@@ -76,46 +76,45 @@
 ;; there's a Re-run ... line, and use that command via docker
 ;; Currently it expects the Re-Run line to be at the cursor
 
-  (defun cb-re-lint ()
-    (interactive)
-    (save-some-buffers 1)
-    (setq lint-command "docker compose run --rm ci linter.lint --fast")
-    (let (
-          (pattern "Re.+:[\s]*\\(.*\\)")
-          (my_line (thing-at-point 'line))
-          )
-      (message (concat "my line: " my_line))
-      (if (string-match pattern my_line)
-        (progn
-        (message "Found re-lint")
-        (message (match-string 1))
-        (setq lint-command (concat "docker compose run --rm ci "
-                                   (match-string 1)
-                                   )
-              )
-        (message lint-command)
-        )
-        (message "Didn't match re-run")
-        )
-      )
-    (compile lint-command)
-    )
+(defun split-line-after-string (line delimiter)
+  "Splits a line after the first occurrence of DELIMITER and returns the second half.
 
-  (defun cb-pyright()
-    (interactive)
-    (save-some-buffers 1)
-    (compile "docker compose run --rm ci linter.pyright.lint-branch")
-    )
+If DELIMITER is not found, returns nil."
+  (let ((pos (string-match delimiter line)))
+    (if pos
+        (substring line (1+ (+ 1 pos)))   ; Extract substring after the delimiter ;;extra +1 for teh space
+      nil)))                          ; Return nil if delimiter not found
+
+(defun cb-re-lint()
+  (interactive)
+  (with-current-buffer "*compilation*"
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "^Re-run" nil t)
+        (beginning-of-line)
+        (let ((line (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+          (save-some-buffers 1)
+          (compile (concat "docker compose run --rm ci " (split-line-after-string line ": ")))
+          )))))
+
+
+
+(defun cb-pyright()
+  (interactive)
+  (save-some-buffers 1)
+  (compile "docker compose run --rm ci linter.pyright.lint-branch")
+  )
 
 (defun cb-format()
-    (interactive)
-    (save-some-buffers 1)
-    (compile "docker compose run --rm ci formatpy.format")
-    )
+  (interactive)
+  (save-some-buffers 1)
+  (compile "docker compose run --rm ci formatpy.format")
+  )
 
-  (define-key evil-normal-state-map (kbd "SPC c l") 'cb-lint)
-  (define-key evil-normal-state-map (kbd "SPC c p") 'cb-pyright)
-  (define-key evil-normal-state-map (kbd "SPC c f") 'cb-format)
+(define-key evil-normal-state-map (kbd "SPC c l") 'cb-lint)
+(define-key evil-normal-state-map (kbd "SPC c r") 'cb-re-lint)
+(define-key evil-normal-state-map (kbd "SPC c p") 'cb-pyright)
+(define-key evil-normal-state-map (kbd "SPC c f") 'cb-format)
 
 (defun cb-reformat()
   ;; Reformats files in the region selected by black output
@@ -160,15 +159,15 @@ the next history element (which can be accessed with \
    (magit-get-current-branch)
    ": "
    (read-string (format "Stash message (default: On%s:%s): "
-                       (magit--ellipsis) (magit--ellipsis))
-               nil nil
-               (format "%s"
-                       (magit-rev-format "%h %s"))))
+                        (magit--ellipsis) (magit--ellipsis))
+                nil nil
+                (format "%s"
+                        (magit-rev-format "%h %s"))))
   )
 
 (defun buffer-exists (buffer-name)
   (not (eq nil (get-buffer buffer-name))
-  )
+       )
   )
 
 ;; (defun check-buffa (buffer-name)
