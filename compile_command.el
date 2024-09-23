@@ -3,23 +3,20 @@
    followed by the text from after 'def' up to but not including the first '(' on the current line."
   (interactive)
   (save-some-buffers 1)
-  (setq my_line (thing-at-point 'line))
-
-  (let ((pattern "^def \\([a-zA-Z0-9_]+\\)"))
-    (when (string-match pattern my_line)
-      (setq function-name (match-string 1 my_line))))
-
-  (setq fullpath (buffer-file-name))
-  (setq root (projectile-project-root))
-  (setq final_path (replace-regexp-in-string root "" fullpath))
-  (setq command (concat "docker compose run --rm test "
-                        final_path
-                        "::"
-                        function-name
-                        " --no-cov --reuse-db --no-migrations"
-                        ))
-  (message command)
-  (compile command)
+  (let (
+        (my_line (thing-at-point 'line))
+        (function-name (current-test-at-point))
+        (fullpath (buffer-file-name))
+        (root (projectile-project-root))
+        (final_path (replace-regexp-in-string root "" fullpath))
+        )
+    (compile (concat "docker compose run --rm test "
+                     final_path
+                     "::"
+                     function-name
+                     " --no-cov --reuse-db --no-migrations"
+                     ))
+    )
   )
 
 
@@ -64,6 +61,47 @@
   )
 
 (define-key evil-normal-state-map (kbd ", f b") 'format-buffer-by-mode)
+
+(defun current-test-at-point ()
+  (let ((my-line (thing-at-point 'line))
+        (pattern "^def \\([a-zA-Z0-9_]+\\)")
+        (result nil)
+        )
+    ;;(message my-line)
+    (if (string-match pattern my-line)
+        ;; then
+        (progn
+          ;; (message "it matched")
+          (setq result (match-string 1 my-line)))
+      ;; else
+      (save-excursion
+        (while (re-search-forward pattern nil t -1)
+          (beginning-of-line)
+          (let ((this-line (thing-at-point 'line)))
+            (message (concat "found test on line be " this-line))
+            (when (string-match pattern this-line)
+              (message "string-matched.")
+              (setq result (match-string 1 this-line))
+              )
+            )
+          )
+        )
+      )
+    result
+    )
+  )
+
+
+(defun call-current-test-at-point ()
+  ;; lil helper to debug
+  (interactive)
+  (let ((res (current-test-at-point)))
+    (message (concat "Found above test: " res ))
+    )
+  )
+
+(define-key evil-normal-state-map (kbd "SPC c F") 'call-current-test-at-point)
+
 
 (defun cb-lint ()
   (interactive)
@@ -111,8 +149,16 @@ If DELIMITER is not found, returns nil."
   (compile "docker compose run --rm ci formatpy.format")
   )
 
+(defun my-recompile()
+  (interactive)
+  (save-some-buffers 1)
+  (recompile)
+  )
+
+
 (define-key evil-normal-state-map (kbd "SPC c l") 'cb-lint)
-(define-key evil-normal-state-map (kbd "SPC c r") 'cb-re-lint)
+(define-key evil-normal-state-map (kbd "SPC c R") 'cb-re-lint)
+(define-key evil-normal-state-map (kbd "SPC c r") 'my-recompile)
 (define-key evil-normal-state-map (kbd "SPC c p") 'cb-pyright)
 (define-key evil-normal-state-map (kbd "SPC c f") 'cb-format)
 
