@@ -6,10 +6,11 @@
   (let (
         (my_line (thing-at-point 'line))
         (function-name (current-test-at-point))
-        (fullpath (buffer-file-name))
-        (root (projectile-project-root))
-        (final_path (replace-regexp-in-string root "" fullpath))
+        ;; (fullpath (buffer-file-name))
+        ;; (root (projectile-project-root))
+        (final_path (replace-regexp-in-string (projectile-project-root) "" (buffer-file-name)))
         )
+
     (compile (concat "docker compose run --rm test "
                      final_path
                      "::"
@@ -75,12 +76,12 @@
           (setq result (match-string 1 my-line)))
       ;; else
       (save-excursion
-        (while (re-search-forward pattern nil t -1)
+        (while (and (re-search-backward pattern nil t 1) (not result))
           (beginning-of-line)
           (let ((this-line (thing-at-point 'line)))
-            (message (concat "found test on line be " this-line))
             (when (string-match pattern this-line)
-              (message "string-matched.")
+              ;;(message (concat "found test on line be " this-line))
+              ;;(message "string-matched.")
               (setq result (match-string 1 this-line))
               )
             )

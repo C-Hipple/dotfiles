@@ -58,7 +58,7 @@ This function should only modify configuration layer settings."
      helm
      markdown
      multiple-cursors
-     auto-completion
+     ;;auto-completion
      org
      lsp
      ;; (shell :variables
@@ -316,9 +316,9 @@ It should only modify the values of Spacemacs settings."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(suscolors
                          gruvbox-dark-medium
-                         nord
                          jazz
                          ;; ef-duo-light
+                         ef-light
                          )
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -766,6 +766,8 @@ before packages are loaded."
 
   (with-eval-after-load 'magit-mode
     (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
+
+  (setq magit-list-refs-sortby "-committerdate")
 
   ;; Auto update the TODO counts on save
   (defun org-auto-check()
