@@ -1,6 +1,31 @@
+(defun insert-todo-with-date ()
+  (interactive)
+  ;; TODO: get the right number of ***.  3 is typical for me though
+  (insert "*** TODO ")
+  (org-date-from-calendar)
+  (insert " ")
+  )
+
+(define-key evil-normal-state-map (kbd "SPC C i") 'insert-todo-with-date)
+
+(defun escape-quotes (str)
+  "Escape all double quotes in STR."
+  (replace-regexp-in-string "\"" "\\\\\"", str))
+
+(defun escape-quotes (str)
+  "Escape all double quotes in STR."
+  (replace-regexp-in-string "\"" "\\\\\"" str))
+
+(defun escape-quotes (str)
+  "Escape all double quotes in STR."
+  (replace-regexp-in-string "\"" "\\\\\"" str t t))
+
+(message (escape-quotes "example"))
+
 (defun run-llm (command)
   (interactive "sEnter LLM command: ")
-  (setq command (concat "llm \"" command "\""))
+  (setq command (concat "llm \"" (escape-quotes command) "\""))
+  (message command)
   (with-temp-buffer
     (pop-to-buffer (get-buffer-create "*llm*"))
     (insert-buffer-substring (current-buffer))

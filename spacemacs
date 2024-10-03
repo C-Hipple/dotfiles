@@ -58,7 +58,7 @@ This function should only modify configuration layer settings."
      helm
      markdown
      multiple-cursors
-     auto-completion
+     ;;auto-completion
      org
      lsp
      ;; (shell :variables
@@ -86,58 +86,62 @@ This function should only modify configuration layer settings."
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    ;; dotspacemacs-additional-packages '(nord-theme suscolors-theme gruvbox-theme solarized-theme oceanic-theme rebecca-theme subatomic-theme obsidian-theme planet-theme smyx-theme underwater-theme magit magit-popup vs-light-theme dockerfile-mode helm-dash python-black )
-   dotspacemacs-additional-packages '(
+   dotspacemacs-additional-packages
+   '(
+     ;; (copilot :location (recipe
+     ;;                        :fetcher github
+     ;;                        :repo "zerolfx/copilot.el"
+     ;;                        :files ("*.el" "dist")
+     ;;                        )
+     ;;          )
+     ;; (chatgpt :location (recipe
+     ;;                     :fetcher github
+     ;;                     :repo "joshcho/ChatGPT.el")
+     ;;          )
+     ;; (chatgpt :location (recipe
+     ;;                     :fetcher github
+     ;;                     :repo "MercuricChloride/chatgpt.el"
+     ;;                     :files ("*.el" "dist")
+     ;;                     )
+     ;;          )
 
+     solarized-theme
+     vs-light-theme
+     python-black
+     helm-dash
+     dap-mode
+     exec-path-from-shell
+     sqlite3
+     (code-review :location (recipe
+                             :fetcher github
+                             :repo "C-Hipple/code-review"
+                             :files ("*.el")
+                             ;;:branch "feature/delta-highlighting-in-review"
+                             )
+                  )
 
-  ;; (copilot :location (recipe
-  ;;                        :fetcher github
-  ;;                        :repo "zerolfx/copilot.el"
-  ;;                        :files ("*.el" "dist")
-  ;;                        )
-  ;;          )
-  ;; (chatgpt :location (recipe
-  ;;                     :fetcher github
-  ;;                     :repo "joshcho/ChatGPT.el")
-  ;;          )
-  ;; (chatgpt :location (recipe
-  ;;                     :fetcher github
-  ;;                     :repo "MercuricChloride/chatgpt.el"
-  ;;                     :files ("*.el" "dist")
-  ;;                     )
-  ;;          )
+     ;; (diff-lsp :location (recipe
+     ;;                    :fetcher github
+     ;;                    :repo "C-Hipple/diff-lsp"
+     ;;                    :files ("*.el")
+     ;;                    )
+     ;;           )
 
-  solarized-theme
-  vs-light-theme
-  python-black
-  helm-dash
-  dap-mode
-  exec-path-from-shell
-  sqlite3
-  (code-review :location (recipe
-                     :fetcher github
-                     :repo "C-Hipple/code-review"
-                     :files ("*.el")
-                     ;;:branch "feature/delta-highlighting-in-review"
-                     )
-               )
-
-  ;; (diff-lsp :location (recipe
-  ;;                    :fetcher github
-  ;;                    :repo "C-Hipple/diff-lsp"
-  ;;                    :files ("*.el")
-  ;;                    )
-  ;;           )
-
-   magit-delta
-   dockerfile-mode
-   docker-compose-mode
-   fireplace
-   ef-themes
-   tide
-   treesit-auto
-   kanagawa-theme
-   jazz-theme
-  )
+     (magit-delta :location (recipe
+                             :fetcher github
+                             :repo "dandavison/magit-delta"
+                             :files ("*.el")
+                             )
+                  )
+     dockerfile-mode
+     docker-compose-mode
+     fireplace
+     ef-themes
+     tide
+     treesit-auto
+     kanagawa-theme
+     jazz-theme
+     )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -312,9 +316,9 @@ It should only modify the values of Spacemacs settings."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(suscolors
                          gruvbox-dark-medium
-                         nord
                          jazz
                          ;; ef-duo-light
+                         ef-light
                          )
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -614,7 +618,7 @@ variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
 
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -624,7 +628,7 @@ It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (setq image-types (cons 'svg image-types))
 
-)
+  )
 
 
 (defun dotspacemacs/user-load ()
@@ -632,7 +636,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-)
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -662,7 +666,7 @@ before packages are loaded."
   ;; not a real hook
   ;;(setq rust-ts-mode-hook rustic-mode-hook)
   (setq python-ts-mode-hook python-mode-hook)
-  (setq go-ts-mode-hook go-mode-hook)
+  ;;(setq go-ts-mode-hook go-mode-hook)
   (setq typescript-ts-mode-hook typescript-mode-hook)
   (setq typescript-tsx-ts-mode-hook typescript-mode-hook)
 
@@ -763,6 +767,8 @@ before packages are loaded."
   (with-eval-after-load 'magit-mode
     (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
 
+  (setq magit-list-refs-sortby "-committerdate")
+
   ;; Auto update the TODO counts on save
   (defun org-auto-check()
     (org-update-statistics-cookies "ALL"))
@@ -772,7 +778,7 @@ before packages are loaded."
     (add-hook 'org-mode-hook 'visual-line-mode)
     (add-hook 'before-save-hook 'org-auto-check)
     (add-hook 'before-save-hook 'whitespace-cleanup)
-  )
+    )
 
   (defun org-summary-todo (n-done n-not-done)
     "Switch entry to DONE when all subentries are done, to TODO otherwise."
@@ -783,31 +789,31 @@ before packages are loaded."
 
   (defun open-inbox-org ()
     (interactive)
-    (find-file-other-window "~/gtd/inbox.org"))
+    (find-file "~/gtd/inbox.org"))
 
   (define-key evil-normal-state-map (kbd "SPC b i") 'open-inbox-org)
 
   (defun open-review-org ()
     (interactive)
-    (find-file-other-window "~/gtd/reviews.org"))
+    (find-file "~/gtd/reviews.org"))
 
   (define-key evil-normal-state-map (kbd "SPC b r") 'open-review-org)
 
   (defun open-release-org ()
     (interactive)
-    (find-file-other-window "~/gtd/release.org"))
+    (find-file "~/gtd/release.org"))
 
   (define-key evil-normal-state-map (kbd "SPC b R") 'open-release-org)
 
   (defun open-next-actions-org ()
     (interactive)
-    (find-file-other-window "~/gtd/next_actions.org"))
+    (find-file "~/gtd/next_actions.org"))
 
   (define-key evil-normal-state-map (kbd "SPC b a") 'open-next-actions-org)
 
   (defun open-agendas-org ()
     (interactive)
-    (find-file-other-window "~/gtd/agendas.org"))
+    (find-file "~/gtd/agendas.org"))
 
   (define-key evil-normal-state-map (kbd "SPC b A") 'open-agendas-org)
 
@@ -906,8 +912,8 @@ before packages are loaded."
   ;; Set up before-save hooks to format buffer and add/delete imports.
 
   ;; Start LSP Mode and YASnippet mode
-  (add-hook 'go-mode-hook 'lsp-deferred)
-  (add-hook 'go-mode-hook 'yas-minor-mode)
+  ;; (add-hook 'go-mode-hook 'lsp-deferred)
+  ;; (add-hook 'go-mode-hook 'yas-minor-mode)
 
 
   ;; Rust - LSP mode
@@ -923,7 +929,7 @@ before packages are loaded."
     (interactive)
     (setq-local helm-dash-docsets '("Go")))
 
-  (add-hook 'go-mode-hook 'go-doc)
+  ;;(add-hook 'go-mode-hook 'go-doc)
 
   ;; Python
   (define-key evil-visual-state-map (kbd ", f r") 'python-black-region)
@@ -1067,28 +1073,29 @@ Operate on selected region on whole buffer."
   ;; trying something here, I htink I need to compile emacs with something else
   ;; (set-frame-parameter nil 'alpha-background 88)
 
-)
+  )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(gruvbox))
- '(custom-safe-themes
-   '("7b8f5bbdc7c316ee62f271acf6bcd0e0b8a272fdffe908f8c920b0ba34871d98" "2681c80b05b9b972e1c5e4d091efb9ba7bb5fa7dad810d9026bc79607a78f1c0" "b1a691bb67bd8bd85b76998caf2386c9a7b2ac98a116534071364ed6489b695d" "d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "ca2e59377dc1ecee2a1069ec7126b453fa1198fed946304abb9a5b8c7ad5404d" default))
- '(desktop-save nil)
- '(package-selected-packages
-   '(github-review minimal-theme solo-jazz-theme jazz-theme kanagawa-theme treesit-auto apheleia nginx-mode ef-themes hydandata-light-theme basic-theme fireplace goose-theme docker-compose-mode dockerfile-mode code-review emacsql-sqlite-builtin emacsql-sqlite-module emojify a vterm dream-theme company-terraform terraform-mode hcl-mode magit-delta sqlite3 lsp-haskell all-the-icons-completion exec-path-from-shell xterm-color harpoon tommyh-theme company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode flycheck-haskell haskell-snippets helm-hoogle hindent hlint-refactor haskell-mode dap-mode lsp-docker bui reformatter dash-docs lcr xref company-cabal cmm-mode attrap quelpa-use-package tablist aio helm-dash python-black python-isort cov yasnippet-snippets tern lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami helm-lsp helm-c-yasnippet fuzzy web-completion-data auto-yasnippet ac-ispell modus-themes pdf-tools go elpy eredis minsk-theme material-theme jedi lsp-jedi lsp-ui lsp-mode eglot sunny-day-theme vs-light-theme smeargle orgit-forge orgit helm-ls-git helm-git-grep gitignore-templates git-timemachine git-modes git-messenger git-link forge yaml ghub emacsql-sqlite emacsql treepy magit-popup treemacs-magit magit magit-section git-commit with-editor yapfify yaml-mode web-mode web-beautify underwater-theme toml-mode tide typescript-mode tagedit suscolors-theme subatomic-theme sql-indent sphinx-doc solarized-theme smyx-theme slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rebecca-theme rbenv rake racer rust-mode pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js poetry transient planet-theme pippel pipenv load-env-vars pyvenv pip-requirements org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-contrib org-cliplink oceanic-theme obsidian-theme npm-mode nose nord-theme nodejs-repl mmm-mode minitest markdown-toc livid-mode skewer-mode live-py-mode json-reformat json-navigator hierarchy json-mode json-snatcher js2-refactor yasnippet multiple-cursors js2-mode js-doc epc ctable concurrent deferred impatient-mode simple-httpd htmlize helm-pydoc helm-org-rifle helm-css-scss haml-mode gruvbox-theme autothemer godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc go-mode gnuplot git-gutter-fringe fringe-helper git-gutter gh-md flyspell-correct-helm flyspell-correct flycheck-rust flycheck-pos-tip pos-tip evil-org emmet-mode cython-mode csv-mode code-cells chruby cargo markdown-mode bundler inf-ruby browse-at-remote blacken auto-dictionary anaconda-mode pythonic ws-butler writeroom-mode visual-fill-column winum volatile-highlights vim-powerline vi-tilde-fringe uuidgen undo-tree queue treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs pfuture posframe toc-org symon symbol-overlay string-inflection spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons memoize spaceline powerline space-doc restart-emacs request rainbow-delimiters quickrun popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless multi-line shut-up macrostep lorem-ipsum link-hint inspector info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck pkg-info epl flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection annalist evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils elisp-slime-nav elisp-def f editorconfig dumb-jump s drag-stuff dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol ht dash auto-compile packed compat all-the-icons aggressive-indent ace-window ace-link ace-jump-helm-line helm avy popup helm-core which-key use-package pcre2el hydra lv hybrid-mode holy-mode font-lock+ evil-evilified-state evil goto-chg dotenv-mode diminish bind-map bind-key async))
- '(warning-suppress-types '((emacs) ((flycheck syntax-checker)))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
-)
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(custom-enabled-themes '(gruvbox))
+   '(custom-safe-themes
+     '("7b8f5bbdc7c316ee62f271acf6bcd0e0b8a272fdffe908f8c920b0ba34871d98" "2681c80b05b9b972e1c5e4d091efb9ba7bb5fa7dad810d9026bc79607a78f1c0" "b1a691bb67bd8bd85b76998caf2386c9a7b2ac98a116534071364ed6489b695d" "d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "ca2e59377dc1ecee2a1069ec7126b453fa1198fed946304abb9a5b8c7ad5404d" default))
+   '(desktop-save nil)
+   '(package-selected-packages
+     '(dakrone-light-theme dakrone-theme berrys-theme avk-emacs-themes calmer-forest-theme almost-mono-themes zeno-theme github-review minimal-theme solo-jazz-theme jazz-theme kanagawa-theme treesit-auto apheleia nginx-mode ef-themes hydandata-light-theme basic-theme fireplace goose-theme docker-compose-mode dockerfile-mode code-review emacsql-sqlite-builtin emacsql-sqlite-module emojify a vterm dream-theme company-terraform terraform-mode hcl-mode magit-delta sqlite3 lsp-haskell all-the-icons-completion exec-path-from-shell xterm-color harpoon tommyh-theme company-lua counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode flycheck-haskell haskell-snippets helm-hoogle hindent hlint-refactor haskell-mode dap-mode lsp-docker bui reformatter dash-docs lcr xref company-cabal cmm-mode attrap quelpa-use-package tablist aio helm-dash python-black python-isort cov yasnippet-snippets tern lsp-treemacs lsp-python-ms lsp-pyright lsp-origami origami helm-lsp helm-c-yasnippet fuzzy web-completion-data auto-yasnippet ac-ispell modus-themes pdf-tools go elpy eredis minsk-theme material-theme jedi lsp-jedi lsp-ui lsp-mode eglot sunny-day-theme vs-light-theme smeargle orgit-forge orgit helm-ls-git helm-git-grep gitignore-templates git-timemachine git-modes git-messenger git-link forge yaml ghub emacsql-sqlite emacsql treepy magit-popup treemacs-magit magit magit-section git-commit with-editor yapfify yaml-mode web-mode web-beautify underwater-theme toml-mode tide typescript-mode tagedit suscolors-theme subatomic-theme sql-indent sphinx-doc solarized-theme smyx-theme slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rebecca-theme rbenv rake racer rust-mode pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js poetry transient planet-theme pippel pipenv load-env-vars pyvenv pip-requirements org-rich-yank org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-contrib org-cliplink oceanic-theme obsidian-theme npm-mode nose nord-theme nodejs-repl mmm-mode minitest markdown-toc livid-mode skewer-mode live-py-mode json-reformat json-navigator hierarchy json-mode json-snatcher js2-refactor yasnippet multiple-cursors js2-mode js-doc epc ctable concurrent deferred impatient-mode simple-httpd htmlize helm-pydoc helm-org-rifle helm-css-scss haml-mode gruvbox-theme autothemer godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc go-mode gnuplot git-gutter-fringe fringe-helper git-gutter gh-md flyspell-correct-helm flyspell-correct flycheck-rust flycheck-pos-tip pos-tip evil-org emmet-mode cython-mode csv-mode code-cells chruby cargo markdown-mode bundler inf-ruby browse-at-remote blacken auto-dictionary anaconda-mode pythonic ws-butler writeroom-mode visual-fill-column winum volatile-highlights vim-powerline vi-tilde-fringe uuidgen undo-tree queue treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs cfrs pfuture posframe toc-org symon symbol-overlay string-inflection spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons memoize spaceline powerline space-doc restart-emacs request rainbow-delimiters quickrun popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless multi-line shut-up macrostep lorem-ipsum link-hint inspector info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck pkg-info epl flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection annalist evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils elisp-slime-nav elisp-def f editorconfig dumb-jump s drag-stuff dired-quick-sort devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol ht dash auto-compile packed compat all-the-icons aggressive-indent ace-window ace-link ace-jump-helm-line helm avy popup helm-core which-key use-package pcre2el hydra lv hybrid-mode holy-mode font-lock+ evil-evilified-state evil goto-chg dotenv-mode diminish bind-map bind-key async))
+   '(warning-minimum-level :error)
+   '(warning-suppress-types '((emacs) ((flycheck syntax-checker)))))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
+  )
