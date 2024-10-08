@@ -1055,6 +1055,15 @@ Operate on selected region on whole buffer."
 
   ;; overwrite default shell-command keybind to be async
   (define-key evil-normal-state-map (kbd "SPC !") 'async-shell-command)
+
+  (defun project-async-shell-command (command)
+    (interactive "sProject Async Command: ")
+    (let ((default-directory (projectile-project-root)))
+      (async-shell-command command)
+      )
+    )
+  (define-key evil-normal-state-map (kbd "SPC @") 'project-async-shell-command)
+
   ;; testing out using project shell
   ;; todo new binding?
   (define-key evil-normal-state-map (kbd "SPC f c") 'comment-or-uncomment-region)
