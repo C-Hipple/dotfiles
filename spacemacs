@@ -1046,6 +1046,9 @@ Operate on selected region on whole buffer."
     (interactive)
     (async-shell-command "gtdbot --oneoff")
     (switch-to-buffer "*Async Shell Command*")
+    (if (buffer-exists "*gtdbot*")
+        (kill-buffer "*gtdbot*")
+      )
     (rename-buffer "*gtdbot*")
     )
 
