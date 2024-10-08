@@ -194,23 +194,6 @@ If DELIMITER is not found, returns nil."
 
 
 ;; Stashing
-(defun magit-stash-read-message ()
-  "OVERLOADED: Always include the branch name in the stash message.
-Read a message from the minibuffer, to be used for a stash.
-
-The message that Git would have picked, is available as the
-default (used when the user enters the empty string) and as
-the next history element (which can be accessed with \
-\\<minibuffer-local-map>\\[next-history-element])."
-  (concat
-   (magit-get-current-branch)
-   ": "
-   (read-string (format "Stash message (default: On%s:%s): "
-                        (magit--ellipsis) (magit--ellipsis))
-                nil nil
-                (format "%s"
-                        (magit-rev-format "%h %s"))))
-  )
 
 (defun buffer-exists (buffer-name)
   (not (eq nil (get-buffer buffer-name))
