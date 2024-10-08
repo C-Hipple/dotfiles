@@ -1045,7 +1045,20 @@ Operate on selected region on whole buffer."
     "Runs gtdbot with the oneoff flag to update reviews.org"
     (interactive)
     (async-shell-command "gtdbot --oneoff")
+    (switch-to-buffer "*Async Shell Command*")
+    (rename-buffer "*gtdbot*")
     )
+
+  (defun devsync (server)
+    (interactive "sEnter the Server Number: ")
+    (let ((default-directory (projectile-project-root)))
+      (async-shell-command (concat "devsync -server " server)))
+    (switch-to-buffer "*Async Shell Command*")
+    (rename-buffer "*devsync*")
+    )
+
+  (define-key evil-normal-state-map (kbd ", d d") 'devsync)
+
 
   (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)
   (define-key evil-normal-state-map (kbd ", r s") 'code-review-start-at-point)
