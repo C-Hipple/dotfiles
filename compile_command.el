@@ -63,25 +63,39 @@
 
 (define-key evil-normal-state-map (kbd ", f b") 'format-buffer-by-mode)
 
+(setq mode-test-pattern-alist
+      '(
+        (go-mode . "^func \\(Test_[a-zA-Z0-9_+]+\\)")
+        (go-ts-mode . "^func \\(Test_[a-zA-Z0-9_+]+\\)")
+        (python-mode . "^def \\([a-zA-Z0-9_]+\\)")
+        (python-ts-mode . "^def \\([a-zA-Z0-9_]+\\)")
+        ))
+
+(defun get-pattern-by-mode ()
+  (interactive)
+  (let (
+        (mode-pattern (assoc major-mode mode-test-pattern-alist))
+        (result nil))
+    (if mode-pattern
+        (setq result (cdr mode-pattern))
+      ;; should error here?
+      )
+    result
+    )
+  )
+
 (defun current-test-at-point ()
   (let ((my-line (thing-at-point 'line))
-        (pattern "^def \\([a-zA-Z0-9_]+\\)")
+        (pattern (get-pattern-by-mode))
         (result nil)
         )
-    ;;(message my-line)
     (if (string-match pattern my-line)
-        ;; then
-        (progn
-          ;; (message "it matched")
-          (setq result (match-string 1 my-line)))
-      ;; else
+        (setq result (match-string 1 my-line))
       (save-excursion
         (while (and (re-search-backward pattern nil t 1) (not result))
           (beginning-of-line)
           (let ((this-line (thing-at-point 'line)))
             (when (string-match pattern this-line)
-              ;;(message (concat "found test on line be " this-line))
-              ;;(message "string-matched.")
               (setq result (match-string 1 this-line))
               )
             )
