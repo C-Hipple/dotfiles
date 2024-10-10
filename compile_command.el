@@ -6,8 +6,6 @@
   (let (
         (my_line (thing-at-point 'line))
         (function-name (current-test-at-point))
-        ;; (fullpath (buffer-file-name))
-        ;; (root (projectile-project-root))
         (final_path (replace-regexp-in-string (projectile-project-root) "" (buffer-file-name)))
         )
 
@@ -22,6 +20,48 @@
 
 
 (define-key evil-normal-state-map (kbd "SPC c t") 'run-individual-pytest)
+
+(defun go-test-command (file-name test-name)
+  ;;go test -v -run Test_Serialize
+  (concat "go test -v -run " test-name)
+  )
+
+(defun py-test-command (file-name test-name)
+  ;;pytest test_main.py::test_add
+  ;;pytest -k test_add
+  (concat "pytest -k " test-name)
+  )
+
+(defun rust-test-command (file-name test-name)
+  ;;pytest test_main.py::test_add
+  ;;pytest -k test_add
+  (concat "cargo test " test-name)
+  )
+
+(setq mode-command-pattern-alist
+      '((go-mode . go-test-command)
+        (go-ts-mode . go-test-command)
+        (python-mode . py-test-command)
+        (python-ts-mode . py-test-command)
+        (rust-ts-mode . rust-test-command)
+        (rust-mode . rust-test-command)
+        (rustic-mode . rust-test-command)
+        ))
+
+
+(defun get-command-by-mode ()
+  "Runs the test command based on major mode and test name."
+  (interactive)
+  (message "starting")
+  (let* ((mode-command (cdr (assoc major-mode mode-command-pattern-alist)))
+         (test-name (current-test-at-point))
+         )
+    (message "Calling command for test: %s" test-name)
+    (if mode-command
+        (compile (funcall mode-command (buffer-file-name) test-name))
+      (message "No command found for %s mode" major-mode))))
+
+(define-key evil-normal-state-map (kbd "SPC c A") 'get-command-by-mode)
 
 (defun run-pytest-full-file ()
   "Compile using 'docker compose run --rm test <FULL_PATH>::'
@@ -69,6 +109,9 @@
         (go-ts-mode . "^func \\(Test_[a-zA-Z0-9_+]+\\)")
         (python-mode . "^def \\([a-zA-Z0-9_]+\\)")
         (python-ts-mode . "^def \\([a-zA-Z0-9_]+\\)")
+        (rust-mode . "fn \\(test_[a-zA-Z0-9_+]+\\)")
+        (rust-ts-mode . "fn \\(test_[a-zA-Z0-9_+]+\\)")
+        (rustic-mode . "fn \\(test_[a-zA-Z0-9_+]+\\)")
         ))
 
 (defun get-pattern-by-mode ()
