@@ -1041,6 +1041,8 @@ Operate on selected region on whole buffer."
       )
     )
 
+  (with-eval-after-load 'code-review '(define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit))
+
   (defun run-gtdbot-oneoff ()
     "Runs gtdbot with the oneoff flag to update reviews.org"
     (interactive)
@@ -1101,9 +1103,7 @@ Operate on selected region on whole buffer."
     )
   (define-key evil-normal-state-map (kbd "SPC @") 'project-async-shell-command)
 
-  ;; testing out using project shell
-  ;; todo new binding?
-  (define-key evil-normal-state-map (kbd "SPC f c") 'comment-or-uncomment-region)
+  (define-key evil-normal-state-map (kbd "SPC f c") 'spacemacs/comment-or-uncomment-lines)
 
   (exec-path-from-shell-copy-env "GTDBOT_GITHUB_TOKEN")
 
