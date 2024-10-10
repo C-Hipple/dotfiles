@@ -765,7 +765,28 @@ before packages are loaded."
 
 
   (with-eval-after-load 'magit-mode
-    (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
+    (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
+    )
+
+  (with-eval-after-load 'magit-stash
+    (defun magit-stash-read-message ()
+      "OVERLOADED: Always include the branch name in the stash message.
+Read a message from the minibuffer, to be used for a stash.
+
+The message that Git would have picked, is available as the
+default (used when the user enters the empty string) and as
+the next history element (which can be accessed with \
+\\<minibuffer-local-map>\\[next-history-element])."
+      (concat
+       (magit-get-current-branch)
+       ": "
+       (read-string (format "Stash message (default: On%s:%s): "
+                            (magit--ellipsis) (magit--ellipsis))
+                    nil nil
+                    (format "%s"
+                            (magit-rev-format "%h %s"))))
+      )
+    )
 
   (setq magit-list-refs-sortby "-committerdate")
 
@@ -1024,7 +1045,23 @@ Operate on selected region on whole buffer."
     "Runs gtdbot with the oneoff flag to update reviews.org"
     (interactive)
     (async-shell-command "gtdbot --oneoff")
+    (switch-to-buffer "*Async Shell Command*")
+    (if (buffer-exists "*gtdbot*")
+        (kill-buffer "*gtdbot*")
+      )
+    (rename-buffer "*gtdbot*")
     )
+
+  (defun devsync (server)
+    (interactive "sEnter the Server Number: ")
+    (let ((default-directory (projectile-project-root)))
+      (async-shell-command (concat "devsync -server " server)))
+    (switch-to-buffer "*Async Shell Command*")
+    (rename-buffer "*devsync*")
+    )
+
+  (define-key evil-normal-state-map (kbd ", d d") 'devsync)
+
 
   (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)
   (define-key evil-normal-state-map (kbd ", r s") 'code-review-start-at-point)
