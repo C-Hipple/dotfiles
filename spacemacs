@@ -141,6 +141,12 @@ This function should only modify configuration layer settings."
      treesit-auto
      kanagawa-theme
      jazz-theme
+     (test-at-point :location (recipe
+                               :fetcher github
+                               :repo "C-Hipple/test-at-point"
+                               :files ("*.el")
+                               )
+                    )
      )
 
    ;; A list of packages that cannot be updated.
