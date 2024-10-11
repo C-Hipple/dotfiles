@@ -34,150 +34,24 @@
   )
 
 
-(define-key evil-normal-state-map (kbd "SPC c t") 'run-individual-pytest)
-
-(defun go-test-command (file-name test-name)
-  ;;go test -v -run Test_Serialize
-  (concat "go test -v -run " test-name)
-  )
-
-(defun py-test-command (file-name test-name)
-  ;;pytest test_main.py::test_add
-  ;;pytest -k test_add
-  (concat "pytest -k " test-name)
-  )
-
-(defun rust-test-command (file-name test-name)
-  ;;pytest test_main.py::test_add
-  ;;pytest -k test_add
-  (concat "cargo test " test-name)
-  )
-
-(setq mode-command-pattern-alist
-      '((go-mode . go-test-command)
-        (go-ts-mode . go-test-command)
-        (python-mode . py-test-command)
-        (python-ts-mode . py-test-command)
-        (rust-ts-mode . rust-test-command)
-        (rust-mode . rust-test-command)
-        (rustic-mode . rust-test-command)
-        ))
-
-(defun cb-py-test-command (file-name test-name)
-  (concat "docker compose run --rm test "
-          (replace-regexp-in-string (projectile-project-root) "" (buffer-file-name))
-          "::"
-          test-name
-          " --no-cov --reuse-db --no-migrations"
-          ))
-
-(setq project-mode-command-overide-alist
-      '(("chaturbate" . ((python-ts-mode . cb-py-test-command))))
-      )
-
-
-(defun get-command-by-mode ()
-  "Runs the test command based on major mode and test name."
-  (interactive)
-  (let* ((mode-command (cdr (assoc major-mode mode-command-pattern-alist)))
-         (project-overides (cdr (assoc (projectile-project-name) project-mode-command-overide-alist)))
-         ;;((current-test-at-point) (current-test-at-point))
-         )
-    (if project-overides
-        (compile (funcall (cdr (assoc major-mode project-overides)) (buffer-file-name) (current-test-at-point)))
-      )
-    (if mode-command
-        (compile (funcall mode-command (buffer-file-name) (current-test-at-point)))
-      (message "No command found for %s mode" major-mode))))
-
-(define-key evil-normal-state-map (kbd "SPC c A") 'get-command-by-mode)
-
-
-
-
-
-;; Recompile should automatically save
-(defun save-and-recompile ()
+(defun save-all()
   (interactive)
   (save-some-buffers 1)
-  (recompile)
   )
 
-(define-key evil-normal-state-map (kbd "SPC c r") 'save-and-recompile)
-(define-key evil-normal-state-map (kbd "SPC c T") 'run-pytest-full-file)
 
-
-(setq mode-test-pattern-alist
-      '(
-        (go-mode . "^func \\(Test_[a-zA-Z0-9_+]+\\)")
-        (go-ts-mode . "^func \\(Test_[a-zA-Z0-9_+]+\\)")
-        (python-mode . "^def \\([a-zA-Z0-9_]+\\)")
-        (python-ts-mode . "^def \\([a-zA-Z0-9_]+\\)")
-        (rust-mode . "fn \\(test_[a-zA-Z0-9_+]+\\)")
-        (rust-ts-mode . "fn \\(test_[a-zA-Z0-9_+]+\\)")
-        (rustic-mode . "fn \\(test_[a-zA-Z0-9_+]+\\)")
-        ))
-
-(defun get-pattern-by-mode ()
+;; frontend compilation
+(defun cb-rebuild-react ()
   (interactive)
-  (let (
-        (mode-pattern (assoc major-mode mode-test-pattern-alist))
-        (result nil))
-    (if mode-pattern
-        (setq result (cdr mode-pattern))
-      ;; should error here?
-      )
-    result
-    )
+  (compile "docker compose run --rm frontend-build yarn workspace @multimediallc/cb-react build")
   )
 
+;;(define-key evil-normal-state-map (kbd "SPC c f r b") 'cb-rebuild-react)
 
-(defun current-test-at-point ()
-  (let ((my-line (thing-at-point 'line))
-        (pattern (get-pattern-by-mode))
-        (result nil)
-        )
-    (if (string-match pattern my-line)
-        (setq result (match-string 1 my-line))
-      (save-excursion
-        (while (and (re-search-backward pattern nil t 1) (not result))
-          (beginning-of-line)
-          (let ((this-line (thing-at-point 'line)))
-            (when (string-match pattern this-line)
-              (setq result (match-string 1 this-line))
-              )
-            )
-          )
-        )
-      )
-    result
-    )
-  )
-
-
-(defun call-current-test-at-point ()
-  ;; lil helper to debug
+(defun cb-test-react ()
   (interactive)
-  (let ((res (current-test-at-point)))
-    (message (concat "Found above test: " res ))
-    )
+  (compile "docker compose run --rm frontend-build yarn workspace @multimediallc/cb-react test")
   )
-
-(define-key evil-normal-state-map (kbd "SPC c F") 'call-current-test-at-point)
-
-(defun format-buffer-by-mode ()
-  "If we're in python, we use black-format-buffer, otherwise we use lsp-format-buffer"
-  (interactive)
-  (if (string= major-mode "python-ts-mode")
-      (progn
-        (py-isort-buffer)
-        (python-black-buffer)
-        )
-    (lsp-format-buffer)
-    )
-  )
-
-(define-key evil-normal-state-map (kbd ", f b") 'format-buffer-by-mode)
 
 
 (defun cb-lint ()
@@ -185,20 +59,6 @@
   (save-some-buffers 1)
   (compile "docker compose run --rm ci linter.lint --fast")
   )
-
-;; Working on being able to automatically use the re-run
-;; Final vision is to read the compilation buffer and see if
-;; there's a Re-run ... line, and use that command via docker
-;; Currently it expects the Re-Run line to be at the cursor
-
-(defun split-line-after-string (line delimiter)
-  "Splits a line after the first occurrence of DELIMITER and returns the second half.
-
-If DELIMITER is not found, returns nil."
-  (let ((pos (string-match delimiter line)))
-    (if pos
-        (substring line (1+ (+ 1 pos)))   ; Extract substring after the delimiter ;;extra +1 for teh space
-      nil)))                          ; Return nil if delimiter not found
 
 (defun cb-re-lint()
   (interactive)
@@ -233,56 +93,56 @@ If DELIMITER is not found, returns nil."
   )
 
 
+(defun split-line-after-string (line delimiter)
+  "Splits a line after the first occurrence of DELIMITER and returns the second half.
+
+If DELIMITER is not found, returns nil."
+  (let ((pos (string-match delimiter line)))
+    (if pos
+        (substring line (1+ (+ 1 pos)))   ; Extract substring after the delimiter ;;extra +1 for teh space
+      nil)))                          ; Return nil if delimiter not found
+
+
+
+(defun format-buffer-by-mode ()
+  "If we're in python, we use black-format-buffer, otherwise we use lsp-format-buffer"
+  (interactive)
+  (if (string= major-mode "python-ts-mode")
+      (progn
+        (py-isort-buffer)
+        (python-black-buffer)
+        )
+    (lsp-format-buffer)
+    )
+  )
+
+(defun cb-py-test-command (file-name test-name)
+  (concat "docker compose run --rm test "
+          (replace-regexp-in-string (projectile-project-root) "" (buffer-file-name))
+          "::"
+          test-name
+          " --no-cov --reuse-db --no-migrations"))
+
+(with-eval-after-load 'test-at-point
+  (add-to-list project-mode-command-overide-alist '("chaturbate" . ((python-ts-mode . cb-py-test-command)))))
+
+
+(define-key evil-normal-state-map (kbd "SPC c t") 'run-individual-pytest)
+(define-key evil-normal-state-map (kbd "SPC c A") 'get-command-by-mode)
+
+(define-key evil-normal-state-map (kbd "SPC c r") 'save-and-recompile)
+(define-key evil-normal-state-map (kbd "SPC c T") 'run-pytest-full-file)
+
+(define-key evil-normal-state-map (kbd "SPC c F") 'call-current-test-at-point)
+
+(define-key evil-normal-state-map (kbd ", f b") 'format-buffer-by-mode)
+
+
+
+
 (define-key evil-normal-state-map (kbd "SPC c l") 'cb-lint)
 (define-key evil-normal-state-map (kbd "SPC c R") 'cb-re-lint)
 (define-key evil-normal-state-map (kbd "SPC c r") 'my-recompile)
 (define-key evil-normal-state-map (kbd "SPC c p") 'cb-pyright)
 (define-key evil-normal-state-map (kbd "SPC c f") 'cb-format)
-
-(defun cb-reformat()
-  ;; Reformats files in the region selected by black output
-  ;; would reformat /opt/app/common/util/util.py
-  (interactive)
-  ;; TODO implement
-  )
-
-(defun save-all()
-  (interactive)
-  (save-some-buffers 1)
-  )
-
-(define-key evil-normal-state-map (kbd "SPC c s") 'save-all)
-
-;; frontend compilation
-(defun cb-rebuild-react ()
-  (interactive)
-  (compile "docker compose run --rm frontend-build yarn workspace @multimediallc/cb-react build")
-  )
-
-;;(define-key evil-normal-state-map (kbd "SPC c f r b") 'cb-rebuild-react)
-
-(defun cb-test-react ()
-  (interactive)
-  (compile "docker compose run --rm frontend-build yarn workspace @multimediallc/cb-react test")
-  )
-
-;;(define-key evil-normal-state-map (kbd "SPC c f r t") 'cb-test-react)
-
-
-;; Stashing
-
-(defun buffer-exists (buffer-name)
-  (not (eq nil (get-buffer buffer-name))
-       )
-  )
-
-;; (defun check-buffa (buffer-name)
-;;   (interactive)
-;;   (when (buffer-exists buffer-name)
-;;     (with-current-buffer buffer-name
-;;       buffer-substring
-;;       )
-;;     )
-;;   )
-
-;; (check-buffa "*scratch*")
+;; (define-key evil-normal-state-map (kbd "SPC c f r t") 'cb-test-react)
