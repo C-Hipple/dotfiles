@@ -1,3 +1,18 @@
+(defun run-pytest-full-file ()
+  "Compile using 'docker compose run --rm test <FULL_PATH>::'
+   followed by the text from after 'def' up to but not including the first '(' on the current line."
+  (interactive)
+  (save-some-buffers 1)
+  (setq fullpath (buffer-file-name))
+  (setq root (projectile-project-root))
+  (setq final_path (replace-regexp-in-string root "" fullpath))
+
+  (setq command (concat "docker compose run --rm test "
+                        final_path
+                        " --no-cov --reuse-db --no-migrations"
+                        ))
+  (compile command))
+
 (defun run-individual-pytest ()
   "Compile using 'docker compose run --rm test <FULL_PATH>::'
    followed by the text from after 'def' up to but not including the first '(' on the current line."
@@ -48,35 +63,37 @@
         (rustic-mode . rust-test-command)
         ))
 
+(defun cb-py-test-command (file-name test-name)
+  (concat "docker compose run --rm test "
+          (replace-regexp-in-string (projectile-project-root) "" (buffer-file-name))
+          "::"
+          test-name
+          " --no-cov --reuse-db --no-migrations"
+          ))
+
+(setq project-mode-command-overide-alist
+      '(("chaturbate" . ((python-ts-mode . cb-py-test-command))))
+      )
+
 
 (defun get-command-by-mode ()
   "Runs the test command based on major mode and test name."
   (interactive)
-  (message "starting")
   (let* ((mode-command (cdr (assoc major-mode mode-command-pattern-alist)))
-         (test-name (current-test-at-point))
+         (project-overides (cdr (assoc (projectile-project-name) project-mode-command-overide-alist)))
+         ;;((current-test-at-point) (current-test-at-point))
          )
-    (message "Calling command for test: %s" test-name)
+    (if project-overides
+        (compile (funcall (cdr (assoc major-mode project-overides)) (buffer-file-name) (current-test-at-point)))
+      )
     (if mode-command
-        (compile (funcall mode-command (buffer-file-name) test-name))
+        (compile (funcall mode-command (buffer-file-name) (current-test-at-point)))
       (message "No command found for %s mode" major-mode))))
 
 (define-key evil-normal-state-map (kbd "SPC c A") 'get-command-by-mode)
 
-(defun run-pytest-full-file ()
-  "Compile using 'docker compose run --rm test <FULL_PATH>::'
-   followed by the text from after 'def' up to but not including the first '(' on the current line."
-  (interactive)
-  (save-some-buffers 1)
-  (setq fullpath (buffer-file-name))
-  (setq root (projectile-project-root))
-  (setq final_path (replace-regexp-in-string root "" fullpath))
 
-  (setq command (concat "docker compose run --rm test "
-                        final_path
-                        " --no-cov --reuse-db --no-migrations"
-                        ))
-  (compile command))
+
 
 
 ;; Recompile should automatically save
@@ -89,19 +106,6 @@
 (define-key evil-normal-state-map (kbd "SPC c r") 'save-and-recompile)
 (define-key evil-normal-state-map (kbd "SPC c T") 'run-pytest-full-file)
 
-(defun format-buffer-by-mode ()
-  "If we're in python, we use black-format-buffer, otherwise we use lsp-format-buffer"
-  (interactive)
-  (if (string= major-mode "python-ts-mode")
-      (progn
-        (py-isort-buffer)
-        (python-black-buffer)
-        )
-    (lsp-format-buffer)
-    )
-  )
-
-(define-key evil-normal-state-map (kbd ", f b") 'format-buffer-by-mode)
 
 (setq mode-test-pattern-alist
       '(
@@ -126,6 +130,7 @@
     result
     )
   )
+
 
 (defun current-test-at-point ()
   (let ((my-line (thing-at-point 'line))
@@ -159,6 +164,20 @@
   )
 
 (define-key evil-normal-state-map (kbd "SPC c F") 'call-current-test-at-point)
+
+(defun format-buffer-by-mode ()
+  "If we're in python, we use black-format-buffer, otherwise we use lsp-format-buffer"
+  (interactive)
+  (if (string= major-mode "python-ts-mode")
+      (progn
+        (py-isort-buffer)
+        (python-black-buffer)
+        )
+    (lsp-format-buffer)
+    )
+  )
+
+(define-key evil-normal-state-map (kbd ", f b") 'format-buffer-by-mode)
 
 
 (defun cb-lint ()
