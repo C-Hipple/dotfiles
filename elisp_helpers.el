@@ -93,6 +93,17 @@
         (markdown "https://github.com/ikatyang/tree-sitter-markdown")
         (python "https://github.com/tree-sitter/tree-sitter-python")
         (toml "https://github.com/tree-sitter/tree-sitter-toml")
+        (rust "https://github.com/tree-sitter/tree-sitter-rust")
         (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
         (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+
+(defun set-global-font-size ()
+  "Interactively set the global font size."
+  (interactive)
+  (let* ((current-size (face-attribute 'default :height))
+         (new-size (read-number "Enter new font size: " current-size)))
+    (set-face-attribute 'default nil :height (* new-size 10))))
+
+(define-key evil-normal-state-map (kbd "SPC T f") 'set-global-font-size)
