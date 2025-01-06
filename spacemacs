@@ -119,12 +119,12 @@ This function should only modify configuration layer settings."
 
      ;;:branch "feature/delta-highlighting-in-review"
 
-     ;; (diff-lsp :location (recipe
-     ;;                    :fetcher github
-     ;;                    :repo "C-Hipple/diff-lsp"
-     ;;                    :files ("*.el")
-     ;;                    )
-     ;;           )
+     (diff-lsp :location (recipe
+                          :fetcher github
+                          :repo "C-Hipple/diff-lsp.el"
+                          :files ("*.el")
+                          )
+               )
 
      (magit-delta :location (recipe
                              :fetcher github
@@ -1081,14 +1081,9 @@ Operate on selected region on whole buffer."
   (with-eval-after-load 'code-review '(define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit))
   ;;(with-eval-after-load 'code-review )
 
-  (defun run-gtdbot-oneoff ()
-    "Runs gtdbot with the oneoff flag to update reviews.org"
-    (interactive)
-    (async-shell-command "gtdbot --oneoff" "*gtdbot*"))
 
   (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)
   (define-key evil-normal-state-map (kbd ", r s") 'code-review-start-at-point)
-  (define-key evil-normal-state-map (kbd ", r l") 'run-gtdbot-oneoff) ;; l for list?
   (define-key evil-normal-state-map (kbd "SPC b C") (lambda () (interactive) (switch-to-buffer "*Code Review*" nil t)))
 
 
@@ -1117,6 +1112,9 @@ Operate on selected region on whole buffer."
 
   (if (file-exists-p "~/dotfiles/elisp_helpers.el")
       (load-file "~/dotfiles/elisp_helpers.el"))
+
+  (if (file-exists-p "~/gtdbot/gtdbot.el")
+      (load-file "~/gtdbot/gtdbot.el"))
 
   ;; TODO set this into a private layer installed locally
   (if (file-exists-p "~/mm-tools/mm-tools.el")
