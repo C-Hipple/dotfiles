@@ -1102,7 +1102,13 @@ Operate on selected region on whole buffer."
 
   (exec-path-from-shell-copy-env "GTDBOT_GITHUB_TOKEN")
 
-  (define-key evil-normal-state-map (kbd "SPC b c") (lambda () (interactive) (switch-to-buffer "*compilation*" nil t)))
+  (defun switch-to-compilation-buffer ()
+    (interactive)
+    (let ((display-buffer-overriding-action
+           '((display-buffer-same-window))))
+      (switch-to-buffer "*compilation*" nil t)))
+
+  (define-key evil-normal-state-map (kbd "SPC b c") 'switch-to-compilation)
 
   (if (file-exists-p "~/dotfiles/elisp_helpers.el")
       (load-file "~/dotfiles/elisp_helpers.el"))
