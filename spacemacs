@@ -141,6 +141,8 @@ This function should only modify configuration layer settings."
                                :fetcher github
                                :repo "C-Hipple/test-at-point"
                                :files ("*.el")))
+
+     pr-review
      )
 
    ;; A list of packages that cannot be updated.
@@ -1108,7 +1110,7 @@ Operate on selected region on whole buffer."
            '((display-buffer-same-window))))
       (switch-to-buffer "*compilation*" nil t)))
 
-  (define-key evil-normal-state-map (kbd "SPC b c") 'switch-to-compilation)
+  (define-key evil-normal-state-map (kbd "SPC b c") 'switch-to-compilation-buffer)
 
   (if (file-exists-p "~/dotfiles/elisp_helpers.el")
       (load-file "~/dotfiles/elisp_helpers.el"))
