@@ -1134,6 +1134,13 @@ Operate on selected region on whole buffer."
   ;;   ;; Amend this to the directory where you keep Combobulate's source
   ;;   ;; code.
   ;;   :load-path ("~/combobulate/"))
+  ;; MERGING
+
+  (define-key evil-normal-state-map (kbd ", k u") 'smerge-keep-upper)
+  (define-key evil-normal-state-map (kbd ", k l") 'smerge-keep-lower)
+  (define-key evil-normal-state-map (kbd ", k b") 'smerge-keep-base)
+  (define-key evil-normal-state-map (kbd ", k a") 'smerge-keep-all)
+
 
   )
 
