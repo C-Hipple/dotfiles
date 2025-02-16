@@ -119,12 +119,12 @@ This function should only modify configuration layer settings."
 
      ;;:branch "feature/delta-highlighting-in-review"
 
-     (diff-lsp :location (recipe
-                          :fetcher github
-                          :repo "C-Hipple/diff-lsp.el"
-                          :files ("*.el")
-                          )
-               )
+     ;; (diff-lsp :location (recipe
+     ;;                      :fetcher github
+     ;;                      :repo "C-Hipple/diff-lsp.el"
+     ;;                      :files ("*.el")
+     ;;                      )
+     ;;           )
 
      (magit-delta :location (recipe
                              :fetcher github
@@ -143,6 +143,7 @@ This function should only modify configuration layer settings."
                                :files ("*.el")))
 
      pr-review
+     gptel
      )
 
    ;; A list of packages that cannot be updated.
@@ -736,11 +737,14 @@ before packages are loaded."
 
   ;; For when I want to back out
   (setq auto-mode-alist (delete '("\.py[iw]?\'" . python-ts-mode) auto-mode-alist))
+
   ;; for macos shell env vars
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
 
   (exec-path-from-shell-copy-env "GTDBOT_GITHUB_TOKEN")
+  (exec-path-from-shell-copy-env "GEMINI_API_TOKEN")
+
 
 
   ;; Org-mode configurations are from the blog in the link below:
@@ -1142,13 +1146,27 @@ Operate on selected region on whole buffer."
   (define-key evil-normal-state-map (kbd ", k a") 'smerge-keep-all)
 
   ;; GPT / AI
-  (setq
-   gptel-model 'llama3.1:latest
-   gptel-backend (gptel-make-ollama "Ollama"
-                   :host "localhost:11434"
-                   :stream t
-                   :models '(llama3.1:latest)))
+  ;;
+  (if (getenv "GEMINI_API_TOKEN")
+      (setq
+       gptel-model 'gemini-pro
+       gptel-backend (gptel-make-gemini "Gemini"
+                       :key (getenv "GEMINI_API_TOKEN")
+                       :stream t))
+    (setq
+     gptel-model 'llama3.1:latest
+     gptel-backend (gptel-make-ollama "Ollama"
+                     :host "localhost:11434"
+                     :stream t
+                     :models '(llama3.1:latest)))
+    )
+
+  (define-key evil-normal-state-map (kbd ", a m") 'gptel-menu)
+  (define-key evil-normal-state-map (kbd ", a a") 'gptel-add)
+  (define-key evil-normal-state-map (kbd ", a c") 'gptel) ;; chat
+
   )
+
 
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
