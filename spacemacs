@@ -649,7 +649,6 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
-  ;;(add-to-list 'default-frame-alist '(undecorated . t))
 
   ;; General stuff
   (setq-default tab-width 4)
@@ -883,6 +882,11 @@ the next history element (which can be accessed with \
   ;;(mapc #'disable-theme custom-enabled-themes))
 
   ;; Silly theme stuff
+
+  (defun hide-title-bar()
+    ;; call this and then make a new frame
+    (add-to-list 'default-frame-alist '(undecorated . t)))
+
   (defun set-gold ()
     "set the default face to #d7af5f."
     (interactive)
@@ -1149,7 +1153,7 @@ Operate on selected region on whole buffer."
   ;;
   (if (getenv "GEMINI_API_TOKEN")
       (setq
-       gptel-model 'gemini-pro
+       gptel-model 'gemini-2.0-flash-exp
        gptel-backend (gptel-make-gemini "Gemini"
                        :key (getenv "GEMINI_API_TOKEN")
                        :stream t))
