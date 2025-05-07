@@ -21,21 +21,21 @@
 [interactive]
     diffFilter = delta --color-only
 
-[delta]
-    navigate = true    # use n and N to move between diff sections
-    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
-
 [merge]
     conflictstyle = diff3
 
 [diff]
     colorMoved = default
 
+[include]
+    path = /Users/chrishipple/delta/themes.gitconfig
+
 [delta]
     line-numbers = false
     plus-emph-style = normal
     plus-non-emph-style = normal
     keep-plus-minus-markers = true
+#     features = collared-trogon
 #     color-diff-new = blue
 
 # [delta "unobtrusive-line-numbers"]
