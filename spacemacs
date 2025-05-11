@@ -112,6 +112,7 @@ This function should only modify configuration layer settings."
      dap-mode
      exec-path-from-shell
      sqlite3
+     magit-delta
      (code-review :location (recipe
                              :fetcher github
                              :repo "C-Hipple/code-review"
@@ -126,10 +127,10 @@ This function should only modify configuration layer settings."
      ;;                      )
      ;;           )
 
-     (magit-delta :location (recipe
-                             :fetcher github
-                             :repo "dandavison/magit-delta"
-                             :files ("*.el")))
+     ;; (magit-delta :location (recipe
+     ;;                         :fetcher github
+     ;;                         :repo "dandavison/magit-delta"
+     ;;                         :files ("*.el")))
      dockerfile-mode
      docker-compose-mode
      fireplace
@@ -752,8 +753,7 @@ before packages are loaded."
   (setq auto-mode-alist (delete '("\.py[iw]?\'" . python-ts-mode) auto-mode-alist))
 
   ;; for macos shell env vars
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize))
+  (exec-path-from-shell-initialize)
 
   (exec-path-from-shell-copy-env "GTDBOT_GITHUB_TOKEN")
   (exec-path-from-shell-copy-env "GEMINI_API_TOKEN")
@@ -782,18 +782,6 @@ before packages are loaded."
     ;; disable inline previews
     (delq 'company-preview-if-just-one-frontend company-frontends))
 
-
-  ;; copilot copy/pasted from readme
-
-  ;; (with-eval-after-load 'copilot
-  ;;   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-  ;;   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
-
-  ;; (add-hook 'prog-mode-hook 'copilot-mode)
-
-  ;; (define-key evil-insert-state-map (kbd "C-<tab>") 'copilot-accept-completion-by-word)
-  ;; (define-key evil-insert-state-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
-
   ;; ORG MODE
   (setq org-startup-folded t)
   (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "PROGRESS(p)" "MAYBE(m)" "BLOCKED(b)" "DELEGATED(l)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)" )))
@@ -813,9 +801,6 @@ before packages are loaded."
                              ("~/gtd/someday.org" :maxlevel . 3)
                              ("~/gtd/notes.org" :maxlevel . 3)
                              ("~/gtd/tickler.org" :maxlevel . 2)))
-
-
-  (load-file "~/dotfiles/review.el")
 
 
   (setq org-todo-keyword-faces
