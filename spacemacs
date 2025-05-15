@@ -843,7 +843,8 @@ the next history element (which can be accessed with \
 
   ;; Auto update the TODO counts on save
   (defun org-auto-check()
-    (org-update-statistics-cookies "ALL"))
+    (if (string= major-mode "org-mode")
+        (org-update-statistics-cookies "ALL")))
   (add-hook 'org-capture-before-finalize-hook 'org-auto-check)
 
   (with-eval-after-load 'org
