@@ -126,10 +126,11 @@ This function should only modify configuration layer settings."
      ;;                      )
      ;;           )
 
-     (magit-delta :location (recipe
-                             :fetcher github
-                             :repo "dandavison/magit-delta"
-                             :files ("*.el")))
+     ;; (magit-delta :location (recipe
+     ;;                         :fetcher github
+     ;;                         :repo "dandavison/magit-delta"
+     ;;                         :files ("*.el")))
+     magit-delta
      dockerfile-mode
      docker-compose-mode
      fireplace
@@ -1096,6 +1097,9 @@ Operate on selected region on whole buffer."
 
 
   ;; Code Review
+
+  (setq code-review-fill-column 120)
+
   (defun code-review-start-at-point ()
     "Copy the current line and pass it to `code-review-start`."
     (interactive)
