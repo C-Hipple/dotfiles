@@ -850,8 +850,7 @@ the next history element (which can be accessed with \
   (with-eval-after-load 'org
     (add-hook 'org-mode-hook 'visual-line-mode)
     (add-hook 'before-save-hook 'org-auto-check)
-    (add-hook 'before-save-hook 'whitespace-cleanup)
-    )
+    (add-hook 'before-save-hook 'whitespace-cleanup))
 
   (defun org-summary-todo (n-done n-not-done)
     "Switch entry to DONE when all subentries are done, to TODO otherwise."
@@ -1082,26 +1081,13 @@ Operate on selected region on whole buffer."
 
 
   ;; Code Review
-  (defun code-review-start-at-point ()
-    "Copy the current line and pass it to `code-review-start`."
-    (interactive)
-    (let (
-          (current-line (thing-at-point 'line t))
-          (pattern "https://github\\.com/[^/]+/\\([^/]+\\)/pull/[0-9]+")
-          (project-name "")
-          )
-      (when (string-match pattern current-line)
-        (setq project-name (match-string 1 current-line))
-        )
-      (code-review-start current-line)
-      ;; TODO: check if we successfully got the project name
-      (cd (concat "~/" project-name))
-      )
-    )
-
-
-  (with-eval-after-load 'code-review '(define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit))
-  ;;(with-eval-after-load 'code-review )
+  (with-eval-after-load 'code-review
+    (progn
+      (define-key code-review-mode-map (kbd "K") (lambda () (interactive) (previous-line 10)))
+      (define-key code-review-mode-map (kbd "J") (lambda () (interactive) (next-line 10)))
+      (define-key code-review-mode-map (kbd "C-k") (lambda () (interactive) (previous-line 15)))
+      (define-key code-review-mode-map (kbd "C-j") (lambda () (interactive) (next-line 15)))
+      (define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit)))
 
   (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)
   (define-key evil-normal-state-map (kbd ", r s") 'code-review-start-at-point)
