@@ -125,11 +125,6 @@ This function should only modify configuration layer settings."
      ;;                      :files ("*.el")
      ;;                      )
      ;;           )
-
-     ;; (magit-delta :location (recipe
-     ;;                         :fetcher github
-     ;;                         :repo "dandavison/magit-delta"
-     ;;                         :files ("*.el")))
      magit-delta
      dockerfile-mode
      docker-compose-mode
@@ -147,8 +142,6 @@ This function should only modify configuration layer settings."
                          :fetcher github
                          :repo "C-Hipple/harpoon.el"
                          :files ("*.el")))
-
-     pr-review
      gptel
      )
 
@@ -753,8 +746,7 @@ before packages are loaded."
   (setq auto-mode-alist (delete '("\.py[iw]?\'" . python-ts-mode) auto-mode-alist))
 
   ;; for macos shell env vars
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize))
+  (exec-path-from-shell-initialize)
 
   (exec-path-from-shell-copy-env "GTDBOT_GITHUB_TOKEN")
   (exec-path-from-shell-copy-env "GEMINI_API_TOKEN")
@@ -783,18 +775,6 @@ before packages are loaded."
     ;; disable inline previews
     (delq 'company-preview-if-just-one-frontend company-frontends))
 
-
-  ;; copilot copy/pasted from readme
-
-  ;; (with-eval-after-load 'copilot
-  ;;   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-  ;;   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
-
-  ;; (add-hook 'prog-mode-hook 'copilot-mode)
-
-  ;; (define-key evil-insert-state-map (kbd "C-<tab>") 'copilot-accept-completion-by-word)
-  ;; (define-key evil-insert-state-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
-
   ;; ORG MODE
   (setq org-startup-folded t)
   (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "PROGRESS(p)" "MAYBE(m)" "BLOCKED(b)" "DELEGATED(l)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)" )))
@@ -814,9 +794,6 @@ before packages are loaded."
                              ("~/gtd/someday.org" :maxlevel . 3)
                              ("~/gtd/notes.org" :maxlevel . 3)
                              ("~/gtd/tickler.org" :maxlevel . 2)))
-
-
-  (load-file "~/dotfiles/review.el")
 
 
   (setq org-todo-keyword-faces
@@ -859,14 +836,14 @@ the next history element (which can be accessed with \
 
   ;; Auto update the TODO counts on save
   (defun org-auto-check()
-    (org-update-statistics-cookies "ALL"))
+    (if (string= major-mode "org-mode")
+        (org-update-statistics-cookies "ALL")))
   (add-hook 'org-capture-before-finalize-hook 'org-auto-check)
 
   (with-eval-after-load 'org
     (add-hook 'org-mode-hook 'visual-line-mode)
     (add-hook 'before-save-hook 'org-auto-check)
-    (add-hook 'before-save-hook 'whitespace-cleanup)
-    )
+    (add-hook 'before-save-hook 'whitespace-cleanup))
 
   (defun org-summary-todo (n-done n-not-done)
     "Switch entry to DONE when all subentries are done, to TODO otherwise."
@@ -1097,29 +1074,14 @@ Operate on selected region on whole buffer."
 
 
   ;; Code Review
-
   (setq code-review-fill-column 120)
-
-  (defun code-review-start-at-point ()
-    "Copy the current line and pass it to `code-review-start`."
-    (interactive)
-    (let (
-          (current-line (thing-at-point 'line t))
-          (pattern "https://github\\.com/[^/]+/\\([^/]+\\)/pull/[0-9]+")
-          (project-name "")
-          )
-      (when (string-match pattern current-line)
-        (setq project-name (match-string 1 current-line))
-        )
-      (code-review-start current-line)
-      ;; TODO: check if we successfully got the project name
-      (cd (concat "~/" project-name))
-      )
-    )
-
-
-  (with-eval-after-load 'code-review '(define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit))
-  ;;(with-eval-after-load 'code-review )
+  (with-eval-after-load 'code-review
+    (progn
+      (define-key code-review-mode-map (kbd "K") (lambda () (interactive) (previous-line 10)))
+      (define-key code-review-mode-map (kbd "J") (lambda () (interactive) (next-line 10)))
+      (define-key code-review-mode-map (kbd "C-k") (lambda () (interactive) (previous-line 15)))
+      (define-key code-review-mode-map (kbd "C-j") (lambda () (interactive) (next-line 15)))
+      (define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit)))
 
   (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)
   (define-key evil-normal-state-map (kbd ", r s") 'code-review-start-at-point)
