@@ -116,15 +116,10 @@ This function should only modify configuration layer settings."
                              :fetcher github
                              :repo "C-Hipple/code-review"
                              :files ("*.el")))
-
-     ;;:branch "feature/delta-highlighting-in-review"
-
-     ;; (diff-lsp :location (recipe
-     ;;                      :fetcher github
-     ;;                      :repo "C-Hipple/diff-lsp.el"
-     ;;                      :files ("*.el")
-     ;;                      )
-     ;;           )
+     (diff-lsp :location (recipe
+                          :fetcher github
+                          :repo "C-Hipple/diff-lsp.el"
+                          :files ("*.el")))
      magit-delta
      dockerfile-mode
      docker-compose-mode
@@ -143,6 +138,8 @@ This function should only modify configuration layer settings."
                          :repo "C-Hipple/harpoon.el"
                          :files ("*.el")))
      gptel
+     prettier
+     aider
      )
 
    ;; A list of packages that cannot be updated.
@@ -714,23 +711,23 @@ before packages are loaded."
     (recompile)
     )
 
+
   (defun format-buffer-by-mode ()
     "Format the current buffer based on its major mode."
     (interactive)
-    (message (prin1-to-string major-mode))
-    (cond
-     ((string= major-mode "python-ts-mode")
-      (message "Formatting Python with isort and black")
-      (py-isort-buffer)
-      (python-black-buffer))
-     ((string= major-mode "tsx-ts-mode")
-      (message "Formatting typescript with prettier")
-      (prettier-prettify))
-     ((string= major-mode "typescript-tsx-mode")
-      (message "Formatting typescript with prettier")
-      (prettier-prettify))
-     (t
-      (lsp-format-buffer))))
+    (let ((mode (symbol-name major-mode)))
+      (cond
+       ((string= mode "python-ts-mode")
+        (message "Formatting Python with isort and black")
+        (py-isort-buffer)
+        (python-black-buffer))
+       ((or (string= mode "tsx-ts-mode")
+            (string= mode "typescript-ts-mode")
+            (string= mode "typescript-tsx-mode"))
+        (message "Formatting Typescript with prettier")
+        (prettier-prettify))
+       (t
+        (lsp-format-buffer)))))
 
   (setq lsp-enable-on-type-formatting nil)
 
@@ -1081,7 +1078,9 @@ Operate on selected region on whole buffer."
       (define-key code-review-mode-map (kbd "J") (lambda () (interactive) (next-line 10)))
       (define-key code-review-mode-map (kbd "C-k") (lambda () (interactive) (previous-line 15)))
       (define-key code-review-mode-map (kbd "C-j") (lambda () (interactive) (next-line 15)))
-      (define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit)))
+      (define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit)
+      (define-key code-review-mode-map (kbd ", g g") 'lsp-find-definition) ;; DIFF-LSP HYPPEEEEE
+      (define-key code-review-mode-map (kbd ", g r") 'xref-find-references)))
 
   (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)
   (define-key evil-normal-state-map (kbd ", r s") 'code-review-start-at-point)
@@ -1144,7 +1143,7 @@ Operate on selected region on whole buffer."
   ;;
   (if (getenv "GEMINI_API_TOKEN")
       (setq
-       gptel-model 'gemini-2.0-flash-exp
+       gptel-model 'gemini-2.5-flash-lite-preview-06-17
        gptel-backend (gptel-make-gemini "Gemini"
                        :key (getenv "GEMINI_API_TOKEN")
                        :stream t))
@@ -1185,90 +1184,78 @@ This function is called at the very end of Spacemacs initialization."
        "ca2e59377dc1ecee2a1069ec7126b453fa1198fed946304abb9a5b8c7ad5404d" default))
    '(desktop-save nil)
    '(package-selected-packages
-     '(doom-themes tangonov-theme prettier gptel pr-review melancholy-theme
-                   timu-macos-theme kuronami-theme dakrone-light-theme
-                   dakrone-theme berrys-theme avk-emacs-themes calmer-forest-theme
-                   almost-mono-themes zeno-theme github-review minimal-theme
-                   solo-jazz-theme jazz-theme treesit-auto apheleia nginx-mode
-                   ef-themes hydandata-light-theme basic-theme fireplace
-                   goose-theme docker-compose-mode dockerfile-mode
-                   emacsql-sqlite-builtin emacsql-sqlite-module emojify a vterm
-                   dream-theme company-terraform terraform-mode hcl-mode
-                   magit-delta sqlite3 lsp-haskell all-the-icons-completion
-                   exec-path-from-shell xterm-color tommyh-theme company-lua
-                   counsel-gtags counsel swiper ivy ggtags helm-gtags lua-mode
-                   flycheck-haskell haskell-snippets helm-hoogle hindent
-                   hlint-refactor haskell-mode dap-mode lsp-docker bui reformatter
-                   dash-docs lcr xref company-cabal cmm-mode attrap
-                   quelpa-use-package tablist aio helm-dash python-black
-                   python-isort cov yasnippet-snippets tern lsp-treemacs
-                   lsp-python-ms lsp-pyright lsp-origami origami helm-lsp
-                   helm-c-yasnippet fuzzy web-completion-data auto-yasnippet
-                   ac-ispell modus-themes pdf-tools go elpy eredis minsk-theme
-                   material-theme jedi lsp-jedi lsp-ui lsp-mode eglot
-                   sunny-day-theme vs-light-theme smeargle orgit-forge orgit
-                   helm-ls-git helm-git-grep gitignore-templates git-timemachine
-                   git-modes git-messenger git-link forge yaml ghub emacsql-sqlite
-                   emacsql treepy magit-popup treemacs-magit magit magit-section
-                   git-commit with-editor yapfify yaml-mode web-mode web-beautify
-                   underwater-theme toml-mode tide typescript-mode tagedit
-                   suscolors-theme subatomic-theme sql-indent sphinx-doc
-                   solarized-theme smyx-theme slim-mode seeing-is-believing
-                   scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor
-                   ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe
-                   rebecca-theme rbenv rake racer rust-mode pytest pylookup
-                   pyenv-mode pydoc py-isort pug-mode prettier-js poetry transient
-                   planet-theme pippel pipenv load-env-vars pyvenv
-                   pip-requirements org-rich-yank org-projectile
-                   org-category-capture org-present org-pomodoro alert log4e gntp
-                   org-mime org-download org-contrib org-cliplink oceanic-theme
-                   obsidian-theme npm-mode nose nord-theme nodejs-repl mmm-mode
-                   minitest markdown-toc livid-mode skewer-mode live-py-mode
-                   json-reformat json-navigator hierarchy json-mode json-snatcher
-                   js2-refactor yasnippet multiple-cursors js2-mode js-doc epc
-                   ctable concurrent deferred impatient-mode simple-httpd htmlize
-                   helm-pydoc helm-org-rifle helm-css-scss haml-mode gruvbox-theme
-                   autothemer godoctor go-tag go-rename go-impl go-guru
-                   go-gen-test go-fill-struct go-eldoc go-mode gnuplot
-                   git-gutter-fringe fringe-helper git-gutter gh-md
-                   flyspell-correct-helm flyspell-correct flycheck-rust
-                   flycheck-pos-tip pos-tip evil-org emmet-mode cython-mode
-                   csv-mode code-cells chruby cargo markdown-mode bundler inf-ruby
-                   browse-at-remote blacken auto-dictionary anaconda-mode pythonic
-                   ws-butler writeroom-mode visual-fill-column winum
-                   volatile-highlights vim-powerline vi-tilde-fringe uuidgen
-                   undo-tree queue treemacs-projectile treemacs-persp
-                   treemacs-icons-dired treemacs-evil treemacs cfrs pfuture
-                   posframe toc-org symon symbol-overlay string-inflection
-                   spacemacs-whitespace-cleanup spacemacs-purpose-popwin
-                   spaceline-all-the-icons memoize spaceline powerline space-doc
-                   restart-emacs request rainbow-delimiters quickrun popwin
-                   persp-mode password-generator paradox spinner overseer
-                   org-superstar open-junk-file nameless multi-line shut-up
-                   macrostep lorem-ipsum link-hint inspector info+ indent-guide
-                   hungry-delete hl-todo highlight-parentheses highlight-numbers
-                   parent-mode highlight-indentation hide-comnt help-fns+
-                   helm-xref helm-themes helm-swoop helm-purpose window-purpose
-                   imenu-list helm-projectile helm-org helm-mode-manager helm-make
-                   helm-flx helm-descbinds helm-ag google-translate golden-ratio
-                   flycheck-package package-lint flycheck pkg-info epl
-                   flycheck-elsa flx-ido flx fancy-battery eyebrowse expand-region
-                   evil-visualstar evil-visual-mark-mode evil-unimpaired
-                   evil-tutor evil-textobj-line evil-terminal-cursor-changer
-                   evil-surround evil-numbers evil-nerd-commenter evil-mc
-                   evil-matchit evil-lisp-state evil-lion evil-indent-plus
-                   evil-iedit-state evil-goggles evil-exchange evil-escape
-                   evil-easymotion evil-collection annalist evil-cleverparens
-                   smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit
-                   clang-format projectile paredit list-utils elisp-slime-nav
-                   elisp-def f editorconfig dumb-jump s drag-stuff
-                   dired-quick-sort devdocs define-word column-enforce-mode
-                   clean-aindent-mode centered-cursor-mode auto-highlight-symbol
-                   ht dash auto-compile packed compat all-the-icons
-                   aggressive-indent ace-window ace-link ace-jump-helm-line helm
-                   avy popup helm-core which-key use-package pcre2el hydra lv
-                   hybrid-mode holy-mode font-lock+ evil-evilified-state evil
-                   goto-chg dotenv-mode diminish bind-map bind-key async))
+     '(a ac-ispell ace-jump-helm-line ace-link ace-window aggressive-indent aider aio
+         alert all-the-icons all-the-icons-completion almost-mono-themes
+         anaconda-mode annalist anzu apheleia async attrap auto-compile
+         auto-dictionary auto-highlight-symbol auto-yasnippet autothemer
+         avk-emacs-themes avy basic-theme berrys-theme bind-key bind-map blacken
+         browse-at-remote bui bundler calmer-forest-theme cargo
+         centered-cursor-mode cfrs chruby clang-format clean-aindent-mode cmm-mode
+         code-cells column-enforce-mode company-cabal company-lua
+         company-terraform compat concurrent counsel counsel-gtags cov csv-mode
+         ctable cython-mode dakrone-light-theme dakrone-theme dap-mode dash
+         dash-docs deferred define-word devdocs diff-lsp diminish dired-quick-sort
+         docker-compose-mode dockerfile-mode doom-themes dotenv-mode drag-stuff
+         dream-theme dumb-jump editorconfig ef-themes eglot elisp-def
+         elisp-slime-nav elpy emacsql emacsql-sqlite emacsql-sqlite-builtin
+         emacsql-sqlite-module emmet-mode emojify emr epc epl eredis eval-sexp-fu
+         evil evil-anzu evil-args evil-cleverparens evil-collection
+         evil-easymotion evil-escape evil-evilified-state evil-exchange
+         evil-goggles evil-iedit-state evil-indent-plus evil-lion evil-lisp-state
+         evil-matchit evil-mc evil-nerd-commenter evil-numbers evil-org
+         evil-surround evil-terminal-cursor-changer evil-textobj-line evil-tutor
+         evil-unimpaired evil-visual-mark-mode evil-visualstar
+         exec-path-from-shell expand-region eyebrowse f fancy-battery fireplace
+         flx flx-ido flycheck flycheck-elsa flycheck-haskell flycheck-package
+         flycheck-pos-tip flycheck-rust flyspell-correct flyspell-correct-helm
+         font-lock+ forge fringe-helper fuzzy ggtags gh-md ghub git-commit
+         git-gutter git-gutter-fringe git-link git-messenger git-modes
+         git-timemachine github-review gitignore-templates gntp gnuplot go
+         go-eldoc go-fill-struct go-gen-test go-guru go-impl go-mode go-rename
+         go-tag godoctor golden-ratio google-translate goose-theme goto-chg gptel
+         gruvbox-theme haml-mode haskell-mode haskell-snippets hcl-mode helm
+         helm-ag helm-c-yasnippet helm-core helm-css-scss helm-dash helm-descbinds
+         helm-flx helm-git-grep helm-gtags helm-hoogle helm-ls-git helm-lsp
+         helm-make helm-mode-manager helm-org helm-org-rifle helm-projectile
+         helm-purpose helm-pydoc helm-swoop helm-themes helm-xref help-fns+
+         hide-comnt hierarchy highlight-indentation highlight-numbers
+         highlight-parentheses hindent hl-todo hlint-refactor holy-mode ht htmlize
+         hungry-delete hybrid-mode hydandata-light-theme hydra iedit imenu-list
+         impatient-mode indent-guide inf-ruby info+ inspector iter2 ivy jazz-theme
+         jedi js-doc js2-mode js2-refactor json-mode json-navigator json-reformat
+         json-snatcher kuronami-theme lcr link-hint list-utils live-py-mode
+         livid-mode load-env-vars log4e lorem-ipsum lsp-docker lsp-haskell
+         lsp-jedi lsp-mode lsp-origami lsp-pyright lsp-python-ms lsp-treemacs
+         lsp-ui lua-mode lv macrostep magit magit-delta magit-popup magit-section
+         markdown-mode markdown-toc material-theme melancholy-theme memoize
+         minimal-theme minitest minsk-theme mmm-mode modus-themes multi-line
+         multiple-cursors nameless nginx-mode nodejs-repl nord-theme nose npm-mode
+         nvm obsidian-theme oceanic-theme open-junk-file org-category-capture
+         org-cliplink org-contrib org-download org-mime org-pomodoro org-present
+         org-projectile org-rich-yank org-superstar orgit orgit-forge origami
+         overseer package-lint packed paradox paredit parent-mode
+         password-generator pcre2el pdf-tools persp-mode pfuture pip-requirements
+         pipenv pippel pkg-info planet-theme poetry popup popwin pos-tip posframe
+         powerline pr-review prettier prettier-js projectile pug-mode py-isort
+         pydoc pyenv-mode pylookup pytest python-black python-isort pythonic
+         pyvenv quelpa-use-package queue quickrun racer rainbow-delimiters rake
+         rbenv rebecca-theme reformatter request restart-emacs robe ron-mode
+         rspec-mode rubocop rubocopfmt ruby-hash-syntax ruby-refactor
+         ruby-test-mode ruby-tools rust-mode rvm s sass-mode scss-mode
+         seeing-is-believing shut-up simple-httpd skewer-mode slim-mode
+         smartparens smeargle smyx-theme solarized-theme solo-jazz-theme space-doc
+         spaceline spaceline-all-the-icons spacemacs-purpose-popwin
+         spacemacs-whitespace-cleanup sphinx-doc spinner sql-indent sqlite3
+         string-inflection subatomic-theme sunny-day-theme suscolors-theme swiper
+         symbol-overlay symon tablist tagedit tangonov-theme tern terraform-mode
+         tide timu-macos-theme toc-org toml-mode tommyh-theme transient treemacs
+         treemacs-evil treemacs-icons-dired treemacs-magit treemacs-persp
+         treemacs-projectile treepy treesit-auto typescript-mode underwater-theme
+         undo-tree use-package uuidgen vi-tilde-fringe vim-powerline
+         visual-fill-column volatile-highlights vs-light-theme vterm web-beautify
+         web-completion-data web-mode which-key window-purpose winum with-editor
+         writeroom-mode ws-butler xref xterm-color yaml yaml-mode yapfify
+         yasnippet yasnippet-snippets zeno-theme))
    '(safe-local-variable-values
      '((web-mode-indent-style . 2) (web-mode-block-padding . 4)
        (web-mode-script-padding . 4) (web-mode-style-padding . 4)
