@@ -711,10 +711,21 @@ before packages are loaded."
     (recompile)
     )
 
+  (defun remove-markdown-code-block-delimiters ()
+    "Remove all markdown code block entry and exit lines in the current buffer. Useful for LLM slop."
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (while (search-forward-regexp "^```\\(.*\\)$" nil t)
+        (kill-whole-line))
+      (goto-char (point-min))
+      (while (search-forward-regexp "^```" nil t)
+        (kill-whole-line))))
 
   (defun format-buffer-by-mode ()
     "Format the current buffer based on its major mode."
     (interactive)
+    (remove-markdown-code-block-delimiters)
     (let ((mode (symbol-name major-mode)))
       (cond
        ((string= mode "python-ts-mode")
@@ -1141,19 +1152,11 @@ Operate on selected region on whole buffer."
 
   ;; GPT / AI
   ;;
-  (if (getenv "GEMINI_API_TOKEN")
-      (setq
-       gptel-model 'gemini-2.5-flash-lite-preview-06-17
-       gptel-backend (gptel-make-gemini "Gemini"
-                       :key (getenv "GEMINI_API_TOKEN")
-                       :stream t))
-    (setq
-     gptel-model 'llama3.1:latest
-     gptel-backend (gptel-make-ollama "Ollama"
-                     :host "localhost:11434"
-                     :stream t
-                     :models '(llama3.1:latest)))
-    )
+  (setq
+   gptel-model 'gemini-2.5-flash-lite-preview-06-17
+   gptel-backend (gptel-make-gemini "Gemini"
+                   :key (getenv "GEMINI_API_TOKEN")
+                   :stream t))
 
   (define-key evil-normal-state-map (kbd ", a m") 'gptel-menu)
   (define-key evil-normal-state-map (kbd ", a a") 'gptel-add)
