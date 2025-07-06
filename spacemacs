@@ -725,7 +725,8 @@ before packages are loaded."
   (defun format-buffer-by-mode ()
     "Format the current buffer based on its major mode."
     (interactive)
-    (remove-markdown-code-block-delimiters)
+    (if (derived-mode-p 'prog-mode)
+        (remove-markdown-code-block-delimiters))
     (let ((mode (symbol-name major-mode)))
       (cond
        ((string= mode "python-ts-mode")
