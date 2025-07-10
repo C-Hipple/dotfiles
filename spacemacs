@@ -691,6 +691,7 @@ before packages are loaded."
 
   ;; This may bite me if I"m ever in a non-lsp language"
 
+
   (define-key evil-normal-state-map (kbd ", g g") 'lsp-find-definition)
   (define-key evil-normal-state-map (kbd ", g r") 'xref-find-references)
   (define-key evil-normal-state-map (kbd ", r I") 'py-isort-buffer)
@@ -1084,18 +1085,19 @@ Operate on selected region on whole buffer."
 
   ;; Code Review
   (setq code-review-fill-column 120)
-  (with-eval-after-load 'code-review
-    (progn
-      (define-key code-review-mode-map (kbd "K") (lambda () (interactive) (previous-line 10)))
-      (define-key code-review-mode-map (kbd "J") (lambda () (interactive) (next-line 10)))
-      (define-key code-review-mode-map (kbd "C-k") (lambda () (interactive) (previous-line 15)))
-      (define-key code-review-mode-map (kbd "C-j") (lambda () (interactive) (next-line 15)))
-      (define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit)
-      (define-key code-review-mode-map (kbd ", g g") 'lsp-find-definition) ;; DIFF-LSP HYPPEEEEE
-      (define-key code-review-mode-map (kbd ", g r") 'xref-find-references)))
+  (diff-lsp-setup-advice)
+
+  (define-key code-review-mode-map (kbd "K") (lambda () (interactive) (previous-line 10)))
+  (define-key code-review-mode-map (kbd "J") (lambda () (interactive) (next-line 10)))
+  (define-key code-review-mode-map (kbd "C-k") (lambda () (interactive) (previous-line 15)))
+  (define-key code-review-mode-map (kbd "C-j") (lambda () (interactive) (next-line 15)))
+  (define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit)
+  (define-key code-review-mode-map (kbd ", g g") 'lsp-find-definition) ;; DIFF-LSP HYPPEEEEE
+  (define-key code-review-mode-map (kbd ", g r") 'xref-find-references)
 
   (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)
   (define-key evil-normal-state-map (kbd ", r s") 'code-review-start-at-point)
+
   (define-key evil-normal-state-map (kbd "SPC b C") (lambda () (interactive) (switch-to-buffer "*Code Review*" nil t)))
 
 
