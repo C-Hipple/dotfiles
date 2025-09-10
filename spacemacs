@@ -67,7 +67,7 @@ This function should only modify configuration layer settings."
      spell-checking
      syntax-checking
      ;; version-control
-     treemacs
+     ;;treemacs
 
      ;; fun
      (haskell :variables
@@ -88,23 +88,6 @@ This function should only modify configuration layer settings."
    ;; dotspacemacs-additional-packages '(nord-theme suscolors-theme gruvbox-theme solarized-theme oceanic-theme rebecca-theme subatomic-theme obsidian-theme planet-theme smyx-theme underwater-theme magit magit-popup vs-light-theme dockerfile-mode helm-dash python-black )
    dotspacemacs-additional-packages
    '(
-     ;; (copilot :location (recipe
-     ;;                        :fetcher github
-     ;;                        :repo "zerolfx/copilot.el"
-     ;;                        :files ("*.el" "dist")
-     ;;                        )
-     ;;          )
-     ;; (chatgpt :location (recipe
-     ;;                     :fetcher github
-     ;;                     :repo "joshcho/ChatGPT.el")
-     ;;          )
-     ;; (chatgpt :location (recipe
-     ;;                     :fetcher github
-     ;;                     :repo "MercuricChloride/chatgpt.el"
-     ;;                     :files ("*.el" "dist")
-     ;;                     )
-     ;;          )
-
      solarized-theme
      vs-light-theme
      python-black
@@ -120,13 +103,17 @@ This function should only modify configuration layer settings."
                           :fetcher github
                           :repo "C-Hipple/diff-lsp.el"
                           :files ("*.el")))
-     magit-delta
+     ;; doesn't work for some reason
+     ;; (gtdbot :location (recipe
+     ;;                    :fetcher github
+     ;;                    :repo "C-Hipple/gtdbot"
+     ;;                    :files ("*.el")))
      dockerfile-mode
      docker-compose-mode
      fireplace
      ef-themes
      tide
-     treesit-auto
+     ;; treesit-auto
      jazz-theme
      (test-at-point :location (recipe
                                :fetcher github
@@ -657,16 +644,16 @@ before packages are loaded."
   (define-key evil-normal-state-map (kbd "J") (lambda () (interactive) (beginning-of-line)))
 
   ;; Tree sitter!
-  (use-package treesit-auto
-    :config
-    (global-treesit-auto-mode))
+  ;; (use-package treesit-auto
+  ;;   :config
+  ;;   (global-treesit-auto-mode))
 
   ;; not a real hook
-  ;;(setq rust-ts-mode-hook rustic-mode-hook)
-  (setq python-ts-mode-hook python-mode-hook)
-  ;;(setq go-ts-mode-hook go-mode-hook)
+  ;; (setq python-ts-mode-hook python-mode-hook)
   (setq typescript-ts-mode-hook typescript-mode-hook)
   (setq typescript-tsx-ts-mode-hook typescript-mode-hook)
+  ;; no idea why this started erroring all the time
+  (setq treemacs--buffer-name-prefix "")
 
   (setq major-mode-remap-alist
         '((yaml-mode . yaml-ts-mode)
@@ -687,7 +674,7 @@ before packages are loaded."
   (add-hook 'rust-ts-mode-hook 'lsp)
 
   (setq tab-width 4)
-  (setq go-ts-mode-indent-offset tab-width)
+  ;; (setq go-ts-mode-indent-offset tab-width)
 
   ;; This may bite me if I"m ever in a non-lsp language"
 
@@ -1126,9 +1113,6 @@ Operate on selected region on whole buffer."
 
   (if (file-exists-p "~/dotfiles/elisp_helpers.el")
       (load-file "~/dotfiles/elisp_helpers.el"))
-
-  (if (file-exists-p "~/gtdbot/gtdbot.el")
-      (load-file "~/gtdbot/gtdbot.el"))
 
   ;; TODO set this into a private layer installed locally
   (if (file-exists-p "~/mm-tools/mm-tools.el")
