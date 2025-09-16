@@ -713,6 +713,7 @@ before packages are loaded."
   (defun format-buffer-by-mode ()
     "Format the current buffer based on its major mode."
     (interactive)
+    (whitespace-cleanup)
     (if (derived-mode-p 'prog-mode)
         (remove-markdown-code-block-delimiters))
     (let ((mode (symbol-name major-mode)))
@@ -1070,6 +1071,13 @@ Operate on selected region on whole buffer."
         (ansi-color-apply-on-region compilation-filter-start (point-max))))
     (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
 
+  ;; gtdbot
+
+  (define-key evil-motion-state-map (kbd ",") nil) ;; unbind
+  (define-key evil-motion-state-map (kbd ", r S") 'run-gtdbot-service) ;; s I already have bound to review start at url
+  (define-key evil-motion-state-map (kbd ", r l") 'run-gtdbot-oneoff) ;; l for list?
+  (define-key evil-motion-state-map (kbd ", r d") 'delta-wash)
+  (define-key evil-motion-state-map (kbd ", r k") 'stop-gtdbot-service)
 
   ;; Code Review
   (setq code-review-fill-column 120)
