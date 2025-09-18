@@ -690,14 +690,12 @@ before packages are loaded."
 
   (defun save-all()
     (interactive)
-    (save-some-buffers 1)
-    )
+    (save-some-buffers 1))
 
   (defun my-recompile()
     (interactive)
     (save-some-buffers 1)
-    (recompile)
-    )
+    (recompile))
 
   (defun remove-markdown-code-block-delimiters ()
     "Remove all markdown code block entry and exit lines in the current buffer. Useful for LLM slop."
