@@ -731,6 +731,26 @@ before packages are loaded."
        (t
         (lsp-format-buffer)))))
 
+  (defun my-build()
+    "attempt to compile the project based on the file type you're in"
+    (interactive)
+    (save-some-buffers 1)
+    (let ((filename (buffer-file-name)))
+      (cond
+       ((or (and filename (string-match "\\.tsx\\'" filename))
+            (and filename (string-match "\\.scss\\'" filename))
+            (and filename (string-match "\\.ts\\'" filename)))
+        ;; we don't cd to root since we have sub package.jsons, and yarn is smart.
+        (compile "yarn build"))
+       ((and filename (string-match "\\.rs\\'" filename))
+        (progn
+          (cd (projectile-project-root))
+          (compile "cargo build")))
+       ((and filename (string-match "\\.go\\'" filename))
+        (progn
+          (cd (projectile-project-root))
+          (compile "go build ./..."))))))
+
   (setq lsp-enable-on-type-formatting nil)
 
   (define-key evil-normal-state-map (kbd ", f b") 'format-buffer-by-mode)
@@ -740,6 +760,8 @@ before packages are loaded."
   (define-key evil-normal-state-map (kbd "SPC c u") 'remove-current-test-at-point-from-buffer)
   (define-key evil-normal-state-map (kbd "SPC c r") 'my-recompile)
   (define-key evil-normal-state-map (kbd "SPC c s") 'save-all)
+
+  (define-key evil-normal-state-map (kbd "SPC c b") 'my-build)
 
   ;; For when I want to back out
   (setq auto-mode-alist (delete '("\.py[iw]?\'" . python-ts-mode) auto-mode-alist))
