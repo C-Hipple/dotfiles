@@ -974,7 +974,6 @@ the next history element (which can be accessed with \
         (message "No default settings found for face '%s'." face)))
     )
 
-
   ;; it bork
   ;; (defun revert-face-to-default ()
   ;;   (interactive)
@@ -1144,6 +1143,7 @@ Operate on selected region on whole buffer."
     (define-key code-review-mode-map (kbd "C-k") (lambda () (interactive) (previous-line 15)))
     (define-key code-review-mode-map (kbd "C-j") (lambda () (interactive) (next-line 15)))
     (define-key code-review-mode-map (kbd "c") 'code-review-comment-add-or-edit)
+    (define-key code-review-mode-map (kbd "<return>") 'magit-diff-visit-file)
 
     ;; DIFF-LSP HYPPEEEEE
     (define-key evil-motion-state-map (kbd ", g g") 'lsp-find-definition)
