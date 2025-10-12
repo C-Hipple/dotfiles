@@ -20,8 +20,6 @@
   "Escape all double quotes in STR."
   (replace-regexp-in-string "\"" "\\\\\"" str t t))
 
-(message (escape-quotes "example"))
-
 (defun run-llm (command)
   (interactive "sEnter LLM command: ")
   (setq command (concat "llm \"" (escape-quotes command) "\""))
