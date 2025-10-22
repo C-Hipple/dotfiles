@@ -678,6 +678,9 @@ before packages are loaded."
   (define-key evil-normal-state-map (kbd "L") (lambda () (interactive) (end-of-line)))
   (define-key evil-normal-state-map (kbd "J") (lambda () (interactive) (beginning-of-line)))
 
+  ;; not sure where exactly to put this tbh
+  (define-key evil-normal-state-map (kbd "SPC b S") 'window-swap-states)
+
   ;; Tree sitter!
   ;; (use-package treesit-auto
   ;;   :config
@@ -1130,15 +1133,7 @@ Operate on selected region on whole buffer."
         (ansi-color-apply-on-region compilation-filter-start (point-max))))
     (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
 
-  ;; gtdbot
 
-  (with-eval-after-load 'gtdbot
-    (define-key evil-motion-state-map (kbd ",") nil) ;; unbind
-    (define-key evil-motion-state-map (kbd ", r S") 'run-gtdbot-service) ;; s I already have bound to review start at url
-    (define-key evil-motion-state-map (kbd ", r l") 'run-gtdbot-oneoff) ;; l for list?
-    (define-key evil-motion-state-map (kbd ", r d") 'delta-wash)
-    (define-key evil-motion-state-map (kbd ", r k") 'stop-gtdbot-service)
-    )
 
   ;; Code Review
   (setq code-review-fill-column 120)
@@ -1215,6 +1210,19 @@ Operate on selected region on whole buffer."
   (define-key evil-normal-state-map (kbd ", k b") 'smerge-keep-base)
   (define-key evil-normal-state-map (kbd ", k a") 'smerge-keep-all)
 
+  ;; gtdbot
+
+  ;; (message (prin1-to-string evil-motion-state-map))
+  ;; (define-key evil-motion-state-map (kbd ",") nil) ;; unbind
+  ;; (message (prin1-to-string 'run-gtdbot-oneoff))
+  (with-eval-after-load 'gtdbot
+    (message "starting gtdbot")
+    (define-key evil-motion-state-map (kbd ", r S") 'run-gtdbot-service) ;; s I already have bound to review start at url
+    (define-key evil-motion-state-map (kbd ", r l") 'run-gtdbot-oneoff) ;; l for list?
+    (define-key evil-motion-state-map (kbd ", r d") 'delta-wash)
+    (define-key evil-motion-state-map (kbd ", r k") 'stop-gtdbot-service)
+    (message "done gtdbot keybinds"))
+
   ;; GPT / AI
   ;;
   (setq
@@ -1261,14 +1269,14 @@ This function is called at the very end of Spacemacs initialization."
        "ca2e59377dc1ecee2a1069ec7126b453fa1198fed946304abb9a5b8c7ad5404d" default))
    '(desktop-save nil)
    '(package-selected-packages
-     '(a acp agent-shell shell-maker ac-ispell ace-jump-helm-line ace-link ace-window aggressive-indent aider aio
-         alert all-the-icons all-the-icons-completion almost-mono-themes
-         anaconda-mode annalist anzu apheleia async attrap auto-compile
-         auto-dictionary auto-highlight-symbol auto-yasnippet autothemer
-         avk-emacs-themes avy basic-theme berrys-theme bind-key bind-map blacken
-         browse-at-remote bui bundler calmer-forest-theme cargo
+     '(a ac-ispell ace-jump-helm-line ace-link ace-window acp agent-shell
+         aggressive-indent aider aio alert all-the-icons all-the-icons-completion
+         almost-mono-themes anaconda-mode annalist anzu apheleia async attrap
+         auto-compile auto-dictionary auto-highlight-symbol auto-yasnippet
+         autothemer avk-emacs-themes avy basic-theme berrys-theme bind-key
+         bind-map blacken browse-at-remote bui bundler calmer-forest-theme cargo
          centered-cursor-mode cfrs chruby clang-format clean-aindent-mode cmm-mode
-         code-cells column-enforce-mode company-cabal company-lua
+         code-cells code-review column-enforce-mode company-cabal company-lua
          company-terraform compat concurrent counsel counsel-gtags cov csv-mode
          ctable cython-mode dakrone-light-theme dakrone-theme dap-mode dash
          dash-docs deferred define-word devdocs diff-lsp diminish dired-quick-sort
@@ -1319,8 +1327,8 @@ This function is called at the very end of Spacemacs initialization."
          rebecca-theme reformatter request restart-emacs robe ron-mode rspec-mode
          rubocop rubocopfmt ruby-hash-syntax ruby-refactor ruby-test-mode
          ruby-tools rust-mode rvm s sass-mode scss-mode seeing-is-believing
-         shut-up simple-httpd skewer-mode slim-mode smartparens smeargle
-         smyx-theme solarized-theme solo-jazz-theme space-doc spaceline
+         shell-maker shut-up simple-httpd skewer-mode slim-mode smartparens
+         smeargle smyx-theme solarized-theme solo-jazz-theme space-doc spaceline
          spaceline-all-the-icons spacemacs-purpose-popwin
          spacemacs-whitespace-cleanup sphinx-doc spinner sql-indent sqlite3
          string-inflection subatomic-theme sunny-day-theme suscolors-theme swiper
