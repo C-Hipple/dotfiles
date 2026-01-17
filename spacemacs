@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(nginx
+   '(ocaml
+     nginx
      lua
      python
      (javascript :variables
@@ -1209,6 +1210,12 @@ Operate on selected region on whole buffer."
   ;; TODO set this into a private layer installed locally
   (if (file-exists-p "~/mm-tools/mm-tools.el")
       (load-file "~/mm-tools/mm-tools.el"))
+
+  (if (file-exists-p "~/code-review-server/washer.el")
+      (load-file "~/code-review-server/washer.el"))
+
+  (if (file-exists-p "~/code-review-server/client.el")
+      (load-file "~/code-review-server/client.el"))
 
   ;; trying something here, I htink I need to compile emacs with something else
   ;; (set-frame-parameter nil 'alpha-background 88)
