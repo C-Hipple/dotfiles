@@ -666,6 +666,14 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
+  (add-to-list 'load-path "~/lsp-bridge/")
+
+  (require 'yasnippet)
+  (yas-global-mode 1)
+
+  (require 'lsp-bridge)
+  (global-lsp-bridge-mode)
+
   ;; (use-package shell-maker
   ;;   :vc (:url "https://github.com/xenodium/shell-maker")
   ;;   :ensure t)
@@ -1300,49 +1308,50 @@ This function is called at the very end of Spacemacs initialization."
          anaconda-mode annalist anzu apheleia async attrap auto-compile
          auto-dictionary auto-highlight-symbol auto-yasnippet autothemer
          avk-emacs-themes avy basic-theme berrys-theme bind-key bind-map blacken
-         browse-at-remote bui bundler calmer-forest-theme cargo catppuccin-theme
-         centered-cursor-mode cfrs cherry-blossom-theme chruby clang-format
-         clean-aindent-mode cmm-mode code-cells column-enforce-mode company-cabal
-         company-lua company-terraform compat concurrent counsel counsel-gtags cov
-         csv-mode ctable cython-mode dakrone-light-theme dakrone-theme dap-mode
-         dash dash-docs deferred define-word devdocs diff-lsp diminish
-         dired-quick-sort docker-compose-mode dockerfile-mode doom-themes
-         dotenv-mode drag-stuff dream-theme dumb-jump editorconfig ef-themes eglot
-         elisp-def elisp-slime-nav elpy emacsql emacsql-sqlite
-         emacsql-sqlite-builtin emacsql-sqlite-module emmet-mode emojify emr epc
-         epl eredis eslint-fix eval-sexp-fu evil evil-anzu evil-args
-         evil-cleverparens evil-collection evil-easymotion evil-escape
+         browse-at-remote bui bundler calmer-forest-theme caml cargo
+         catppuccin-theme centered-cursor-mode cfrs cherry-blossom-theme chruby
+         clang-format clean-aindent-mode cmm-mode code-cells column-enforce-mode
+         company-cabal company-lua company-terraform compat concurrent counsel
+         counsel-gtags cov csv-mode ctable cython-mode dakrone-light-theme
+         dakrone-theme dap-mode dash dash-docs deferred define-word devdocs
+         diff-lsp diminish dired-quick-sort docker-compose-mode dockerfile-mode
+         doom-themes dotenv-mode drag-stuff dream-theme dumb-jump dune
+         editorconfig ef-themes eglot elisp-def elisp-slime-nav elpy emacsql
+         emacsql-sqlite emacsql-sqlite-builtin emacsql-sqlite-module emmet-mode
+         emojify emr epc epl eredis eslint-fix eval-sexp-fu evil evil-anzu
+         evil-args evil-cleverparens evil-collection evil-easymotion evil-escape
          evil-evilified-state evil-exchange evil-goggles evil-iedit-state
          evil-indent-plus evil-lion evil-lisp-state evil-matchit evil-mc
          evil-nerd-commenter evil-numbers evil-org evil-surround
          evil-terminal-cursor-changer evil-textobj-line evil-tutor evil-unimpaired
          evil-visual-mark-mode evil-visualstar exec-path-from-shell expand-region
          eyebrowse f fancy-battery fireplace flx flx-ido flycheck flycheck-elsa
-         flycheck-haskell flycheck-package flycheck-pos-tip flycheck-rust
-         flyspell-correct flyspell-correct-helm font-lock+ forge fringe-helper
-         fuzzy ggtags gh-md ghub git-commit git-gutter git-gutter-fringe git-link
-         git-messenger git-modes git-timemachine github-review gitignore-templates
-         gntp gnuplot go go-eldoc go-fill-struct go-gen-test go-guru go-impl
-         go-mode go-rename go-tag godoctor golden-ratio google-translate
-         goose-theme goto-chg gptel gruvbox-theme gtdbot haml-mode haskell-mode
-         haskell-snippets hcl-mode helm helm-ag helm-c-yasnippet helm-core
-         helm-css-scss helm-dash helm-descbinds helm-flx helm-git-grep helm-gtags
-         helm-hoogle helm-ls-git helm-lsp helm-make helm-mode-manager helm-org
-         helm-org-rifle helm-projectile helm-purpose helm-pydoc helm-swoop
-         helm-themes helm-xref help-fns+ hide-comnt hierarchy
-         highlight-indentation highlight-numbers highlight-parentheses hindent
-         hl-todo hlint-refactor holy-mode ht htmlize hungry-delete hybrid-mode
-         hydandata-light-theme hydra iedit imenu-list impatient-mode indent-guide
-         inf-ruby info+ inspector iter2 ivy jazz-theme jedi js-doc js2-mode
-         js2-refactor json-mode json-navigator json-reformat json-snatcher
-         kuronami-theme lcr link-hint list-utils live-py-mode livid-mode
-         load-env-vars log4e lorem-ipsum lsp-bridge lsp-docker lsp-haskell
-         lsp-jedi lsp-mode lsp-origami lsp-pyright lsp-python-ms lsp-treemacs
-         lsp-ui lua-mode lv macrostep magit magit-popup magit-section
-         markdown-mode markdown-toc material-theme melancholy-theme memoize
-         minimal-theme minitest minsk-theme mmm-mode modus-themes multi-line
-         multiple-cursors nameless nginx-mode nodejs-repl nord-theme nose npm-mode
-         nvm obsidian-theme oceanic-theme open-junk-file org-category-capture
+         flycheck-haskell flycheck-ocaml flycheck-package flycheck-pos-tip
+         flycheck-rust flyspell-correct flyspell-correct-helm font-lock+ forge
+         fringe-helper fuzzy ggtags gh-md ghub git-commit git-gutter
+         git-gutter-fringe git-link git-messenger git-modes git-timemachine
+         github-review gitignore-templates gntp gnuplot go go-eldoc go-fill-struct
+         go-gen-test go-guru go-impl go-mode go-rename go-tag godoctor
+         golden-ratio google-translate goose-theme goto-chg gptel gruvbox-theme
+         gtdbot haml-mode haskell-mode haskell-snippets hcl-mode helm helm-ag
+         helm-c-yasnippet helm-core helm-css-scss helm-dash helm-descbinds
+         helm-flx helm-git-grep helm-gtags helm-hoogle helm-ls-git helm-lsp
+         helm-make helm-mode-manager helm-org helm-org-rifle helm-projectile
+         helm-purpose helm-pydoc helm-swoop helm-themes helm-xref help-fns+
+         hide-comnt hierarchy highlight-indentation highlight-numbers
+         highlight-parentheses hindent hl-todo hlint-refactor holy-mode ht htmlize
+         hungry-delete hybrid-mode hydandata-light-theme hydra iedit imenu-list
+         impatient-mode indent-guide inf-ruby info+ inspector iter2 ivy jazz-theme
+         jedi js-doc js2-mode js2-refactor json-mode json-navigator json-reformat
+         json-snatcher kuronami-theme lcr link-hint list-utils live-py-mode
+         livid-mode load-env-vars log4e lorem-ipsum lsp-bridge lsp-docker
+         lsp-haskell lsp-jedi lsp-mode lsp-origami lsp-pyright lsp-python-ms
+         lsp-treemacs lsp-ui lua-mode lv macrostep magit magit-popup magit-section
+         markdown-mode markdown-toc material-theme melancholy-theme memoize merlin
+         merlin-company merlin-eldoc merlin-iedit minimal-theme minitest
+         minsk-theme mmm-mode modus-themes multi-line multiple-cursors nameless
+         nginx-mode nodejs-repl nord-theme nose npm-mode nvm obsidian-theme
+         ocamlformat oceanic-theme ocp-indent open-junk-file org-category-capture
          org-cliplink org-contrib org-download org-mime org-pomodoro org-present
          org-projectile org-rich-yank org-superstar orgit orgit-forge origami
          overseer package-lint packed paradox paredit parent-mode
@@ -1362,12 +1371,12 @@ This function is called at the very end of Spacemacs initialization."
          symbol-overlay symon tablist tagedit tangonov-theme tern terraform-mode
          tide timu-macos-theme toc-org toml-mode tommyh-theme transient treemacs
          treemacs-evil treemacs-icons-dired treemacs-magit treemacs-persp
-         treemacs-projectile treepy treesit-auto typescript-mode underwater-theme
-         undo-tree use-package uuidgen vi-tilde-fringe vim-powerline
-         visual-fill-column volatile-highlights vs-light-theme vterm web-beautify
-         web-completion-data web-mode which-key window-purpose winum with-editor
-         writeroom-mode ws-butler xref xterm-color yaml yaml-mode yapfify
-         yasnippet yasnippet-snippets zeno-theme))
+         treemacs-projectile treepy treesit-auto tuareg typescript-mode
+         underwater-theme undo-tree use-package utop uuidgen vi-tilde-fringe
+         vim-powerline visual-fill-column volatile-highlights vs-light-theme vterm
+         web-beautify web-completion-data web-mode which-key window-purpose winum
+         with-editor writeroom-mode ws-butler xref xterm-color yaml yaml-mode
+         yapfify yasnippet yasnippet-snippets zeno-theme))
    '(package-vc-selected-packages
      '((agent-shell :url "https://github.com/xenodium/agent-shell")))
    '(safe-local-variable-values
