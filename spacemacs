@@ -704,7 +704,7 @@ before packages are loaded."
   (define-key evil-normal-state-map (kbd "C-j") (lambda () (interactive) (next-line 15)))
 
   (define-key evil-normal-state-map (kbd "L") (lambda () (interactive) (end-of-line)))
-  (define-key evil-normal-state-map (kbd "J") (lambda () (interactive) (beginning-of-line)))
+  (define-key evil-normal-state-map (kbd "H") (lambda () (interactive) (beginning-of-line)))
 
   ;; not sure where exactly to put this tbh
   (define-key evil-normal-state-map (kbd "SPC b S") 'window-swap-states)
@@ -823,6 +823,7 @@ before packages are loaded."
   (define-key evil-normal-state-map (kbd "SPC c a") 'select-current-test-at-point)
   (define-key evil-normal-state-map (kbd "SPC c T") 'test-at-point-run-selected)
   (define-key evil-normal-state-map (kbd "SPC c u") 'remove-current-test-at-point-from-buffer)
+
   (define-key evil-normal-state-map (kbd "SPC c r") 'my-recompile)
   (define-key evil-normal-state-map (kbd "SPC c s") 'save-all)
 
