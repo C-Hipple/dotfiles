@@ -1186,8 +1186,8 @@ Operate on selected region on whole buffer."
 
   (define-key evil-normal-state-map (kbd ", r r") 'code-review-start)
 
-  (with-eval-after-load 'code-review-server
-    (crs-start-server)
+  (crs-start-server)
+  (with-eval-after-load 'crs-client
     (define-key evil-normal-state-map (kbd "SPC b r") 'crs-get-reviews)
     (define-key evil-normal-state-map (kbd ", r s") 'crs-start-review-at-point)
     )
@@ -1247,12 +1247,7 @@ Operate on selected region on whole buffer."
   ;; (message (prin1-to-string evil-motion-state-map))
   (define-key evil-motion-state-map (kbd ",") nil) ;; unbind
   ;; (message (prin1-to-string 'run-gtdbot-oneoff))
-  (message "starting gtdbot")
-  (define-key evil-motion-state-map (kbd ", r S") 'run-gtdbot-service) ;; s I already have bound to review start at url
-  (define-key evil-motion-state-map (kbd ", r l") 'run-gtdbot-oneoff) ;; l for list?
   (define-key evil-motion-state-map (kbd ", r d") 'delta-wash)
-  (define-key evil-motion-state-map (kbd ", r k") 'stop-gtdbot-service)
-  (message "done gtdbot keybinds")
 
   ;; GPT / AI
   ;;
