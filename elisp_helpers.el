@@ -97,11 +97,14 @@
         (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
 
-(defun set-global-font-size ()
-  "Interactively set the global font size."
-  (interactive)
+(defun set-global-font-size (&optional new-size-int)
+  "Interactively set the global font size.
+If an optional integer argument is provided, use it directly."
+  (interactive) ; Capture the optional interactive argument as an integer
   (let* ((current-size (face-attribute 'default :height))
-         (new-size (read-number "Enter new font size: " current-size)))
-    (set-face-attribute 'default nil :height (* new-size 10))))
+         (size (if new-size-int
+                   new-size-int
+                 (read-number "Enter new font size: " (/ current-size 10.0))))) ; Use / 10.0 for float division if reading interactively
+    (set-face-attribute 'default nil :height (* size 10))))
 
 (define-key evil-normal-state-map (kbd "SPC T f") 'set-global-font-size)

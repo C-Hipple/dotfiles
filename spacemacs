@@ -1272,6 +1272,15 @@ Operate on selected region on whole buffer."
     (setq agent-shell-google-authentication
           (agent-shell-google-make-authentication
            :api-key (lambda () (getenv "GEMINI_API_TOKEN")))))
+
+  ;; system-specific stuff
+  (cond
+   ((eq system-type 'gnu/linux)
+    (progn
+      (set-global-font-size 15) ;; why not working
+      (set-frame-stream-size)
+      )
+    ))
   )
 
 
