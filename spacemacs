@@ -960,7 +960,9 @@ the next history element (which can be accessed with \
 
   (defun open-next-actions-org ()
     (interactive)
-    (find-file "~/gtd/next_actions.org"))
+    (if (eq system-type 'gnu/linux)
+        (find-file "~/gtd/personal_next_actions.org")
+      (find-file "~/gtd/next_actions.org")))
 
   (define-key evil-normal-state-map (kbd "SPC b a") 'open-next-actions-org)
 
