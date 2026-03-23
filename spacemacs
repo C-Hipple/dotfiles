@@ -32,8 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(ocaml
-     nginx
+   '(nginx
      lua
      python
      (javascript :variables
@@ -159,6 +158,12 @@ This function should only modify configuration layer settings."
                              :repo "emacsattic/helm-themes"
                              :files ("*.el")
                              ))
+
+     (fleury-theme :location (recipe
+                              :fetcher github
+                              :repo "ShamsParvezArka/fleury-theme"
+                              :files ("*.el")
+                              ))
 
      ;; (lsp-bridge :location (recipe
      ;;                        :fetcher github
@@ -1349,7 +1354,7 @@ This function is called at the very end of Spacemacs initialization."
          evil-terminal-cursor-changer evil-textobj-line evil-tutor evil-unimpaired
          evil-visual-mark-mode evil-visualstar exec-path-from-shell expand-region
          eyebrowse f fancy-battery fireplace flx flx-ido flycheck flycheck-elsa
-         flycheck-haskell flycheck-ocaml flycheck-package flycheck-pos-tip
+         flycheck-haskell flycheck-package flycheck-pos-tip
          flycheck-rust flyspell-correct flyspell-correct-helm font-lock+ forge
          fringe-helper fuzzy ggtags gh-md ghub git-commit git-gutter
          git-gutter-fringe git-link git-messenger git-modes git-timemachine
@@ -1373,7 +1378,7 @@ This function is called at the very end of Spacemacs initialization."
          material-theme melancholy-theme memoize merlin merlin-company
          merlin-eldoc merlin-iedit minimal-theme minitest minsk-theme mmm-mode
          modus-themes multi-line multiple-cursors nameless nginx-mode nodejs-repl
-         nord-theme nose npm-mode nvm obsidian-theme ocamlformat oceanic-theme
+         nord-theme nose npm-mode nvm obsidian-theme oceanic-theme
          ocp-indent open-junk-file org-category-capture org-cliplink org-contrib
          org-download org-mime org-pomodoro org-present org-projectile
          org-rich-yank org-superstar orgit orgit-forge origami overseer
